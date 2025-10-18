@@ -1,0 +1,113 @@
+name: Quality Gate
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-coverage:
+    name: Test Coverage Gate
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.19.0'
+
+    - name: Get Flutter dependencies
+      run: flutter pub get
+
+    - name: Run tests with coverage
+      run: flutter test --coverage
+
+    - name: Check minimum coverage (60%)
+      run: |
+        # Install lcov
+        sudo apt-get update
+        sudo apt-get install -y lcov
+
+        # Generate coverage report
+        genhtml coverage/lcov.info --output-directory coverage/html
+
+        # Extract coverage percentage
+        COVERAGE=$(lcov --summary coverage/lcov.info | grep "lines.*:" | sed 's/.*(\([0-9.]*\)%.*/\1/')
+        echo "Coverage: $COVERAGE%"
+
+        # Check if coverage meets minimum requirement
+        if (( $(echo "$COVERAGE < 60" | bc -l) )); then
+          echo "Coverage too low: $COVERAGE% (minimum: 60%)"
+          exit 1
+        fi
+
+    - name: Upload coverage report
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage-report
+        path: coverage/html/
+
+  performance-gate:
+    name: Performance Gate
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.19.0'
+
+    - name: Get Flutter dependencies
+      run: flutter pub get
+
+    - name: Run performance tests
+      run: flutter test --test-name-regex="performance"
+
+    - name: Check build performance
+      run: |
+        # Measure build time
+        start_time=$(date +%s.%N)
+        flutter build apk --debug --target-platform=android-arm64
+        end_time=$(date +%s.%N)
+
+        build_time=$(echo "$end_time - $start_time" | bc)
+        echo "Build time: $build_time seconds"
+
+        # Check if build time is acceptable (< 5 minutes)
+        if (( $(echo "$build_time > 300" | bc -l) )); then
+          echo "Build time too long: $build_time seconds (maximum: 300s)"
+          exit 1
+        fi
+
+  security-gate:
+    name: Security Gate
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Run dependency check
+      run: |
+        # Check for outdated dependencies
+        flutter pub outdated --mode=null-safety
+
+        # Check for security issues in dependencies
+        flutter pub deps --style=tree
+
+    - name: Run Flutter security scan
+      uses: dart-lang/setup-dart@v1
+      with:
+        sdk: '3.9.2'
+
+    - name: Install and run dart_code_metrics
+      run: |
+        dart pub global activate dart_code_metrics
+        dart_code_metrics . --fatal-levels=error,warning

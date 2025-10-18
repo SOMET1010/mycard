@@ -1,0 +1,102 @@
+{
+  "templates": [
+    {
+      "id": "minimal",
+      "name": "Minimal",
+      "description": "Design épuré et moderne",
+      "colors": {
+        "primary": "#000000",
+        "secondary": "#666666",
+        "accent": "#2563eb"
+      },
+      "rendererKey": "minimal",
+      "layout": "centered"
+    },
+    {
+      "id": "corporate",
+      "name": "Corporate",
+      "description": "Style professionnel et formel",
+      "colors": {
+        "primary": "#1e293b",
+        "secondary": "#64748b",
+        "accent": "#0f172a"
+      },
+      "rendererKey": "corporate",
+      "layout": "left-aligned"
+    },
+    {
+      "id": "creative",
+      "name": "Créatif",
+      "description": "Design original et dynamique",
+      "colors": {
+        "primary": "#7c3aed",
+        "secondary": "#a78bfa",
+        "accent": "#fbbf24"
+      },
+      "rendererKey": "ansut_style",
+      "layout": "modern"
+    },
+    {
+      "id": "event_campaign",
+      "name": "Event Campaign",
+      "description": "Deux colonnes + QR, accent événement",
+      "colors": {
+        "primary": "#6A1B9A",
+        "secondary": "#2E2E3A",
+        "accent": "#FF69B4"
+      },
+      "rendererKey": "event_campaign",
+      "layout": "two-columns"
+    },
+    {
+      "id": "elegant",
+      "name": "Élégant",
+      "description": "Style sophistiqué et raffiné",
+      "colors": {
+        "primary": "#374151",
+        "secondary": "#9ca3af",
+        "accent": "#d97706"
+      },
+      "rendererKey": "minimal",
+      "layout": "centered",
+      "isPremium": true
+    }
+    ,
+    {
+      "id": "modern_gradient",
+      "name": "Gradient Moderne",
+      "description": "Fond dégradé moderne et lisible",
+      "colors": {
+        "primary": "#0E4274",
+        "secondary": "#8DC5D2",
+        "accent": "#E28742"
+      },
+      "rendererKey": "modern_gradient",
+      "layout": "modern"
+    },
+    {
+      "id": "stripe_left",
+      "name": "Bande à gauche",
+      "description": "Bande verticale accent et style pro",
+      "colors": {
+        "primary": "#21130D",
+        "secondary": "#EAB676",
+        "accent": "#E28742"
+      },
+      "rendererKey": "stripe_left",
+      "layout": "left-aligned"
+    },
+    {
+      "id": "photo_badge",
+      "name": "Photo Badge",
+      "description": "Avatar/logo + infos compactes",
+      "colors": {
+        "primary": "#1E293B",
+        "secondary": "#64748B",
+        "accent": "#E28742"
+      },
+      "rendererKey": "photo_badge",
+      "layout": "two-columns"
+    }
+  ]
+}

@@ -1,0 +1,200 @@
+{
+  "appName": "MyCard",
+
+  // Navigation
+  "home": "Accueil",
+  "templates": "Modèles",
+  "gallery": "Ma galerie",
+  "settings": "Paramètres",
+  "about": "À propos",
+
+  // Cartes de visite
+  "businessCard": "Carte de visite",
+  "businessCards": "Cartes de visite",
+  "createCard": "Créer une carte",
+  "editCard": "Modifier la carte",
+  "deleteCard": "Supprimer la carte",
+  "viewCard": "Voir la carte",
+  "shareCard": "Partager la carte",
+  "exportCard": "Exporter la carte",
+
+  // Champs du formulaire
+  "firstName": "Prénom",
+  "lastName": "Nom",
+  "fullName": "Nom complet",
+  "title": "Fonction",
+  "phone": "Téléphone",
+  "email": "Email",
+  "company": "Entreprise",
+  "website": "Site web",
+  "address": "Adresse",
+  "city": "Ville",
+  "postalCode": "Code postal",
+  "country": "Pays",
+  "notes": "Notes",
+
+  // Validation
+  "requiredField": "Ce champ est requis",
+  "invalidEmail": "Veuillez entrer un email valide",
+  "invalidPhone": "Veuillez entrer un numéro de téléphone valide",
+  "invalidWebsite": "Veuillez entrer une URL valide",
+  "nameTooShort": "Doit contenir au moins 2 caractères",
+  "nameTooLong": "Doit contenir au maximum 50 caractères",
+  "titleTooLong": "Doit contenir au maximum 100 caractères",
+
+  // Templates
+  "template": "Modèle",
+  "templates": "Modèles",
+  "chooseTemplate": "Choisir un modèle",
+  "templatePreview": "Aperçu du modèle",
+  "minimalTemplate": "Minimal",
+  "corporateTemplate": "Corporate",
+  "creativeTemplate": "Créatif",
+  "elegantTemplate": "Élégant",
+  "premiumTemplate": "Premium",
+
+  // Événements
+  "event": "Événement",
+  "events": "Événements",
+  "chooseEvent": "Choisir un événement",
+  "noEvent": "Aucun événement",
+  "activeEvents": "Événements actifs",
+  "allEvents": "Tous les événements",
+
+  // Événements spécifiques
+  "octoberRose": "Octobre Rose",
+  "christmas": "Noël",
+  "mothersDay": "Fête des Mères",
+  "fathersDay": "Fête des Pères",
+  "valentinesDay": "Saint-Valentin",
+  "halloween": "Halloween",
+  "newYear": "Nouvel An",
+  "movember": "Movember",
+
+  // Export
+  "export": "Exporter",
+  "exportFormat": "Format d'export",
+  "exportOptions": "Options d'export",
+  "includeQRCode": "Inclure le code QR",
+  "includeVCard": "Inclure la vCard",
+  "exportSuccess": "Export réussi",
+  "exportFailed": "Échec de l'export",
+  "share": "Partager",
+
+  // Formats d'export
+  "pngFormat": "PNG",
+  "jpgFormat": "JPG",
+  "pdfFormat": "PDF",
+
+  // Galerie
+  "myGallery": "Ma galerie",
+  "noCards": "Aucune carte de visite",
+  "noCardsDescription": "Appuyez sur + pour créer votre première carte",
+  "searchCards": "Rechercher une carte",
+  "sortBy": "Trier par",
+  "sortByName": "Trier par nom",
+  "sortByDate": "Trier par date",
+  "sortAscending": "Ordre croissant",
+  "sortDescending": "Ordre décroissant",
+
+  // Actions
+  "save": "Enregistrer",
+  "cancel": "Annuler",
+  "delete": "Supprimer",
+  "edit": "Modifier",
+  "share": "Partager",
+  "copy": "Copier",
+  "done": "Terminé",
+  "next": "Suivant",
+  "previous": "Précédent",
+  "back": "Retour",
+  "close": "Fermer",
+  "tryAgain": "Réessayer",
+  "loading": "Chargement...",
+
+  // Messages
+  "cardCreated": "Carte créée avec succès",
+  "cardUpdated": "Carte mise à jour avec succès",
+  "cardDeleted": "Carte supprimée avec succès",
+  "deleteConfirmation": "Êtes-vous sûr de vouloir supprimer cette carte ?",
+  "deleteCardConfirmation": "Êtes-vous sûr de vouloir supprimer la carte de {name} ?",
+  "error": "Erreur",
+  "unknownError": "Une erreur inconnue est survenue",
+  "networkError": "Erreur de connexion réseau",
+  "permissionDenied": "Permission refusée",
+
+  // Temps
+  "today": "Aujourd'hui",
+  "yesterday": "Hier",
+  "daysAgo": "Il y a {count} jours",
+  "weeksAgo": "Il y a {count} semaines",
+  "monthsAgo": "Il y a {count} mois",
+  "yearsAgo": "Il y a {count} ans",
+
+  // Mois
+  "january": "Janvier",
+  "february": "Février",
+  "march": "Mars",
+  "april": "Avril",
+  "may": "Mai",
+  "june": "Juin",
+  "july": "Juillet",
+  "august": "Août",
+  "september": "Septembre",
+  "october": "Octobre",
+  "november": "Novembre",
+  "december": "Décembre",
+
+  // Paramètres
+  "settings": "Paramètres",
+  "appearance": "Apparence",
+  "theme": "Thème",
+  "lightTheme": "Thème clair",
+  "darkTheme": "Thème sombre",
+  "systemTheme": "Thème système",
+  "language": "Langue",
+  "about": "À propos",
+  "version": "Version",
+  "developer": "Développeur",
+  "contact": "Contact",
+
+  // À propos
+  "appDescription": "Application de création de cartes de visite numériques avec templates et événements",
+  "privacyPolicy": "Politique de confidentialité",
+  "termsOfService": "Conditions d'utilisation",
+
+  // QR Code
+  "qrCode": "Code QR",
+  "scanQRCode": "Scanner le code QR",
+  "generateQRCode": "Générer un code QR",
+  "qrCodeGenerated": "Code QR généré avec succès",
+
+  // vCard
+  "vCard": "vCard",
+  "exportVCard": "Exporter en vCard",
+  "importVCard": "Importer une vCard",
+  "vCardExported": "vCard exportée avec succès",
+  "vCardImported": "vCard importée avec succès",
+
+  // Partage
+  "shareVia": "Partager via",
+  "shareCard": "Partager la carte",
+  "shareSuccess": "Partage réussi",
+  "shareFailed": "Échec du partage",
+
+  // Divers
+  "search": "Rechercher",
+  "filter": "Filtrer",
+  "clear": "Effacer",
+  "refresh": "Actualiser",
+  "loadingMore": "Charger plus...",
+  "noResults": "Aucun résultat",
+  "noResultsFound": "Aucun résultat trouvé",
+  "tryDifferentSearch": "Essayez une autre recherche",
+
+  // Erreurs
+  "errorOccurred": "Une erreur est survenue",
+  "tryAgainLater": "Veuillez réessayer plus tard",
+  "contactSupport": "Contactez le support technique",
+  "somethingWentWrong": "Quelque chose s'est mal passé"
+}

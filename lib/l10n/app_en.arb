@@ -1,0 +1,200 @@
+{
+  "appName": "MyCard",
+
+  // Navigation
+  "home": "Home",
+  "templates": "Templates",
+  "gallery": "My Gallery",
+  "settings": "Settings",
+  "about": "About",
+
+  // Business Cards
+  "businessCard": "Business Card",
+  "businessCards": "Business Cards",
+  "createCard": "Create Card",
+  "editCard": "Edit Card",
+  "deleteCard": "Delete Card",
+  "viewCard": "View Card",
+  "shareCard": "Share Card",
+  "exportCard": "Export Card",
+
+  // Form Fields
+  "firstName": "First Name",
+  "lastName": "Last Name",
+  "fullName": "Full Name",
+  "title": "Title",
+  "phone": "Phone",
+  "email": "Email",
+  "company": "Company",
+  "website": "Website",
+  "address": "Address",
+  "city": "City",
+  "postalCode": "Postal Code",
+  "country": "Country",
+  "notes": "Notes",
+
+  // Validation
+  "requiredField": "This field is required",
+  "invalidEmail": "Please enter a valid email",
+  "invalidPhone": "Please enter a valid phone number",
+  "invalidWebsite": "Please enter a valid URL",
+  "nameTooShort": "Must be at least 2 characters",
+  "nameTooLong": "Must be at most 50 characters",
+  "titleTooLong": "Must be at most 100 characters",
+
+  // Templates
+  "template": "Template",
+  "templates": "Templates",
+  "chooseTemplate": "Choose Template",
+  "templatePreview": "Template Preview",
+  "minimalTemplate": "Minimal",
+  "corporateTemplate": "Corporate",
+  "creativeTemplate": "Creative",
+  "elegantTemplate": "Elegant",
+  "premiumTemplate": "Premium",
+
+  // Events
+  "event": "Event",
+  "events": "Events",
+  "chooseEvent": "Choose Event",
+  "noEvent": "No Event",
+  "activeEvents": "Active Events",
+  "allEvents": "All Events",
+
+  // Specific Events
+  "octoberRose": "October Rose",
+  "christmas": "Christmas",
+  "mothersDay": "Mother's Day",
+  "fathersDay": "Father's Day",
+  "valentinesDay": "Valentine's Day",
+  "halloween": "Halloween",
+  "newYear": "New Year",
+  "movember": "Movember",
+
+  // Export
+  "export": "Export",
+  "exportFormat": "Export Format",
+  "exportOptions": "Export Options",
+  "includeQRCode": "Include QR Code",
+  "includeVCard": "Include vCard",
+  "exportSuccess": "Export successful",
+  "exportFailed": "Export failed",
+  "share": "Share",
+
+  // Export Formats
+  "pngFormat": "PNG",
+  "jpgFormat": "JPG",
+  "pdfFormat": "PDF",
+
+  // Gallery
+  "myGallery": "My Gallery",
+  "noCards": "No business cards",
+  "noCardsDescription": "Tap + to create your first card",
+  "searchCards": "Search cards",
+  "sortBy": "Sort by",
+  "sortByName": "Sort by name",
+  "sortByDate": "Sort by date",
+  "sortAscending": "Ascending order",
+  "sortDescending": "Descending order",
+
+  // Actions
+  "save": "Save",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "edit": "Edit",
+  "share": "Share",
+  "copy": "Copy",
+  "done": "Done",
+  "next": "Next",
+  "previous": "Previous",
+  "back": "Back",
+  "close": "Close",
+  "tryAgain": "Try Again",
+  "loading": "Loading...",
+
+  // Messages
+  "cardCreated": "Card created successfully",
+  "cardUpdated": "Card updated successfully",
+  "cardDeleted": "Card deleted successfully",
+  "deleteConfirmation": "Are you sure you want to delete this card?",
+  "deleteCardConfirmation": "Are you sure you want to delete {name}'s card?",
+  "error": "Error",
+  "unknownError": "An unknown error occurred",
+  "networkError": "Network connection error",
+  "permissionDenied": "Permission denied",
+
+  // Time
+  "today": "Today",
+  "yesterday": "Yesterday",
+  "daysAgo": "{count} days ago",
+  "weeksAgo": "{count} weeks ago",
+  "monthsAgo": "{count} months ago",
+  "yearsAgo": "{count} years ago",
+
+  // Months
+  "january": "January",
+  "february": "February",
+  "march": "March",
+  "april": "April",
+  "may": "May",
+  "june": "June",
+  "july": "July",
+  "august": "August",
+  "september": "September",
+  "october": "October",
+  "november": "November",
+  "december": "December",
+
+  // Settings
+  "settings": "Settings",
+  "appearance": "Appearance",
+  "theme": "Theme",
+  "lightTheme": "Light Theme",
+  "darkTheme": "Dark Theme",
+  "systemTheme": "System Theme",
+  "language": "Language",
+  "about": "About",
+  "version": "Version",
+  "developer": "Developer",
+  "contact": "Contact",
+
+  // About
+  "appDescription": "Digital business card creation app with templates and events",
+  "privacyPolicy": "Privacy Policy",
+  "termsOfService": "Terms of Service",
+
+  // QR Code
+  "qrCode": "QR Code",
+  "scanQRCode": "Scan QR Code",
+  "generateQRCode": "Generate QR Code",
+  "qrCodeGenerated": "QR Code generated successfully",
+
+  // vCard
+  "vCard": "vCard",
+  "exportVCard": "Export as vCard",
+  "importVCard": "Import vCard",
+  "vCardExported": "vCard exported successfully",
+  "vCardImported": "vCard imported successfully",
+
+  // Sharing
+  "shareVia": "Share via",
+  "shareCard": "Share Card",
+  "shareSuccess": "Share successful",
+  "shareFailed": "Share failed",
+
+  // Miscellaneous
+  "search": "Search",
+  "filter": "Filter",
+  "clear": "Clear",
+  "refresh": "Refresh",
+  "loadingMore": "Loading more...",
+  "noResults": "No results",
+  "noResultsFound": "No results found",
+  "tryDifferentSearch": "Try a different search",
+
+  // Errors
+  "errorOccurred": "An error occurred",
+  "tryAgainLater": "Please try again later",
+  "contactSupport": "Contact support",
+  "somethingWentWrong": "Something went wrong"
+}

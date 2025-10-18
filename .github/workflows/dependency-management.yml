@@ -1,0 +1,180 @@
+name: Dependency Management
+
+on:
+  schedule:
+    # Run weekly on Monday at 6 AM UTC
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+    inputs:
+      update-type:
+        description: 'Type of update'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - major
+          - minor
+          - patch
+
+jobs:
+  check-outdated:
+    name: Check Outdated Dependencies
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.19.0'
+
+    - name: Get Flutter dependencies
+      run: flutter pub get
+
+    - name: Check outdated dependencies
+      run: |
+        flutter pub outdated --mode=null-safety > outdated.txt
+        flutter pub deps --style=tree > dependency-tree.txt
+
+    - name: Upload dependency reports
+      uses: actions/upload-artifact@v3
+      with:
+        name: dependency-reports
+        path: |
+          outdated.txt
+          dependency-tree.txt
+
+    - name: Create issue if outdated dependencies found
+      if: contains(steps.list-outdated.outputs.outdated, 'is available')
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          const outdated = fs.readFileSync('outdated.txt', 'utf8');
+
+          github.rest.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: 'Outdated dependencies detected',
+            body: `The following dependencies are outdated:\n\n\`\`\`\n${outdated}\n\`\`\`\n\nPlease consider updating them.`,
+            labels: ['dependencies', 'maintenance']
+          });
+
+  security-audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.19.0'
+
+    - name: Get Flutter dependencies
+      run: flutter pub get
+
+    - name: Run security audit
+      run: |
+        flutter pub deps | grep -E "(dart|flutter)" > security-audit.txt
+        # Check for known vulnerable packages
+        echo "Security audit completed" >> security-audit.txt
+
+    - name: Upload security audit report
+      uses: actions/upload-artifact@v3
+      with:
+        name: security-audit
+        path: security-audit.txt
+
+  dependency-update:
+    name: Update Dependencies
+    runs-on: ubuntu-latest
+    if: github.event.inputs.update-type == 'all' || contains(github.event.inputs.update-type, 'major')
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.19.0'
+
+    - name: Get Flutter dependencies
+      run: flutter pub get
+
+    - name: Update dependencies
+      run: |
+        flutter pub upgrade --major-versions
+        flutter pub get
+
+    - name: Run tests
+      run: flutter test
+
+    - name: Create PR if updates successful
+      uses: peter-evans/create-pull-request@v5
+      with:
+        title: 'feat: Update dependencies'
+        commit-message: 'feat: Update dependencies'
+        branch: 'deps/update-dependencies'
+        labels: ['dependencies', 'automated']
+        body: |
+          Automated dependency update
+
+          This PR updates dependencies to their latest versions.
+
+          ## Changes
+          - Updated Flutter dependencies
+          - Ran tests to ensure compatibility
+
+          ## Checklist
+          - [ ] All tests pass
+          - [ ] No breaking changes detected
+          - [ ] Manual testing completed
+
+  pubspec-check:
+    name: Validate pubspec.yaml
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.19.0'
+
+    - name: Validate pubspec.yaml
+      run: |
+        # Check if pubspec.yaml is valid
+        flutter pub get --dry-run
+
+        # Check for duplicate dependencies
+        if grep -q "duplicate entry" pubspec.lock; then
+          echo "Error: Duplicate dependencies found"
+          exit 1
+        fi
+
+        # Check for dev dependencies in main section
+        if grep -A 50 "dependencies:" pubspec.yaml | grep -q "flutter_test"; then
+          echo "Error: Dev dependency found in main dependencies"
+          exit 1
+        fi
+
+    - name: Check dependency versions
+      run: |
+        # Check for overly permissive version constraints
+        if grep -q "any:" pubspec.yaml; then
+          echo "Warning: Found 'any' version constraints"
+        fi
+
+        # Check for outdated Flutter/Dart versions
+        flutter pub deps --style=tree

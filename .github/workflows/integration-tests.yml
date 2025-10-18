@@ -1,0 +1,153 @@
+name: Integration Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+
+jobs:
+  android-integration:
+    name: Android Integration Tests
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.19.0'
+
+    - name: Get Flutter dependencies
+      run: flutter pub get
+
+    - name: Setup Android emulator
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: 33
+        target: google_apis
+        arch: x86_64
+        profile: Nexus 6
+        script: flutter test integration_test/
+
+  ios-integration:
+    name: iOS Integration Tests
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.19.0'
+
+    - name: Get Flutter dependencies
+      run: flutter pub get
+
+    - name: Setup Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: '15.0'
+
+    - name: Setup iOS simulator
+      run: |
+        xcrun simctl boot "iPhone 15 Pro" || true
+        xcrun simctl list devices available
+
+    - name: Run iOS integration tests
+      run: flutter test integration_test/ --platform=ios
+
+  web-integration:
+    name: Web Integration Tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.19.0'
+
+    - name: Get Flutter dependencies
+      run: flutter pub get
+
+    - name: Enable web support
+      run: flutter config --enable-web
+
+    - name: Run web integration tests
+      run: flutter test integration_test/ --platform=chrome
+
+  desktop-integration:
+    name: Desktop Integration Tests
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.19.0'
+
+    - name: Get Flutter dependencies
+      run: flutter pub get
+
+    - name: Enable desktop support
+      run: |
+        if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
+          flutter config --enable-linux-desktop
+        elif [ "${{ matrix.os }}" == "windows-latest" ]; then
+          flutter config --enable-windows-desktop
+        elif [ "${{ matrix.os }}" == "macos-latest" ]; then
+          flutter config --enable-macos-desktop
+        fi
+      shell: bash
+
+    - name: Run desktop integration tests
+      run: flutter test integration_test/ --platform=desktop
+
+  accessibility-testing:
+    name: Accessibility Testing
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.19.0'
+
+    - name: Get Flutter dependencies
+      run: flutter pub get
+
+    - name: Run accessibility tests
+      run: flutter test --test-name-regex="accessibility"
+
+    - name: Check accessibility compliance
+      run: |
+        # Run accessibility audit
+        flutter test test/features/accessibility/ --reporter=expanded
+
+        # Generate accessibility report
+        dart run tool/accessibility_audit.dart
