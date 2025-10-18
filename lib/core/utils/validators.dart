@@ -21,7 +21,9 @@ class Validators {
     }
 
     // Regex plus flexible qui supporte les formats internationaux
-    final phoneRegex = RegExp(r'^\+?[0-9]{1,4}?[-\s]?[(]?[0-9]{1,4}?[)]?[-\s]?[0-9]{1,4}[-\s]?[0-9]{1,4}[-\s]?[0-9]{2,9}$');
+    final phoneRegex = RegExp(
+      r'^\+?[0-9]{1,4}?[-\s]?[(]?[0-9]{1,4}?[)]?[-\s]?[0-9]{1,4}[-\s]?[0-9]{1,4}[-\s]?[0-9]{2,9}$',
+    );
     if (!phoneRegex.hasMatch(value)) {
       return 'Veuillez entrer un numéro de téléphone valide';
     }
@@ -35,7 +37,9 @@ class Validators {
       return null; // Optionnel
     }
 
-    final urlRegex = RegExp(r'^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$');
+    final urlRegex = RegExp(
+      r'^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$',
+    );
     if (!urlRegex.hasMatch(value)) {
       return 'Veuillez entrer une URL valide (ex: https://example.com)';
     }

@@ -1,5 +1,6 @@
 /// Renderer de carte style Ansut (moderne et créatif)
 library;
+
 import 'package:flutter/material.dart';
 import 'package:mycard/app/theme.dart';
 import 'package:mycard/data/models/card_template.dart';
@@ -120,7 +121,10 @@ class AnsutStyleRenderer implements CardRenderer {
                 // Entreprise avec style moderne
                 if (company?.isNotEmpty == true) ...[
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: primaryColor.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(20),
@@ -145,9 +149,27 @@ class AnsutStyleRenderer implements CardRenderer {
                     spacing: 16,
                     runSpacing: 12,
                     children: [
-                      if (phone.isNotEmpty) _buildModernContact(Icons.phone, phone, primaryColor, fontFamily),
-                      if (email.isNotEmpty) _buildModernContact(Icons.email, email, primaryColor, fontFamily),
-                      if (website?.isNotEmpty == true) _buildModernContact(Icons.language, website!, primaryColor, fontFamily),
+                      if (phone.isNotEmpty)
+                        _buildModernContact(
+                          Icons.phone,
+                          phone,
+                          primaryColor,
+                          fontFamily,
+                        ),
+                      if (email.isNotEmpty)
+                        _buildModernContact(
+                          Icons.email,
+                          email,
+                          primaryColor,
+                          fontFamily,
+                        ),
+                      if (website?.isNotEmpty == true)
+                        _buildModernContact(
+                          Icons.language,
+                          website!,
+                          primaryColor,
+                          fontFamily,
+                        ),
                     ],
                   ),
                   const SizedBox(height: 16),
@@ -157,7 +179,14 @@ class AnsutStyleRenderer implements CardRenderer {
                 if (address?.isNotEmpty == true ||
                     city?.isNotEmpty == true ||
                     postalCode?.isNotEmpty == true)
-                  _buildModernAddress(address, city, postalCode, country, secondaryColor, fontFamily),
+                  _buildModernAddress(
+                    address,
+                    city,
+                    postalCode,
+                    country,
+                    secondaryColor,
+                    fontFamily,
+                  ),
               ],
             ),
           ),
@@ -166,34 +195,35 @@ class AnsutStyleRenderer implements CardRenderer {
     );
   }
 
-  Widget _buildModernContact(IconData icon, String text, Color color, String? fontFamily) => Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.05),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.2)),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            size: 16,
+  Widget _buildModernContact(
+    IconData icon,
+    String text,
+    Color color,
+    String? fontFamily,
+  ) => Container(
+    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+    decoration: BoxDecoration(
+      color: color.withOpacity(0.05),
+      borderRadius: BorderRadius.circular(12),
+      border: Border.all(color: color.withOpacity(0.2)),
+    ),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 16, color: color),
+        const SizedBox(width: 6),
+        Text(
+          text,
+          style: TextStyle(
+            fontSize: 13,
             color: color,
+            fontWeight: FontWeight.w500,
+            fontFamily: fontFamily,
           ),
-          const SizedBox(width: 6),
-          Text(
-            text,
-            style: TextStyle(
-              fontSize: 13,
-              color: color,
-              fontWeight: FontWeight.w500,
-              fontFamily: fontFamily,
-            ),
-          ),
-        ],
-      ),
-    );
+        ),
+      ],
+    ),
+  );
 
   Widget _buildModernAddress(
     String? address,
@@ -220,11 +250,7 @@ class AnsutStyleRenderer implements CardRenderer {
       ),
       child: Row(
         children: [
-          Icon(
-            Icons.location_on,
-            size: 16,
-            color: color,
-          ),
+          Icon(Icons.location_on, size: 16, color: color),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
@@ -241,11 +267,17 @@ class AnsutStyleRenderer implements CardRenderer {
     );
   }
 
-  Color _getColor(String colorType, CardTemplate template, Map<String, String> customColors) {
+  Color _getColor(
+    String colorType,
+    CardTemplate template,
+    Map<String, String> customColors,
+  ) {
     final customColor = customColors[colorType];
     if (customColor != null) {
       // Retirer le # s'il est présent au début
-      final cleanColor = customColor.startsWith('#') ? customColor.substring(1) : customColor;
+      final cleanColor = customColor.startsWith('#')
+          ? customColor.substring(1)
+          : customColor;
       return Color(int.parse('FF$cleanColor', radix: 16));
     }
 

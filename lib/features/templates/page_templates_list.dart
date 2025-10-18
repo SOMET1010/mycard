@@ -1,5 +1,6 @@
 /// Page affichant la grille des modèles disponibles
 library;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -10,7 +11,11 @@ import 'package:mycard/data/models/event_overlay.dart';
 import 'package:mycard/features/templates/widget_template_card.dart';
 
 class TemplatesListPage extends ConsumerStatefulWidget {
-  const TemplatesListPage({super.key, this.selectionMode = false, this.onTemplateSelected});
+  const TemplatesListPage({
+    super.key,
+    this.selectionMode = false,
+    this.onTemplateSelected,
+  });
 
   /// Si true, la page retourne un template au lieu de naviguer vers l'éditeur
   final bool selectionMode;
@@ -66,10 +71,10 @@ class _TemplatesListPageState extends ConsumerState<TemplatesListPage> {
     final isLoading = templatesRepo.isLoading;
 
     // Debug: afficher le nombre de templates chargés
-    print('Templates loaded: ${templates.length}');
-    print('Is loading: $isLoading');
+    debugPrint('Templates loaded: ${templates.length}');
+    debugPrint('Is loading: $isLoading');
     if (templates.isNotEmpty) {
-      print('First template: ${templates.first.name}');
+      debugPrint('First template: ${templates.first.name}');
     }
 
     return Scaffold(
@@ -103,7 +108,10 @@ class _TemplatesListPageState extends ConsumerState<TemplatesListPage> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
               ),
               onChanged: (value) {
                 setState(() {});
@@ -131,8 +139,16 @@ class _TemplatesListPageState extends ConsumerState<TemplatesListPage> {
   }
 
   Widget _buildCategoryFilter() {
-    final categories = ['Tous', 'Favoris', 'Gratuits', 'Premium', 'Professionnel', 'Créatif', 'Événements'];
-    
+    final categories = [
+      'Tous',
+      'Favoris',
+      'Gratuits',
+      'Premium',
+      'Professionnel',
+      'Créatif',
+      'Événements',
+    ];
+
     return Container(
       height: 50,
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -143,7 +159,7 @@ class _TemplatesListPageState extends ConsumerState<TemplatesListPage> {
         itemBuilder: (context, index) {
           final category = categories[index];
           final isSelected = category == _selectedCategory;
-          
+
           return Padding(
             padding: const EdgeInsets.only(right: 8),
             child: FilterChip(
@@ -165,82 +181,111 @@ class _TemplatesListPageState extends ConsumerState<TemplatesListPage> {
   }
 
   Widget _buildAdvancedFilters() => SizedBox(
-        height: 56,
-        child: ListView(
-          scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              decoration: BoxDecoration(
-                color: Colors.grey[100],
-                borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: Colors.grey[300]!),
-              ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String?>(
-                  hint: const Text('Événement'),
-                  value: _selectedEventId,
-                  onChanged: (value) {
-                    setState(() => _selectedEventId = value);
-                  },
-                  items: [
-                    const DropdownMenuItem<String?>(value: null, child: Text('Tous les événements')),
-                    ...EventOverlay.predefinedEvents.map((e) => DropdownMenuItem<String?>(
-                          value: e.id,
-                          child: Text(e.label),
-                        )),
-                  ],
+    height: 56,
+    child: ListView(
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          decoration: BoxDecoration(
+            color: Colors.grey[100],
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(color: Colors.grey[300]!),
+          ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String?>(
+              hint: const Text('Événement'),
+              value: _selectedEventId,
+              onChanged: (value) {
+                setState(() => _selectedEventId = value);
+              },
+              items: [
+                const DropdownMenuItem<String?>(
+                  value: null,
+                  child: Text('Tous les événements'),
                 ),
-              ),
+                ...EventOverlay.predefinedEvents.map(
+                  (e) => DropdownMenuItem<String?>(
+                    value: e.id,
+                    child: Text(e.label),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
-      );
+      ],
+    ),
+  );
 
   Widget _buildTemplatesGrid(List<CardTemplate> templates) {
     final searchQuery = _searchController.text.toLowerCase();
-    
+
     // Filtrer par recherche et par catégorie
-    var filteredTemplates = templates.where((template) => 
-        template.name.toLowerCase().contains(searchQuery) ||
-        template.description.toLowerCase().contains(searchQuery)).toList();
+    var filteredTemplates = templates
+        .where(
+          (template) =>
+              template.name.toLowerCase().contains(searchQuery) ||
+              template.description.toLowerCase().contains(searchQuery),
+        )
+        .toList();
 
     // Appliquer le filtre de catégorie
     if (_selectedCategory != 'Tous') {
       switch (_selectedCategory) {
         case 'Favoris':
-          filteredTemplates = filteredTemplates.where((t) => _favoriteTemplates.contains(t.id)).toList();
+          filteredTemplates = filteredTemplates
+              .where((t) => _favoriteTemplates.contains(t.id))
+              .toList();
           break;
         case 'Gratuits':
-          filteredTemplates = filteredTemplates.where((t) => !t.isPremium).toList();
+          filteredTemplates = filteredTemplates
+              .where((t) => !t.isPremium)
+              .toList();
           break;
         case 'Premium':
-          filteredTemplates = filteredTemplates.where((t) => t.isPremium).toList();
+          filteredTemplates = filteredTemplates
+              .where((t) => t.isPremium)
+              .toList();
           break;
         case 'Professionnel':
-          filteredTemplates = filteredTemplates.where((t) => 
-              t.name.toLowerCase().contains('corporate') ||
-              t.layout == 'left-aligned').toList();
+          filteredTemplates = filteredTemplates
+              .where(
+                (t) =>
+                    t.name.toLowerCase().contains('corporate') ||
+                    t.layout == 'left-aligned',
+              )
+              .toList();
           break;
         case 'Créatif':
-          filteredTemplates = filteredTemplates.where((t) => 
-              t.name.toLowerCase().contains('créatif') ||
-              t.name.toLowerCase().contains('creative') ||
-              t.layout == 'modern').toList();
+          filteredTemplates = filteredTemplates
+              .where(
+                (t) =>
+                    t.name.toLowerCase().contains('créatif') ||
+                    t.name.toLowerCase().contains('creative') ||
+                    t.layout == 'modern',
+              )
+              .toList();
           break;
         case 'Événements':
-          filteredTemplates = filteredTemplates.where((t) => t.eventId != null).toList();
+          filteredTemplates = filteredTemplates
+              .where((t) => t.eventId != null)
+              .toList();
           break;
       }
     }
 
     // Filtre spécifique par événement
     if (_selectedEventId != null) {
-      filteredTemplates = filteredTemplates.where((t) => t.eventId == _selectedEventId).toList();
+      filteredTemplates = filteredTemplates
+          .where((t) => t.eventId == _selectedEventId)
+          .toList();
     }
 
-    print('Building templates grid with ${filteredTemplates.length} filtered templates from ${templates.length} total');
+    debugPrint(
+      'Building templates grid with ${filteredTemplates.length} filtered templates from ${templates.length} total',
+    );
 
     if (filteredTemplates.isEmpty) {
       return const Center(

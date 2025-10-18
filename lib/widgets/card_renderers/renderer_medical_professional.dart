@@ -1,5 +1,6 @@
 /// Renderer pour carte Professionnel Médical
 library;
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mycard/data/models/card_template.dart';
@@ -36,10 +37,7 @@ class MedicalProfessionalRenderer implements CardRenderer {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: accentColor.withValues(alpha: 0.3),
-          width: 2,
-        ),
+        border: Border.all(color: accentColor.withValues(alpha: 0.3), width: 2),
       ),
       child: Column(
         children: [
@@ -65,21 +63,19 @@ class MedicalProfessionalRenderer implements CardRenderer {
                         height: 50,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(25),
-                          border: Border.all(
-                            color: Colors.white,
-                            width: 2,
-                          ),
+                          border: Border.all(color: Colors.white, width: 2),
                         ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(23),
                           child: Image.file(
                             File(logoPath),
                             fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) => const Icon(
-                                Icons.medical_services,
-                                color: Colors.white,
-                                size: 30,
-                              ),
+                            errorBuilder: (context, error, stackTrace) =>
+                                const Icon(
+                                  Icons.medical_services,
+                                  color: Colors.white,
+                                  size: 30,
+                                ),
                           ),
                         ),
                       )
@@ -128,7 +124,10 @@ class MedicalProfessionalRenderer implements CardRenderer {
                 if (company?.isNotEmpty == true) ...[
                   const SizedBox(height: 8),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: accentColor,
                       borderRadius: BorderRadius.circular(12),
@@ -156,7 +155,9 @@ class MedicalProfessionalRenderer implements CardRenderer {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Section contact
-                  if (phone.isNotEmpty || email.isNotEmpty || website?.isNotEmpty == true) ...[
+                  if (phone.isNotEmpty ||
+                      email.isNotEmpty ||
+                      website?.isNotEmpty == true) ...[
                     Text(
                       'CONTACT',
                       style: TextStyle(
@@ -168,11 +169,26 @@ class MedicalProfessionalRenderer implements CardRenderer {
                     ),
                     const SizedBox(height: 8),
                     if (phone.isNotEmpty)
-                      _buildMedicalContact(Icons.phone, phone, secondaryColor, fontFamily),
+                      _buildMedicalContact(
+                        Icons.phone,
+                        phone,
+                        secondaryColor,
+                        fontFamily,
+                      ),
                     if (email.isNotEmpty)
-                      _buildMedicalContact(Icons.email, email, secondaryColor, fontFamily),
+                      _buildMedicalContact(
+                        Icons.email,
+                        email,
+                        secondaryColor,
+                        fontFamily,
+                      ),
                     if (website?.isNotEmpty == true)
-                      _buildMedicalContact(Icons.language, website!, secondaryColor, fontFamily),
+                      _buildMedicalContact(
+                        Icons.language,
+                        website!,
+                        secondaryColor,
+                        fontFamily,
+                      ),
                     const SizedBox(height: 16),
                   ],
 
@@ -190,7 +206,14 @@ class MedicalProfessionalRenderer implements CardRenderer {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    _buildAddressSection(address, city, postalCode, country, secondaryColor, fontFamily),
+                    _buildAddressSection(
+                      address,
+                      city,
+                      postalCode,
+                      country,
+                      secondaryColor,
+                      fontFamily,
+                    ),
                   ],
 
                   const Spacer(),
@@ -206,11 +229,7 @@ class MedicalProfessionalRenderer implements CardRenderer {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
-                          Icons.favorite,
-                          size: 16,
-                          color: accentColor,
-                        ),
+                        Icon(Icons.favorite, size: 16, color: accentColor),
                         const SizedBox(width: 6),
                         Text(
                           'Santé et Bien-être',
@@ -238,38 +257,33 @@ class MedicalProfessionalRenderer implements CardRenderer {
     String text,
     Color color,
     String? fontFamily,
-  ) =>
-      Padding(
-        padding: const EdgeInsets.only(bottom: 6),
-        child: Row(
-          children: [
-            Container(
-              width: 24,
-              height: 24,
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(
-                icon,
-                size: 14,
-                color: color,
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                text,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: color,
-                  fontFamily: fontFamily,
-                ),
-              ),
-            ),
-          ],
+  ) => Padding(
+    padding: const EdgeInsets.only(bottom: 6),
+    child: Row(
+      children: [
+        Container(
+          width: 24,
+          height: 24,
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(icon, size: 14, color: color),
         ),
-      );
+        const SizedBox(width: 10),
+        Expanded(
+          child: Text(
+            text,
+            style: TextStyle(
+              fontSize: 12,
+              color: color,
+              fontFamily: fontFamily,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 
   Widget _buildAddressSection(
     String? address,
@@ -296,11 +310,7 @@ class MedicalProfessionalRenderer implements CardRenderer {
             color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
           ),
-          child: Icon(
-            Icons.location_on,
-            size: 14,
-            color: color,
-          ),
+          child: Icon(Icons.location_on, size: 14, color: color),
         ),
         const SizedBox(width: 10),
         Expanded(
@@ -317,7 +327,11 @@ class MedicalProfessionalRenderer implements CardRenderer {
     );
   }
 
-  Color _getColor(String colorType, CardTemplate template, Map<String, String> customColors) {
+  Color _getColor(
+    String colorType,
+    CardTemplate template,
+    Map<String, String> customColors,
+  ) {
     final customColor = customColors[colorType];
     if (customColor != null) {
       final cleanColor = customColor.startsWith('#')

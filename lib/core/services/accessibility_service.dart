@@ -3,7 +3,11 @@ import 'dart:math';
 /// Service pour gérer l'accessibilité de l'application
 class AccessibilityService {
   /// Vérifie si le contraste entre deux couleurs est suffisant (WCAG AA)
-  static bool hasSufficientContrast(int foregroundColor, int backgroundColor, {bool largeText = false}) {
+  static bool hasSufficientContrast(
+    int foregroundColor,
+    int backgroundColor, {
+    bool largeText = false,
+  }) {
     final ratio = _calculateContrastRatio(foregroundColor, backgroundColor);
     return ratio >= (largeText ? 3.0 : 4.5);
   }
@@ -35,14 +39,17 @@ class AccessibilityService {
   }
 
   /// @visibleForTesting - calcule le ratio de contraste entre deux couleurs
-  static double _calculateContrastRatio(int color1, int color2) => calculateContrastRatio(color1, color2);
+  static double _calculateContrastRatio(int color1, int color2) =>
+      calculateContrastRatio(color1, color2);
 
   /// @visibleForTesting - calcule la luminance relative d'une couleur
   static double _getLuminance(int color) => getLuminance(color);
 
-
   /// Détermine la taille de texte accessible recommandée
-  static double getAccessibleTextSize(double baseSize, {bool isLargeText = false}) {
+  static double getAccessibleTextSize(
+    double baseSize, {
+    bool isLargeText = false,
+  }) {
     if (isLargeText) {
       return baseSize >= 18.0 ? baseSize : 18.0;
     }
@@ -64,7 +71,8 @@ class AccessibilityService {
   }
 
   /// Vérifie si un élément interactif a une taille suffisante
-  static bool isInteractiveSizeAccessible(double width, double height) => width >= 44.0 && height >= 44.0;
+  static bool isInteractiveSizeAccessible(double width, double height) =>
+      width >= 44.0 && height >= 44.0;
 
   /// Génère des suggestions pour améliorer l'accessibilité
   static List<String> getAccessibilitySuggestions({
@@ -78,21 +86,27 @@ class AccessibilityService {
     // Vérifier les contrastes
     for (var i = 0; i < foregroundColors.length; i++) {
       if (!hasSufficientContrast(foregroundColors[i], backgroundColor)) {
-        suggestions.add('Améliorer le contraste du texte ${i + 1} avec le fond');
+        suggestions.add(
+          'Améliorer le contraste du texte ${i + 1} avec le fond',
+        );
       }
     }
 
     // Vérifier les tailles de texte
     for (var i = 0; i < textSizes.length; i++) {
       if (!isTextSizeAccessible(textSizes[i])) {
-        suggestions.add('Augmenter la taille du texte ${i + 1} à au moins 14px');
+        suggestions.add(
+          'Augmenter la taille du texte ${i + 1} à au moins 14px',
+        );
       }
     }
 
     // Vérifier les éléments interactifs
     interactiveSizes.forEach((name, size) {
       if (size < getMinimumInteractiveSize()) {
-        suggestions.add('Augmenter la taille de l\'élément "$name" à au moins 44px');
+        suggestions.add(
+          'Augmenter la taille de l\'élément "$name" à au moins 44px',
+        );
       }
     });
 

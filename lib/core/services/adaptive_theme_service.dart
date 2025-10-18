@@ -1,34 +1,34 @@
 /// Service de thèmes adaptatifs avec détection automatique du contexte
 library;
+
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mycard/features/events/page_event_theme_preview.dart';
 
 enum AdaptationTrigger {
-  timeOfDay,        // Heure de la journée
-  weather,          // Météo
-  location,         // Localisation
-  userActivity,     // Activité de l'utilisateur
+  timeOfDay, // Heure de la journée
+  weather, // Météo
+  location, // Localisation
+  userActivity, // Activité de l'utilisateur
   deviceOrientation, // Orientation de l'appareil
-  ambientLight,     // Lumière ambiante
-  batteryLevel,     // Niveau de batterie
-  userPreference,   // Préférence utilisateur
-  systemTheme,      // Thème système
-  season,           // Saison
-  weekday,          // Jour de la semaine
-  custom,           // Déclencheur personnalisé
+  ambientLight, // Lumière ambiante
+  batteryLevel, // Niveau de batterie
+  userPreference, // Préférence utilisateur
+  systemTheme, // Thème système
+  season, // Saison
+  weekday, // Jour de la semaine
+  custom, // Déclencheur personnalisé
 }
 
 enum ThemeAdaptationMode {
-  automatic,        // Adaptation automatique
-  scheduled,        // Adaptation planifiée
-  manual,           // Adaptation manuelle
-  hybrid,           // Mode hybride
+  automatic, // Adaptation automatique
+  scheduled, // Adaptation planifiée
+  manual, // Adaptation manuelle
+  hybrid, // Mode hybride
 }
 
 class AdaptiveThemeRule {
-
   const AdaptiveThemeRule({
     required this.id,
     required this.trigger,
@@ -46,37 +46,42 @@ class AdaptiveThemeRule {
     this.transitionCurve = Curves.easeInOut,
   });
 
-  factory AdaptiveThemeRule.fromJson(Map<String, dynamic> json) => AdaptiveThemeRule(
-      id: json['id'],
-      trigger: AdaptationTrigger.values.firstWhere(
-        (e) => e.name == json['trigger'],
-        orElse: () => AdaptationTrigger.custom,
-      ),
-      conditions: Map<String, dynamic>.from(json['conditions'] ?? {}),
-      targetTheme: EventThemeCustomization.fromJson(json['targetTheme']),
-      name: json['name'],
-      description: json['description'] ?? '',
-      isActive: json['isActive'] ?? true,
-      createdAt: DateTime.parse(json['createdAt']),
-      lastTriggered: json['lastTriggered'] != null
-          ? DateTime.parse(json['lastTriggered'])
-          : null,
-      triggerCount: json['triggerCount'] ?? 0,
-      mode: ThemeAdaptationMode.values.firstWhere(
-        (e) => e.name == json['mode'],
-        orElse: () => ThemeAdaptationMode.automatic,
-      ),
-      scheduleTimes: (json['scheduleTimes'] as List?)
-          ?.map((time) => TimeOfDay(
-                hour: time['hour'],
-                minute: time['minute'],
-              ))
-          .toList() ?? [],
-      transitionDuration: Duration(
-        milliseconds: json['transitionDuration'] ?? 500,
-      ),
-      transitionCurve: _getCurveFromString(json['transitionCurve'] ?? 'easeInOut'),
-    );
+  factory AdaptiveThemeRule.fromJson(Map<String, dynamic> json) =>
+      AdaptiveThemeRule(
+        id: json['id'],
+        trigger: AdaptationTrigger.values.firstWhere(
+          (e) => e.name == json['trigger'],
+          orElse: () => AdaptationTrigger.custom,
+        ),
+        conditions: Map<String, dynamic>.from(json['conditions'] ?? {}),
+        targetTheme: EventThemeCustomization.fromJson(json['targetTheme']),
+        name: json['name'],
+        description: json['description'] ?? '',
+        isActive: json['isActive'] ?? true,
+        createdAt: DateTime.parse(json['createdAt']),
+        lastTriggered: json['lastTriggered'] != null
+            ? DateTime.parse(json['lastTriggered'])
+            : null,
+        triggerCount: json['triggerCount'] ?? 0,
+        mode: ThemeAdaptationMode.values.firstWhere(
+          (e) => e.name == json['mode'],
+          orElse: () => ThemeAdaptationMode.automatic,
+        ),
+        scheduleTimes:
+            (json['scheduleTimes'] as List?)
+                ?.map(
+                  (time) =>
+                      TimeOfDay(hour: time['hour'], minute: time['minute']),
+                )
+                .toList() ??
+            [],
+        transitionDuration: Duration(
+          milliseconds: json['transitionDuration'] ?? 500,
+        ),
+        transitionCurve: _getCurveFromString(
+          json['transitionCurve'] ?? 'easeInOut',
+        ),
+      );
   final String id;
   final AdaptationTrigger trigger;
   final Map<String, dynamic> conditions;
@@ -93,36 +98,44 @@ class AdaptiveThemeRule {
   final Curve transitionCurve;
 
   Map<String, dynamic> toJson() => {
-      'id': id,
-      'trigger': trigger.name,
-      'conditions': conditions,
-      'targetTheme': targetTheme.toJson(),
-      'name': name,
-      'description': description,
-      'isActive': isActive,
-      'createdAt': createdAt.toIso8601String(),
-      'lastTriggered': lastTriggered?.toIso8601String(),
-      'triggerCount': triggerCount,
-      'mode': mode.name,
-      'scheduleTimes': scheduleTimes.map((time) => {
-        'hour': time.hour,
-        'minute': time.minute,
-      }).toList(),
-      'transitionDuration': transitionDuration.inMilliseconds,
-      'transitionCurve': _curveToString(transitionCurve),
-    };
+    'id': id,
+    'trigger': trigger.name,
+    'conditions': conditions,
+    'targetTheme': targetTheme.toJson(),
+    'name': name,
+    'description': description,
+    'isActive': isActive,
+    'createdAt': createdAt.toIso8601String(),
+    'lastTriggered': lastTriggered?.toIso8601String(),
+    'triggerCount': triggerCount,
+    'mode': mode.name,
+    'scheduleTimes': scheduleTimes
+        .map((time) => {'hour': time.hour, 'minute': time.minute})
+        .toList(),
+    'transitionDuration': transitionDuration.inMilliseconds,
+    'transitionCurve': _curveToString(transitionCurve),
+  };
 
   static Curve _getCurveFromString(String curveString) {
     switch (curveString) {
-      case 'linear': return Curves.linear;
-      case 'easeIn': return Curves.easeIn;
-      case 'easeOut': return Curves.easeOut;
-      case 'easeInOut': return Curves.easeInOut;
-      case 'bounceIn': return Curves.bounceIn;
-      case 'bounceOut': return Curves.bounceOut;
-      case 'elasticIn': return Curves.elasticIn;
-      case 'elasticOut': return Curves.elasticOut;
-      default: return Curves.easeInOut;
+      case 'linear':
+        return Curves.linear;
+      case 'easeIn':
+        return Curves.easeIn;
+      case 'easeOut':
+        return Curves.easeOut;
+      case 'easeInOut':
+        return Curves.easeInOut;
+      case 'bounceIn':
+        return Curves.bounceIn;
+      case 'bounceOut':
+        return Curves.bounceOut;
+      case 'elasticIn':
+        return Curves.elasticIn;
+      case 'elasticOut':
+        return Curves.elasticOut;
+      default:
+        return Curves.easeInOut;
     }
   }
 
@@ -154,21 +167,21 @@ class AdaptiveThemeRule {
     Duration? transitionDuration,
     Curve? transitionCurve,
   }) => AdaptiveThemeRule(
-      id: id ?? this.id,
-      trigger: trigger ?? this.trigger,
-      conditions: conditions ?? this.conditions,
-      targetTheme: targetTheme ?? this.targetTheme,
-      name: name ?? this.name,
-      description: description ?? this.description,
-      isActive: isActive ?? this.isActive,
-      createdAt: createdAt ?? this.createdAt,
-      lastTriggered: lastTriggered ?? this.lastTriggered,
-      triggerCount: triggerCount ?? this.triggerCount,
-      mode: mode ?? this.mode,
-      scheduleTimes: scheduleTimes ?? this.scheduleTimes,
-      transitionDuration: transitionDuration ?? this.transitionDuration,
-      transitionCurve: transitionCurve ?? this.transitionCurve,
-    );
+    id: id ?? this.id,
+    trigger: trigger ?? this.trigger,
+    conditions: conditions ?? this.conditions,
+    targetTheme: targetTheme ?? this.targetTheme,
+    name: name ?? this.name,
+    description: description ?? this.description,
+    isActive: isActive ?? this.isActive,
+    createdAt: createdAt ?? this.createdAt,
+    lastTriggered: lastTriggered ?? this.lastTriggered,
+    triggerCount: triggerCount ?? this.triggerCount,
+    mode: mode ?? this.mode,
+    scheduleTimes: scheduleTimes ?? this.scheduleTimes,
+    transitionDuration: transitionDuration ?? this.transitionDuration,
+    transitionCurve: transitionCurve ?? this.transitionCurve,
+  );
 }
 
 class AdaptiveThemeService {
@@ -193,11 +206,13 @@ class AdaptiveThemeService {
   static Future<void> addRule(AdaptiveThemeRule rule) async {
     _rules.add(rule);
     await _saveRules();
-    _eventController.add(AdaptiveThemeEvent(
-      type: AdaptiveEventType.ruleAdded,
-      ruleId: rule.id,
-      data: {'rule': rule},
-    ));
+    _eventController.add(
+      AdaptiveThemeEvent(
+        type: AdaptiveEventType.ruleAdded,
+        ruleId: rule.id,
+        data: {'rule': rule},
+      ),
+    );
   }
 
   /// Met à jour une règle d'adaptation
@@ -206,11 +221,13 @@ class AdaptiveThemeService {
     if (index != -1) {
       _rules[index] = rule;
       await _saveRules();
-      _eventController.add(AdaptiveThemeEvent(
-        type: AdaptiveEventType.ruleUpdated,
-        ruleId: rule.id,
-        data: {'rule': rule},
-      ));
+      _eventController.add(
+        AdaptiveThemeEvent(
+          type: AdaptiveEventType.ruleUpdated,
+          ruleId: rule.id,
+          data: {'rule': rule},
+        ),
+      );
     }
   }
 
@@ -218,17 +235,17 @@ class AdaptiveThemeService {
   static Future<void> removeRule(String ruleId) async {
     _rules.removeWhere((r) => r.id == ruleId);
     await _saveRules();
-    _eventController.add(AdaptiveThemeEvent(
-      type: AdaptiveEventType.ruleRemoved,
-      ruleId: ruleId,
-    ));
+    _eventController.add(
+      AdaptiveThemeEvent(type: AdaptiveEventType.ruleRemoved, ruleId: ruleId),
+    );
   }
 
   /// Récupère toutes les règles
   static List<AdaptiveThemeRule> getRules() => List.unmodifiable(_rules);
 
   /// Récupère les règles actives
-  static List<AdaptiveThemeRule> getActiveRules() => _rules.where((rule) => rule.isActive).toList();
+  static List<AdaptiveThemeRule> getActiveRules() =>
+      _rules.where((rule) => rule.isActive).toList();
 
   /// Définit le thème actuel
   static void setCurrentTheme(EventThemeCustomization theme) {
@@ -256,20 +273,20 @@ class AdaptiveThemeService {
     required EventThemeCustomization theme,
     List<int>? daysOfWeek, // 1-7 (Lundi-Dimanche)
   }) => AdaptiveThemeRule(
-      id: _generateRuleId(),
-      trigger: AdaptationTrigger.timeOfDay,
-      conditions: {
-        'startTime': {'hour': startTime.hour, 'minute': startTime.minute},
-        'endTime': {'hour': endTime.hour, 'minute': endTime.minute},
-        'daysOfWeek': daysOfWeek ?? [1, 2, 3, 4, 5], // Jours ouvrables par défaut
-      },
-      targetTheme: theme,
-      name: name,
-      description: 'Adaptation basée sur l\'heure: $startTime - $endTime',
-      createdAt: DateTime.now(),
-      mode: ThemeAdaptationMode.scheduled,
-      scheduleTimes: [startTime],
-    );
+    id: _generateRuleId(),
+    trigger: AdaptationTrigger.timeOfDay,
+    conditions: {
+      'startTime': {'hour': startTime.hour, 'minute': startTime.minute},
+      'endTime': {'hour': endTime.hour, 'minute': endTime.minute},
+      'daysOfWeek': daysOfWeek ?? [1, 2, 3, 4, 5], // Jours ouvrables par défaut
+    },
+    targetTheme: theme,
+    name: name,
+    description: 'Adaptation basée sur l\'heure: $startTime - $endTime',
+    createdAt: DateTime.now(),
+    mode: ThemeAdaptationMode.scheduled,
+    scheduleTimes: [startTime],
+  );
 
   /// Crée une règle d'adaptation basée sur la météo
   static AdaptiveThemeRule createWeatherBasedRule({
@@ -277,19 +294,20 @@ class AdaptiveThemeService {
     required List<String> weatherConditions,
     required EventThemeCustomization theme,
   }) => AdaptiveThemeRule(
-      id: _generateRuleId(),
-      trigger: AdaptationTrigger.weather,
-      conditions: {
-        'conditions': weatherConditions,
-        'temperature': null, // Optionnel: {min, max}
-        'humidity': null,    // Optionnel: {min, max}
-      },
-      targetTheme: theme,
-      name: name,
-      description: 'Adaptation basée sur la météo: ${weatherConditions.join(', ')}',
-      createdAt: DateTime.now(),
-      mode: ThemeAdaptationMode.automatic,
-    );
+    id: _generateRuleId(),
+    trigger: AdaptationTrigger.weather,
+    conditions: {
+      'conditions': weatherConditions,
+      'temperature': null, // Optionnel: {min, max}
+      'humidity': null, // Optionnel: {min, max}
+    },
+    targetTheme: theme,
+    name: name,
+    description:
+        'Adaptation basée sur la météo: ${weatherConditions.join(', ')}',
+    createdAt: DateTime.now(),
+    mode: ThemeAdaptationMode.automatic,
+  );
 
   /// Crée une règle d'adaptation basée sur la localisation
   static AdaptiveThemeRule createLocationBasedRule({
@@ -298,19 +316,20 @@ class AdaptiveThemeService {
     required EventThemeCustomization theme,
     double? radius, // Rayon en km
   }) => AdaptiveThemeRule(
-      id: _generateRuleId(),
-      trigger: AdaptationTrigger.location,
-      conditions: {
-        'locations': locations,
-        'radius': radius ?? 1.0,
-        'currentLocation': null, // Sera rempli automatiquement
-      },
-      targetTheme: theme,
-      name: name,
-      description: 'Adaptation basée sur la localisation: ${locations.join(', ')}',
-      createdAt: DateTime.now(),
-      mode: ThemeAdaptationMode.automatic,
-    );
+    id: _generateRuleId(),
+    trigger: AdaptationTrigger.location,
+    conditions: {
+      'locations': locations,
+      'radius': radius ?? 1.0,
+      'currentLocation': null, // Sera rempli automatiquement
+    },
+    targetTheme: theme,
+    name: name,
+    description:
+        'Adaptation basée sur la localisation: ${locations.join(', ')}',
+    createdAt: DateTime.now(),
+    mode: ThemeAdaptationMode.automatic,
+  );
 
   /// Crée une règle d'adaptation basée sur l'activité utilisateur
   static AdaptiveThemeRule createActivityBasedRule({
@@ -318,18 +337,18 @@ class AdaptiveThemeService {
     required List<String> activities,
     required EventThemeCustomization theme,
   }) => AdaptiveThemeRule(
-      id: _generateRuleId(),
-      trigger: AdaptationTrigger.userActivity,
-      conditions: {
-        'activities': activities, // ['work', 'leisure', 'exercise', 'sleep']
-        'duration': null,       // Optionnel: durée en minutes
-      },
-      targetTheme: theme,
-      name: name,
-      description: 'Adaptation basée sur l\'activité: ${activities.join(', ')}',
-      createdAt: DateTime.now(),
-      mode: ThemeAdaptationMode.automatic,
-    );
+    id: _generateRuleId(),
+    trigger: AdaptationTrigger.userActivity,
+    conditions: {
+      'activities': activities, // ['work', 'leisure', 'exercise', 'sleep']
+      'duration': null, // Optionnel: durée en minutes
+    },
+    targetTheme: theme,
+    name: name,
+    description: 'Adaptation basée sur l\'activité: ${activities.join(', ')}',
+    createdAt: DateTime.now(),
+    mode: ThemeAdaptationMode.automatic,
+  );
 
   /// Crée une règle d'adaptation basée sur la batterie
   static AdaptiveThemeRule createBatteryBasedRule({
@@ -338,19 +357,19 @@ class AdaptiveThemeService {
     required EventThemeCustomization theme,
     bool isLowPowerMode = false,
   }) => AdaptiveThemeRule(
-      id: _generateRuleId(),
-      trigger: AdaptationTrigger.batteryLevel,
-      conditions: {
-        'minLevel': minBatteryLevel,
-        'maxLevel': 100,
-        'isLowPowerMode': isLowPowerMode,
-      },
-      targetTheme: theme,
-      name: name,
-      description: 'Adaptation basée sur la batterie: <$minBatteryLevel%',
-      createdAt: DateTime.now(),
-      mode: ThemeAdaptationMode.automatic,
-    );
+    id: _generateRuleId(),
+    trigger: AdaptationTrigger.batteryLevel,
+    conditions: {
+      'minLevel': minBatteryLevel,
+      'maxLevel': 100,
+      'isLowPowerMode': isLowPowerMode,
+    },
+    targetTheme: theme,
+    name: name,
+    description: 'Adaptation basée sur la batterie: <$minBatteryLevel%',
+    createdAt: DateTime.now(),
+    mode: ThemeAdaptationMode.automatic,
+  );
 
   /// Crée une règle d'adaptation saisonnière
   static AdaptiveThemeRule createSeasonalRule({
@@ -358,17 +377,17 @@ class AdaptiveThemeService {
     required List<String> seasons,
     required EventThemeCustomization theme,
   }) => AdaptiveThemeRule(
-      id: _generateRuleId(),
-      trigger: AdaptationTrigger.season,
-      conditions: {
-        'seasons': seasons, // ['spring', 'summer', 'autumn', 'winter']
-      },
-      targetTheme: theme,
-      name: name,
-      description: 'Adaptation saisonnière: ${seasons.join(', ')}',
-      createdAt: DateTime.now(),
-      mode: ThemeAdaptationMode.automatic,
-    );
+    id: _generateRuleId(),
+    trigger: AdaptationTrigger.season,
+    conditions: {
+      'seasons': seasons, // ['spring', 'summer', 'autumn', 'winter']
+    },
+    targetTheme: theme,
+    name: name,
+    description: 'Adaptation saisonnière: ${seasons.join(', ')}',
+    createdAt: DateTime.now(),
+    mode: ThemeAdaptationMode.automatic,
+  );
 
   /// Analyse les tendances d'utilisation
   static Future<Map<String, dynamic>> analyzeUsagePatterns() async {
@@ -429,21 +448,20 @@ class AdaptiveThemeService {
 
   /// Exporte les règles d'adaptation
   static Map<String, dynamic> exportRules() => {
-      'version': '1.0',
-      'exportDate': DateTime.now().toIso8601String(),
-      'rules': _rules.map((rule) => rule.toJson()).toList(),
-      'statistics': {
-        'totalRules': _rules.length,
-        'activeRules': getActiveRules().length,
-        'rulesByTrigger': _rules.fold<Map<AdaptationTrigger, int>>(
-          {},
-          (map, rule) {
+    'version': '1.0',
+    'exportDate': DateTime.now().toIso8601String(),
+    'rules': _rules.map((rule) => rule.toJson()).toList(),
+    'statistics': {
+      'totalRules': _rules.length,
+      'activeRules': getActiveRules().length,
+      'rulesByTrigger': _rules
+          .fold<Map<AdaptationTrigger, int>>({}, (map, rule) {
             map[rule.trigger] = (map[rule.trigger] ?? 0) + 1;
             return map;
-          },
-        ).map((k, v) => MapEntry(k.name, v)),
-      },
-    };
+          })
+          .map((k, v) => MapEntry(k.name, v)),
+    },
+  };
 
   /// Importe des règles d'adaptation
   static Future<void> importRules(Map<String, dynamic> data) async {
@@ -460,14 +478,15 @@ class AdaptiveThemeService {
   static Future<void> resetRules() async {
     _rules.clear();
     await _saveRules();
-    _eventController.add(const AdaptiveThemeEvent(
-      type: AdaptiveEventType.rulesReset,
-    ));
+    _eventController.add(
+      const AdaptiveThemeEvent(type: AdaptiveEventType.rulesReset),
+    );
   }
 
   // Méthodes privées
 
-  static String _generateRuleId() => 'rule_${DateTime.now().millisecondsSinceEpoch}_${Random().nextInt(10000)}';
+  static String _generateRuleId() =>
+      'rule_${DateTime.now().millisecondsSinceEpoch}_${Random().nextInt(10000)}';
 
   static Map<String, dynamic>? _getCurrentContext() {
     final now = DateTime.now();
@@ -494,7 +513,10 @@ class AdaptiveThemeService {
     return 'winter';
   }
 
-  static Future<bool> _shouldTriggerRule(AdaptiveThemeRule rule, Map<String, dynamic> context) async {
+  static Future<bool> _shouldTriggerRule(
+    AdaptiveThemeRule rule,
+    Map<String, dynamic> context,
+  ) async {
     switch (rule.trigger) {
       case AdaptationTrigger.timeOfDay:
         return _checkTimeCondition(rule.conditions, context);
@@ -517,7 +539,10 @@ class AdaptiveThemeService {
     }
   }
 
-  static bool _checkTimeCondition(Map<String, dynamic> conditions, Map<String, dynamic> context) {
+  static bool _checkTimeCondition(
+    Map<String, dynamic> conditions,
+    Map<String, dynamic> context,
+  ) {
     final currentTime = context['timeOfDay'] as int;
     final startTime = conditions['startTime']['hour'] as int;
     final endTime = conditions['endTime']['hour'] as int;
@@ -537,49 +562,72 @@ class AdaptiveThemeService {
     }
   }
 
-  static bool _checkWeatherCondition(Map<String, dynamic> conditions, Map<String, dynamic> context) {
+  static bool _checkWeatherCondition(
+    Map<String, dynamic> conditions,
+    Map<String, dynamic> context,
+  ) {
     final currentWeather = context['weather'] as String;
-    final conditionsList = (conditions['conditions'] as List?)?.cast<String>() ?? [];
+    final conditionsList =
+        (conditions['conditions'] as List?)?.cast<String>() ?? [];
 
     return conditionsList.contains(currentWeather);
   }
 
-  static bool _checkLocationCondition(Map<String, dynamic> conditions, Map<String, dynamic> context) {
+  static bool _checkLocationCondition(
+    Map<String, dynamic> conditions,
+    Map<String, dynamic> context,
+  ) {
     final currentLocation = context['location'] as String;
     final locations = (conditions['locations'] as List?)?.cast<String>() ?? [];
 
     return locations.contains(currentLocation);
   }
 
-  static bool _checkActivityCondition(Map<String, dynamic> conditions, Map<String, dynamic> context) {
+  static bool _checkActivityCondition(
+    Map<String, dynamic> conditions,
+    Map<String, dynamic> context,
+  ) {
     final currentActivity = context['activity'] as String;
-    final activities = (conditions['activities'] as List?)?.cast<String>() ?? [];
+    final activities =
+        (conditions['activities'] as List?)?.cast<String>() ?? [];
 
     return activities.contains(currentActivity);
   }
 
-  static bool _checkBatteryCondition(Map<String, dynamic> conditions, Map<String, dynamic> context) {
+  static bool _checkBatteryCondition(
+    Map<String, dynamic> conditions,
+    Map<String, dynamic> context,
+  ) {
     final currentBattery = context['batteryLevel'] as int;
     final minLevel = conditions['minLevel'] as int;
 
     return currentBattery <= minLevel;
   }
 
-  static bool _checkSeasonCondition(Map<String, dynamic> conditions, Map<String, dynamic> context) {
+  static bool _checkSeasonCondition(
+    Map<String, dynamic> conditions,
+    Map<String, dynamic> context,
+  ) {
     final currentSeason = context['season'] as String;
     final seasons = (conditions['seasons'] as List?)?.cast<String>() ?? [];
 
     return seasons.contains(currentSeason);
   }
 
-  static bool _checkWeekdayCondition(Map<String, dynamic> conditions, Map<String, dynamic> context) {
+  static bool _checkWeekdayCondition(
+    Map<String, dynamic> conditions,
+    Map<String, dynamic> context,
+  ) {
     final currentDay = context['dayOfWeek'] as int;
     final days = (conditions['days'] as List?)?.cast<int>() ?? [];
 
     return days.contains(currentDay);
   }
 
-  static bool _checkSystemThemeCondition(Map<String, dynamic> conditions, Map<String, dynamic> context) {
+  static bool _checkSystemThemeCondition(
+    Map<String, dynamic> conditions,
+    Map<String, dynamic> context,
+  ) {
     final currentTheme = context['systemTheme'] as String;
     final themes = (conditions['themes'] as List?)?.cast<String>() ?? [];
 
@@ -600,17 +648,19 @@ class AdaptiveThemeService {
     }
 
     // Émettre l'événement d'adaptation
-    _eventController.add(AdaptiveThemeEvent(
-      type: AdaptiveEventType.themeAdapted,
-      ruleId: rule.id,
-      data: {
-        'theme': rule.targetTheme,
-        'transition': {
-          'duration': rule.transitionDuration,
-          'curve': rule.transitionCurve,
+    _eventController.add(
+      AdaptiveThemeEvent(
+        type: AdaptiveEventType.themeAdapted,
+        ruleId: rule.id,
+        data: {
+          'theme': rule.targetTheme,
+          'transition': {
+            'duration': rule.transitionDuration,
+            'curve': rule.transitionCurve,
+          },
         },
-      },
-    ));
+      ),
+    );
 
     // Appliquer le thème (simulé)
     _currentTheme = rule.targetTheme;
@@ -619,13 +669,17 @@ class AdaptiveThemeService {
   static void _setupSystemListeners() {
     // Écouter les changements système
     // Note: Ceci est une simulation, en réalité utiliserait des plugins spécifiques
-    _subscriptions.add(Stream.periodic(const Duration(minutes: 1))
-        .listen((_) => _checkAdaptationRules()));
+    _subscriptions.add(
+      Stream.periodic(
+        const Duration(minutes: 1),
+      ).listen((_) => _checkAdaptationRules()),
+    );
   }
 
   static void _startScheduledRules() {
     for (final rule in getActiveRules()) {
-      if (rule.mode == ThemeAdaptationMode.scheduled && rule.scheduleTimes.isNotEmpty) {
+      if (rule.mode == ThemeAdaptationMode.scheduled &&
+          rule.scheduleTimes.isNotEmpty) {
         _scheduleRule(rule);
       }
     }
@@ -634,7 +688,10 @@ class AdaptiveThemeService {
   static void _scheduleRule(AdaptiveThemeRule rule) {
     for (final scheduledTime in rule.scheduleTimes) {
       final now = TimeOfDay.now();
-      final scheduled = TimeOfDay(hour: scheduledTime.hour, minute: scheduledTime.minute);
+      final scheduled = TimeOfDay(
+        hour: scheduledTime.hour,
+        minute: scheduledTime.minute,
+      );
 
       // Calculer le délai jusqu'à la prochaine exécution
       final nowMinutes = now.hour * 60 + now.minute;
@@ -675,44 +732,45 @@ class AdaptiveThemeService {
   }
 
   static AdaptiveThemeRule _generateMorningSuggestion() => createTimeBasedRule(
-      name: 'Morning Focus Theme',
-      startTime: const TimeOfDay(hour: 8, minute: 0),
-      endTime: const TimeOfDay(hour: 12, minute: 0),
-      theme: const EventThemeCustomization(
-        primaryColor: Color(0xFF2196F3),
-        backgroundColor: Color(0xFFFFFFFF),
-        textColor: Color(0xFF212121),
-      ),
-    );
+    name: 'Morning Focus Theme',
+    startTime: const TimeOfDay(hour: 8, minute: 0),
+    endTime: const TimeOfDay(hour: 12, minute: 0),
+    theme: const EventThemeCustomization(
+      primaryColor: Color(0xFF2196F3),
+      backgroundColor: Color(0xFFFFFFFF),
+      textColor: Color(0xFF212121),
+    ),
+  );
 
-  static AdaptiveThemeRule _generateBatterySuggestion() => createBatteryBasedRule(
-      name: 'Power Saver Mode',
-      minBatteryLevel: 20,
-      theme: const EventThemeCustomization(
-        primaryColor: Color(0xFF757575),
-        backgroundColor: Color(0xFFFAFAFA),
-        textColor: Color(0xFF212121),
-        showBackgroundPattern: false,
-        shadowOpacity: 0.05,
-      ),
-    );
+  static AdaptiveThemeRule _generateBatterySuggestion() =>
+      createBatteryBasedRule(
+        name: 'Power Saver Mode',
+        minBatteryLevel: 20,
+        theme: const EventThemeCustomization(
+          primaryColor: Color(0xFF757575),
+          backgroundColor: Color(0xFFFAFAFA),
+          textColor: Color(0xFF212121),
+          showBackgroundPattern: false,
+          shadowOpacity: 0.05,
+        ),
+      );
 
   static AdaptiveThemeRule _generateWeekendSuggestion() => AdaptiveThemeRule(
-      id: _generateRuleId(),
-      trigger: AdaptationTrigger.weekday,
-      conditions: {
-        'days': [6, 7], // Samedi, Dimanche
-      },
-      targetTheme: const EventThemeCustomization(
-        primaryColor: Color(0xFF4CAF50),
-        backgroundColor: Color(0xFFF1F8E9),
-        textColor: Color(0xFF1B5E20),
-      ),
-      name: 'Weekend Relax Theme',
-      description: 'Thème détente pour le week-end',
-      createdAt: DateTime.now(),
-      mode: ThemeAdaptationMode.automatic,
-    );
+    id: _generateRuleId(),
+    trigger: AdaptationTrigger.weekday,
+    conditions: {
+      'days': [6, 7], // Samedi, Dimanche
+    },
+    targetTheme: const EventThemeCustomization(
+      primaryColor: Color(0xFF4CAF50),
+      backgroundColor: Color(0xFFF1F8E9),
+      textColor: Color(0xFF1B5E20),
+    ),
+    name: 'Weekend Relax Theme',
+    description: 'Thème détente pour le week-end',
+    createdAt: DateTime.now(),
+    mode: ThemeAdaptationMode.automatic,
+  );
 
   /// Dispose le service
   static void dispose() {
@@ -730,7 +788,6 @@ class AdaptiveThemeService {
 }
 
 class AdaptiveThemeEvent {
-
   const AdaptiveThemeEvent({
     required this.type,
     this.ruleId,
@@ -740,26 +797,27 @@ class AdaptiveThemeEvent {
            ? DateTime.now()
            : DateTime.now();
 
-  factory AdaptiveThemeEvent.fromJson(Map<String, dynamic> json) => AdaptiveThemeEvent(
-      type: AdaptiveEventType.values.firstWhere(
-        (e) => e.name == json['type'],
-        orElse: () => AdaptiveEventType.unknown,
-      ),
-      ruleId: json['ruleId'],
-      data: json['data'],
-      timestamp: DateTime.parse(json['timestamp']),
-    );
+  factory AdaptiveThemeEvent.fromJson(Map<String, dynamic> json) =>
+      AdaptiveThemeEvent(
+        type: AdaptiveEventType.values.firstWhere(
+          (e) => e.name == json['type'],
+          orElse: () => AdaptiveEventType.unknown,
+        ),
+        ruleId: json['ruleId'],
+        data: json['data'],
+        timestamp: DateTime.parse(json['timestamp']),
+      );
   final AdaptiveEventType type;
   final String? ruleId;
   final Map<String, dynamic>? data;
   final DateTime timestamp;
 
   Map<String, dynamic> toJson() => {
-      'type': type.name,
-      'ruleId': ruleId,
-      'data': data,
-      'timestamp': timestamp.toIso8601String(),
-    };
+    'type': type.name,
+    'ruleId': ruleId,
+    'data': data,
+    'timestamp': timestamp.toIso8601String(),
+  };
 }
 
 enum AdaptiveEventType {

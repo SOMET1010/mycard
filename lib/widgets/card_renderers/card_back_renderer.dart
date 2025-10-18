@@ -1,5 +1,6 @@
 /// Renderer pour le verso de la carte de visite
 library;
+
 import 'package:flutter/material.dart';
 import 'package:mycard/app/theme.dart';
 import 'package:mycard/data/models/card_template.dart';
@@ -30,12 +31,12 @@ class CardBackRenderer implements CardRenderer {
     Map<String, String>? backSocialLinks,
   }) {
     // Debug logs pour vérifier les données
-    print('CardBackRenderer - Données reçues:');
-    print('  backNotes: $backNotes');
-    print('  backServices: $backServices');
-    print('  backOpeningHours: $backOpeningHours');
-    print('  backSocialLinks: $backSocialLinks');
-    print('  company: $company');
+    debugPrint('CardBackRenderer - Données reçues:');
+    debugPrint('  backNotes: $backNotes');
+    debugPrint('  backServices: $backServices');
+    debugPrint('  backOpeningHours: $backOpeningHours');
+    debugPrint('  backSocialLinks: $backSocialLinks');
+    debugPrint('  company: $company');
 
     final primaryColor = _getColor('primary', template, customColors);
     final secondaryColor = _getColor('secondary', template, customColors);
@@ -47,10 +48,7 @@ class CardBackRenderer implements CardRenderer {
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: AppTheme.greenWhite,
-        border: Border.all(
-          color: accentColor.withValues(alpha: 0.3),
-          width: 1,
-        ),
+        border: Border.all(color: accentColor.withValues(alpha: 0.3), width: 1),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
@@ -115,32 +113,34 @@ class CardBackRenderer implements CardRenderer {
               ),
             ),
             const SizedBox(height: 8),
-            ...backServices.map((service) => Padding(
-                  padding: const EdgeInsets.only(bottom: 4),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 4,
-                        height: 4,
-                        decoration: BoxDecoration(
-                          color: accentColor,
-                          shape: BoxShape.circle,
+            ...backServices.map(
+              (service) => Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 4,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: accentColor,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        service,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: secondaryColor,
+                          fontFamily: fontFamily,
                         ),
                       ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          service,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: secondaryColor,
-                            fontFamily: fontFamily,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                )),
+                    ),
+                  ],
+                ),
+              ),
+            ),
             const SizedBox(height: 16),
           ],
 
@@ -223,7 +223,10 @@ class CardBackRenderer implements CardRenderer {
                 }
 
                 return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: color.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(16),
@@ -325,7 +328,11 @@ class CardBackRenderer implements CardRenderer {
     );
   }
 
-  Color _getColor(String colorType, CardTemplate template, Map<String, String> customColors) {
+  Color _getColor(
+    String colorType,
+    CardTemplate template,
+    Map<String, String> customColors,
+  ) {
     final customColor = customColors[colorType];
     if (customColor != null) {
       final cleanColor = customColor.startsWith('#')

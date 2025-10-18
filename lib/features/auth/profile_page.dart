@@ -1,4 +1,5 @@
 library;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -21,7 +22,9 @@ class ProfilePage extends ConsumerWidget {
         }
 
         return Scaffold(
-          backgroundColor: isDark ? const Color(0xFF0A0806) : AppTheme.backgroundColor,
+          backgroundColor: isDark
+              ? const Color(0xFF0A0806)
+              : AppTheme.backgroundColor,
           body: SafeArea(
             child: CustomScrollView(
               slivers: [
@@ -54,11 +57,7 @@ class ProfilePage extends ConsumerWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(
-                              Icons.person,
-                              size: 80,
-                              color: Colors.white,
-                            ),
+                            Icon(Icons.person, size: 80, color: Colors.white),
                             SizedBox(height: 16),
                           ],
                         ),
@@ -102,16 +101,16 @@ class ProfilePage extends ConsumerWidget {
                               icon: Icons.access_time,
                               label: 'Date de création',
                               value: user.metadata.creationTime != null
-                                ? _formatDate(user.metadata.creationTime!)
-                                : 'Non disponible',
+                                  ? _formatDate(user.metadata.creationTime!)
+                                  : 'Non disponible',
                             ),
                             _buildInfoItem(
                               context,
                               icon: Icons.login,
                               label: 'Dernière connexion',
                               value: user.metadata.lastSignInTime != null
-                                ? _formatDate(user.metadata.lastSignInTime!)
-                                : 'Non disponible',
+                                  ? _formatDate(user.metadata.lastSignInTime!)
+                                  : 'Non disponible',
                             ),
                           ],
                         ),
@@ -165,7 +164,8 @@ class ProfilePage extends ConsumerWidget {
                               context,
                               icon: Icons.delete_forever,
                               label: 'Supprimer le compte',
-                              onTap: () => _showDeleteAccountDialog(context, ref),
+                              onTap: () =>
+                                  _showDeleteAccountDialog(context, ref),
                               color: AppTheme.errorColor,
                             ),
                           ],
@@ -181,11 +181,8 @@ class ProfilePage extends ConsumerWidget {
           ),
         );
       },
-      loading: () => const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      ),
+      loading: () =>
+          const Scaffold(body: Center(child: CircularProgressIndicator())),
       error: (error, stack) => Scaffold(
         body: Center(
           child: Column(
@@ -268,7 +265,9 @@ class ProfilePage extends ConsumerWidget {
               label,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 fontWeight: FontWeight.w500,
-                color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF6B5E56),
+                color: isDark
+                    ? const Color(0xFF94A3B8)
+                    : const Color(0xFF6B5E56),
               ),
             ),
           ),
@@ -346,11 +345,7 @@ class ProfilePage extends ConsumerWidget {
                 color: color.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Icon(
-                icon,
-                size: 20,
-                color: color,
-              ),
+              child: Icon(icon, size: 20, color: color),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -373,7 +368,8 @@ class ProfilePage extends ConsumerWidget {
     );
   }
 
-  String _formatDate(DateTime date) => '${date.day}/${date.month}/${date.year} à ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
+  String _formatDate(DateTime date) =>
+      '${date.day}/${date.month}/${date.year} à ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
 
   void _showEditProfileDialog(BuildContext context, WidgetRef ref) {
     showDialog(
@@ -482,35 +478,32 @@ class _LoginRequiredView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.login, size: 80),
-              const SizedBox(height: 24),
-              const Text(
-                'Connexion requise',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 12),
-              const Text(
-                'Vous devez être connecté pour accéder à votre profil.',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16),
-              ),
-              const SizedBox(height: 32),
-              ElevatedButton(
-                onPressed: () => context.go('/login'),
-                child: const Text('Se connecter'),
-              ),
-            ],
-          ),
+    body: Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.login, size: 80),
+            const SizedBox(height: 24),
+            const Text(
+              'Connexion requise',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
+            const Text(
+              'Vous devez être connecté pour accéder à votre profil.',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 32),
+            ElevatedButton(
+              onPressed: () => context.go('/login'),
+              child: const Text('Se connecter'),
+            ),
+          ],
         ),
       ),
-    );
+    ),
+  );
 }

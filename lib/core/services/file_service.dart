@@ -1,5 +1,6 @@
 /// Service pour la gestion des fichiers et images
 library;
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -107,7 +108,8 @@ class FileService {
   static String formatFileSize(int bytes) {
     if (bytes < 1024) return '$bytes B';
     if (bytes < 1024 * 1024) return '${(bytes / 1024).toStringAsFixed(1)} KB';
-    if (bytes < 1024 * 1024 * 1024) return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
+    if (bytes < 1024 * 1024 * 1024)
+      return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
     return '${(bytes / (1024 * 1024 * 1024)).toStringAsFixed(1)} GB';
   }
 
@@ -116,10 +118,15 @@ class FileService {
     try {
       final tempDir = Directory.systemTemp;
       if (await tempDir.exists()) {
-        final files = await tempDir.list().where((entity) => entity is File).cast<File>().toList();
+        final files = await tempDir
+            .list()
+            .where((entity) => entity is File)
+            .cast<File>()
+            .toList();
 
         for (final file in files) {
-          if (file.path.contains('mycard') || file.path.contains('screenshot')) {
+          if (file.path.contains('mycard') ||
+              file.path.contains('screenshot')) {
             await file.delete();
           }
         }

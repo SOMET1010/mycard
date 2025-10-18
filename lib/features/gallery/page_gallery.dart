@@ -1,5 +1,6 @@
 /// Page "Mes Cartes" avec grille et barre d'onglets
 library;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -42,11 +43,7 @@ class _GalleryPageState extends ConsumerState<GalleryPage> {
 
     // Vérifier si le repository est initialisé
     if (!cardsRepo.isInitialized) {
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     var cards = cardsRepo.getAllCards();
@@ -64,19 +61,20 @@ class _GalleryPageState extends ConsumerState<GalleryPage> {
         title: const Text('Mes Cartes'),
         centerTitle: true,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: _openSearch,
-          ),
+          IconButton(icon: const Icon(Icons.search), onPressed: _openSearch),
         ],
       ),
       body: ValueListenableBuilder(
         valueListenable: ref.read(cardsRepositoryProvider).listenable,
         builder: (context, box, _) {
           // Recalculer la liste à chaque changement
-          var current = ref.read(cardsRepositoryProvider).getCardsSortedByDate(descending: true);
+          var current = ref
+              .read(cardsRepositoryProvider)
+              .getCardsSortedByDate(descending: true);
           if (_searchQuery.isNotEmpty) {
-            current = ref.read(cardsRepositoryProvider).searchCards(_searchQuery);
+            current = ref
+                .read(cardsRepositoryProvider)
+                .searchCards(_searchQuery);
           }
           current = _applySort(current);
 
@@ -149,7 +147,9 @@ class _GalleryPageState extends ConsumerState<GalleryPage> {
               'Créez votre première carte de visite professionnelle',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF6B5E56),
+                color: isDark
+                    ? const Color(0xFF94A3B8)
+                    : const Color(0xFF6B5E56),
                 height: 1.4,
               ),
             ),
@@ -204,10 +204,7 @@ class _GalleryPageState extends ConsumerState<GalleryPage> {
                 icon: const Icon(Icons.add, size: 24),
                 label: const Text(
                   'Créer ma première carte',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppTheme.primaryColor,
@@ -234,12 +231,16 @@ class _GalleryPageState extends ConsumerState<GalleryPage> {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
-                    color: isDark ? const Color(0xFFEAB676) : AppTheme.primaryColor,
+                    color: isDark
+                        ? const Color(0xFFEAB676)
+                        : AppTheme.primaryColor,
                   ),
                 ),
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(
-                    color: isDark ? const Color(0xFF3A332E) : const Color(0xFFE7D9CF),
+                    color: isDark
+                        ? const Color(0xFF3A332E)
+                        : const Color(0xFFE7D9CF),
                   ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(14),
@@ -269,11 +270,7 @@ class _GalleryPageState extends ConsumerState<GalleryPage> {
             color: AppTheme.primaryColor.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Icon(
-            icon,
-            size: 20,
-            color: AppTheme.primaryColor,
-          ),
+          child: Icon(icon, size: 20, color: AppTheme.primaryColor),
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -291,7 +288,9 @@ class _GalleryPageState extends ConsumerState<GalleryPage> {
               Text(
                 description,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF6B5E56),
+                  color: isDark
+                      ? const Color(0xFF94A3B8)
+                      : const Color(0xFF6B5E56),
                 ),
               ),
             ],
@@ -304,9 +303,17 @@ class _GalleryPageState extends ConsumerState<GalleryPage> {
   Widget _buildGrid(List<BusinessCard> cards) {
     final filtered = _searchQuery.isEmpty
         ? cards
-        : cards.where((c) => c.fullName.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-              (c.company ?? '').toLowerCase().contains(_searchQuery.toLowerCase()))
-            .toList();
+        : cards
+              .where(
+                (c) =>
+                    c.fullName.toLowerCase().contains(
+                      _searchQuery.toLowerCase(),
+                    ) ||
+                    (c.company ?? '').toLowerCase().contains(
+                      _searchQuery.toLowerCase(),
+                    ),
+              )
+              .toList();
 
     // Afficher l'état vide s'il n'y a pas de cartes
     if (filtered.isEmpty) {
@@ -324,10 +331,7 @@ class _GalleryPageState extends ConsumerState<GalleryPage> {
       itemCount: filtered.length,
       itemBuilder: (context, index) {
         final card = filtered[index];
-        return CardGridTile(
-          card: card,
-          onTap: () => _editCard(card),
-        );
+        return CardGridTile(card: card, onTap: () => _editCard(card));
       },
     );
   }
@@ -349,7 +353,9 @@ class _GalleryPageState extends ConsumerState<GalleryPage> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Supprimer la carte'),
-        content: Text('Êtes-vous sûr de vouloir supprimer la carte de ${card.fullName} ?'),
+        content: Text(
+          'Êtes-vous sûr de vouloir supprimer la carte de ${card.fullName} ?',
+        ),
         actions: [
           TextButton(
             onPressed: () => context.pop(),
@@ -389,11 +395,16 @@ class _GalleryPageState extends ConsumerState<GalleryPage> {
         content: TextField(
           controller: controller,
           autofocus: true,
-          decoration: const InputDecoration(hintText: 'Rechercher des cartes...'),
+          decoration: const InputDecoration(
+            hintText: 'Rechercher des cartes...',
+          ),
           onSubmitted: (_) => context.pop(),
         ),
         actions: [
-          TextButton(onPressed: () => context.pop(), child: const Text('Fermer')),
+          TextButton(
+            onPressed: () => context.pop(),
+            child: const Text('Fermer'),
+          ),
         ],
       ),
     );
@@ -433,10 +444,17 @@ class _GalleryPageState extends ConsumerState<GalleryPage> {
     final items = List<BusinessCard>.from(list);
     switch (_sortBy) {
       case 'name':
-        items.sort((a, b) => a.fullName.toLowerCase().compareTo(b.fullName.toLowerCase()));
+        items.sort(
+          (a, b) =>
+              a.fullName.toLowerCase().compareTo(b.fullName.toLowerCase()),
+        );
         break;
       case 'company':
-        items.sort((a, b) => (a.company ?? '').toLowerCase().compareTo((b.company ?? '').toLowerCase()));
+        items.sort(
+          (a, b) => (a.company ?? '').toLowerCase().compareTo(
+            (b.company ?? '').toLowerCase(),
+          ),
+        );
         break;
       case 'date':
       default:
@@ -466,32 +484,32 @@ class _SortByButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => OutlinedButton.icon(
-        onPressed: () async {
-          final box = context.findRenderObject() as RenderBox;
-          final offset = box.localToGlobal(Offset.zero);
-          final v = await showMenu<String>(
-            context: context,
-            position: RelativeRect.fromLTRB(offset.dx, offset.dy + 40, 0, 0),
-            items: const [
-              PopupMenuItem(value: 'date', child: Text('Date')),
-              PopupMenuItem(value: 'name', child: Text('Nom')),
-              PopupMenuItem(value: 'company', child: Text('Entreprise')),
-            ],
-          );
-          if (v != null) onChanged(v);
-        },
-        icon: const Icon(Icons.sort, size: 18),
-        label: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('Trier: $_label'),
-            const SizedBox(width: 6),
-            const Icon(Icons.keyboard_arrow_down_rounded, size: 18),
-          ],
-        ),
-        style: OutlinedButton.styleFrom(
-          shape: const StadiumBorder(),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        ),
+    onPressed: () async {
+      final box = context.findRenderObject() as RenderBox;
+      final offset = box.localToGlobal(Offset.zero);
+      final v = await showMenu<String>(
+        context: context,
+        position: RelativeRect.fromLTRB(offset.dx, offset.dy + 40, 0, 0),
+        items: const [
+          PopupMenuItem(value: 'date', child: Text('Date')),
+          PopupMenuItem(value: 'name', child: Text('Nom')),
+          PopupMenuItem(value: 'company', child: Text('Entreprise')),
+        ],
       );
+      if (v != null) onChanged(v);
+    },
+    icon: const Icon(Icons.sort, size: 18),
+    label: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text('Trier: $_label'),
+        const SizedBox(width: 6),
+        const Icon(Icons.keyboard_arrow_down_rounded, size: 18),
+      ],
+    ),
+    style: OutlinedButton.styleFrom(
+      shape: const StadiumBorder(),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+    ),
+  );
 }

@@ -1,5 +1,6 @@
 /// Page d'édition d'une carte de visite
 library;
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,7 +24,6 @@ import 'package:mycard/widgets/atoms/upload_area.dart';
 import 'package:screenshot/screenshot.dart';
 
 class EditorPage extends ConsumerStatefulWidget {
-
   const EditorPage({super.key, this.card});
   final BusinessCard? card;
 
@@ -152,11 +152,15 @@ class _EditorPageState extends ConsumerState<EditorPage> {
 
       if (_firstNameController.text != first) {
         _firstNameController.text = first;
-        _firstNameController.selection = TextSelection.collapsed(offset: _firstNameController.text.length);
+        _firstNameController.selection = TextSelection.collapsed(
+          offset: _firstNameController.text.length,
+        );
       }
       if (_lastNameController.text != last) {
         _lastNameController.text = last;
-        _lastNameController.selection = TextSelection.collapsed(offset: _lastNameController.text.length);
+        _lastNameController.selection = TextSelection.collapsed(
+          offset: _lastNameController.text.length,
+        );
       }
       setState(() {});
     });
@@ -216,10 +220,7 @@ class _EditorPageState extends ConsumerState<EditorPage> {
             onPressed: () => context.go('/ai-generator'),
             tooltip: 'Générateur IA de couleurs',
           ),
-          IconButton(
-            icon: const Icon(Icons.save),
-            onPressed: _saveCard,
-          ),
+          IconButton(icon: const Icon(Icons.save), onPressed: _saveCard),
         ],
       ),
       body: isWide ? _buildWideLayout() : _buildMobileLayout(),
@@ -233,112 +234,124 @@ class _EditorPageState extends ConsumerState<EditorPage> {
   }
 
   Widget _buildMobileLayout() => SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('Details', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 12),
-          CardFieldsForm(
-            formKey: _formKey,
-            fullNameController: _fullNameController,
-            titleController: _titleController,
-            companyController: _companyController,
-            phoneController: _phoneController,
-            emailController: _emailController,
-          ),
-
-          const SizedBox(height: 24),
-
-          // Formulaire du verso
-          CardBackForm(
-            backNotes: _backNotes,
-            backServices: _backServices,
-            backOpeningHours: _backOpeningHours,
-            backSocialLinks: _backSocialLinks,
-            onChanged: ({
-              String? backNotes,
-              List<String>? backServices,
-              String? backOpeningHours,
-              Map<String, String>? backSocialLinks,
-            }) {
-              setState(() {
-                _backNotes = backNotes;
-                _backServices = backServices;
-                _backOpeningHours = backOpeningHours;
-                _backSocialLinks = backSocialLinks;
-              });
-            },
-          ),
-
-          const SizedBox(height: 16),
-          const Text('Logo/Photo', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 8),
-          UploadArea(
-            initialPath: _logoPath,
-            onSelected: (p) async {
-              setState(() => _logoPath = p);
-            },
-          ),
-
-          const SizedBox(height: 16),
-          const Text('Design', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 8),
-          _buildDesignSelectors(),
-
-          const SizedBox(height: 24),
-          SafeArea(
-            child: SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _saveCard,
-                child: const Text('Enregistrer la Carte'),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-
-  Widget _buildDesignSelectors() => Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+    padding: const EdgeInsets.all(16),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Ligne d'actions: choisir un modèle, gérer presets
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            ElevatedButton.icon(
-              onPressed: _openTemplatePicker,
-              icon: const Icon(Icons.style),
-              label: const Text('Choisir un modèle'),
-            ),
-            OutlinedButton.icon(
-              onPressed: _saveCurrentAsPreset,
-              icon: const Icon(Icons.bookmark_add_outlined),
-              label: const Text('Enregistrer comme preset'),
-            ),
-            if (_presets.isNotEmpty)
-              DropdownButton<CardPreset>(
-                hint: const Text('Appliquer un preset'),
-                value: _selectedPreset,
-                items: _presets
-                    .map((p) => DropdownMenuItem<CardPreset>(
-                          value: p,
-                          child: Text(p.name),
-                        ))
-                    .toList(),
-                onChanged: (p) {
-                  if (p == null) return;
-                  setState(() => _selectedPreset = p);
-                  _applyPreset(p);
-                },
-              ),
-          ],
+        const Text(
+          'Details',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 12),
+        CardFieldsForm(
+          formKey: _formKey,
+          fullNameController: _fullNameController,
+          titleController: _titleController,
+          companyController: _companyController,
+          phoneController: _phoneController,
+          emailController: _emailController,
+        ),
+
+        const SizedBox(height: 24),
+
+        // Formulaire du verso
+        CardBackForm(
+          backNotes: _backNotes,
+          backServices: _backServices,
+          backOpeningHours: _backOpeningHours,
+          backSocialLinks: _backSocialLinks,
+          onChanged:
+              ({
+                String? backNotes,
+                List<String>? backServices,
+                String? backOpeningHours,
+                Map<String, String>? backSocialLinks,
+              }) {
+                setState(() {
+                  _backNotes = backNotes;
+                  _backServices = backServices;
+                  _backOpeningHours = backOpeningHours;
+                  _backSocialLinks = backSocialLinks;
+                });
+              },
+        ),
+
+        const SizedBox(height: 16),
+        const Text(
+          'Logo/Photo',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
+        UploadArea(
+          initialPath: _logoPath,
+          onSelected: (p) async {
+            setState(() => _logoPath = p);
+          },
+        ),
+
+        const SizedBox(height: 16),
+        const Text(
+          'Design',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        _buildDesignSelectors(),
+
+        const SizedBox(height: 24),
+        SafeArea(
+          child: SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: _saveCard,
+              child: const Text('Enregistrer la Carte'),
+            ),
+          ),
+        ),
       ],
-    );
+    ),
+  );
+
+  Widget _buildDesignSelectors() => Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      // Ligne d'actions: choisir un modèle, gérer presets
+      Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: [
+          ElevatedButton.icon(
+            onPressed: _openTemplatePicker,
+            icon: const Icon(Icons.style),
+            label: const Text('Choisir un modèle'),
+          ),
+          OutlinedButton.icon(
+            onPressed: _saveCurrentAsPreset,
+            icon: const Icon(Icons.bookmark_add_outlined),
+            label: const Text('Enregistrer comme preset'),
+          ),
+          if (_presets.isNotEmpty)
+            DropdownButton<CardPreset>(
+              hint: const Text('Appliquer un preset'),
+              value: _selectedPreset,
+              items: _presets
+                  .map(
+                    (p) => DropdownMenuItem<CardPreset>(
+                      value: p,
+                      child: Text(p.name),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (p) {
+                if (p == null) return;
+                setState(() => _selectedPreset = p);
+                _applyPreset(p);
+              },
+            ),
+        ],
+      ),
+      const SizedBox(height: 8),
+    ],
+  );
 
   (double, double) _currentPreviewSize() {
     switch (_sizeKey) {
@@ -353,8 +366,12 @@ class _EditorPageState extends ConsumerState<EditorPage> {
   }
 
   void _applyEventDesign(EventOverlay event) {
-    _selectedTemplate = CardTemplate.findById('event_campaign') ?? _selectedTemplate;
-    final accent = event.color.value.toRadixString(16).substring(2).toUpperCase();
+    _selectedTemplate =
+        CardTemplate.findById('event_campaign') ?? _selectedTemplate;
+    final accent = event.color.value
+        .toRadixString(16)
+        .substring(2)
+        .toUpperCase();
     _customColors = {
       'primary': '6A1B9A',
       'secondary': '2E2E3A',
@@ -390,66 +407,76 @@ class _EditorPageState extends ConsumerState<EditorPage> {
   }
 
   Widget _buildWideLayout() => SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('Details', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 12),
-          CardFieldsForm(
-            formKey: _formKey,
-            fullNameController: _fullNameController,
-            titleController: _titleController,
-            companyController: _companyController,
-            phoneController: _phoneController,
-            emailController: _emailController,
-          ),
-          const SizedBox(height: 24),
+    padding: const EdgeInsets.all(16),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Details',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 12),
+        CardFieldsForm(
+          formKey: _formKey,
+          fullNameController: _fullNameController,
+          titleController: _titleController,
+          companyController: _companyController,
+          phoneController: _phoneController,
+          emailController: _emailController,
+        ),
+        const SizedBox(height: 24),
 
-          // Formulaire du verso
-          CardBackForm(
-            backNotes: _backNotes,
-            backServices: _backServices,
-            backOpeningHours: _backOpeningHours,
-            backSocialLinks: _backSocialLinks,
-            onChanged: ({
-              String? backNotes,
-              List<String>? backServices,
-              String? backOpeningHours,
-              Map<String, String>? backSocialLinks,
-            }) {
-              setState(() {
-                _backNotes = backNotes;
-                _backServices = backServices;
-                _backOpeningHours = backOpeningHours;
-                _backSocialLinks = backSocialLinks;
-              });
-            },
+        // Formulaire du verso
+        CardBackForm(
+          backNotes: _backNotes,
+          backServices: _backServices,
+          backOpeningHours: _backOpeningHours,
+          backSocialLinks: _backSocialLinks,
+          onChanged:
+              ({
+                String? backNotes,
+                List<String>? backServices,
+                String? backOpeningHours,
+                Map<String, String>? backSocialLinks,
+              }) {
+                setState(() {
+                  _backNotes = backNotes;
+                  _backServices = backServices;
+                  _backOpeningHours = backOpeningHours;
+                  _backSocialLinks = backSocialLinks;
+                });
+              },
+        ),
+        const SizedBox(height: 16),
+        const Text(
+          'Logo/Photo',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        UploadArea(
+          initialPath: _logoPath,
+          onSelected: (p) async {
+            setState(() => _logoPath = p);
+          },
+        ),
+        const SizedBox(height: 16),
+        const Text(
+          'Design',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        _buildDesignSelectors(),
+        const SizedBox(height: 24),
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: _saveCard,
+            child: const Text('Enregistrer la Carte'),
           ),
-          const SizedBox(height: 16),
-          const Text('Logo/Photo', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 8),
-          UploadArea(
-            initialPath: _logoPath,
-            onSelected: (p) async {
-              setState(() => _logoPath = p);
-            },
-          ),
-          const SizedBox(height: 16),
-          const Text('Design', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 8),
-          _buildDesignSelectors(),
-          const SizedBox(height: 24),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: _saveCard,
-              child: const Text('Enregistrer la Carte'),
-            ),
-          ),
-        ],
-      ),
-    );
+        ),
+      ],
+    ),
+  );
 
   Future<void> _saveCard() async {
     if (!_formKey.currentState!.validate()) {
@@ -476,7 +503,9 @@ class _EditorPageState extends ConsumerState<EditorPage> {
           postalCode: _postalCodeController.text,
           country: _countryController.text,
           notes: _notesController.text,
-          templateId: _selectedTemplate?.id ?? CardTemplate.predefinedTemplates.first.id,
+          templateId:
+              _selectedTemplate?.id ??
+              CardTemplate.predefinedTemplates.first.id,
           eventOverlayId: _selectedEvent?.id,
           customColors: _customColors,
           logoPath: _logoPath,
@@ -514,16 +543,20 @@ class _EditorPageState extends ConsumerState<EditorPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(widget.card == null ? 'Carte créée avec succès' : 'Carte mise à jour avec succès'),
+            content: Text(
+              widget.card == null
+                  ? 'Carte créée avec succès'
+                  : 'Carte mise à jour avec succès',
+            ),
           ),
         );
         context.pop();
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erreur: ${e.toString()}')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Erreur: ${e.toString()}')));
       }
     }
   }
@@ -537,56 +570,59 @@ class _EditorPageState extends ConsumerState<EditorPage> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (context) => Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    const Text('Preview', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                    const Spacer(),
-                    IconButton(
-                      icon: const Icon(Icons.close),
-                      onPressed: () => context.pop(),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Screenshot(
-                  controller: _screenshotController,
-                  child: CardPreview(
-                    firstName: _firstNameController.text,
-                    lastName: _lastNameController.text,
-                    title: _titleController.text,
-                    phone: _phoneController.text,
-                    email: _emailController.text,
-                    company: _companyController.text,
-                    website: _websiteController.text,
-                    address: _addressController.text,
-                    city: _cityController.text,
-                    postalCode: _postalCodeController.text,
-                    country: _countryController.text,
-                    template: _selectedTemplate,
-                    eventOverlay: _selectedEvent,
-                    customColors: _customColors,
-                    fontFamily: _fontFamily,
-                    logoPath: _logoPath,
-                    previewWidth: size.$1,
-                    previewHeight: size.$2,
-                    backNotes: _backNotes,
-                    backServices: _backServices,
-                    backOpeningHours: _backOpeningHours,
-                    backSocialLinks: _backSocialLinks,
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Text(
+                    'Preview',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
+                  const Spacer(),
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () => context.pop(),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Screenshot(
+                controller: _screenshotController,
+                child: CardPreview(
+                  firstName: _firstNameController.text,
+                  lastName: _lastNameController.text,
+                  title: _titleController.text,
+                  phone: _phoneController.text,
+                  email: _emailController.text,
+                  company: _companyController.text,
+                  website: _websiteController.text,
+                  address: _addressController.text,
+                  city: _cityController.text,
+                  postalCode: _postalCodeController.text,
+                  country: _countryController.text,
+                  template: _selectedTemplate,
+                  eventOverlay: _selectedEvent,
+                  customColors: _customColors,
+                  fontFamily: _fontFamily,
+                  logoPath: _logoPath,
+                  previewWidth: size.$1,
+                  previewHeight: size.$2,
+                  backNotes: _backNotes,
+                  backServices: _backServices,
+                  backOpeningHours: _backOpeningHours,
+                  backSocialLinks: _backSocialLinks,
                 ),
-                const SizedBox(height: 16),
-                _buildExportButtons(),
-              ],
-            ),
+              ),
+              const SizedBox(height: 16),
+              _buildExportButtons(),
+            ],
           ),
         ),
+      ),
     );
   }
 
@@ -599,7 +635,10 @@ class _EditorPageState extends ConsumerState<EditorPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Export', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        const Text(
+          'Export',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
         const SizedBox(height: 8),
         Row(
           children: [
@@ -743,23 +782,35 @@ class _EditorPageState extends ConsumerState<EditorPage> {
   void _applyModule(String module) {
     switch (module) {
       case 'Développeur':
-        _titleController.text = _titleController.text.isEmpty ? 'Développeur' : _titleController.text;
-        _selectedTemplate = CardTemplate.findById('creative') ?? _selectedTemplate;
+        _titleController.text = _titleController.text.isEmpty
+            ? 'Développeur'
+            : _titleController.text;
+        _selectedTemplate =
+            CardTemplate.findById('creative') ?? _selectedTemplate;
         _applyColorScheme('Cool Blue');
         break;
       case 'Médecin':
-        _titleController.text = _titleController.text.isEmpty ? 'Médecin' : _titleController.text;
-        _selectedTemplate = CardTemplate.findById('corporate') ?? _selectedTemplate;
+        _titleController.text = _titleController.text.isEmpty
+            ? 'Médecin'
+            : _titleController.text;
+        _selectedTemplate =
+            CardTemplate.findById('corporate') ?? _selectedTemplate;
         _applyColorScheme('Deep Green');
         break;
       case 'Juriste':
-        _titleController.text = _titleController.text.isEmpty ? 'Juriste' : _titleController.text;
-        _selectedTemplate = CardTemplate.findById('corporate') ?? _selectedTemplate;
+        _titleController.text = _titleController.text.isEmpty
+            ? 'Juriste'
+            : _titleController.text;
+        _selectedTemplate =
+            CardTemplate.findById('corporate') ?? _selectedTemplate;
         _applyColorScheme('Default Warm');
         break;
       case 'Commercial':
-        _titleController.text = _titleController.text.isEmpty ? 'Commercial' : _titleController.text;
-        _selectedTemplate = CardTemplate.findById('corporate') ?? _selectedTemplate;
+        _titleController.text = _titleController.text.isEmpty
+            ? 'Commercial'
+            : _titleController.text;
+        _selectedTemplate =
+            CardTemplate.findById('corporate') ?? _selectedTemplate;
         _applyColorScheme('Default Warm');
         break;
       case 'Aucun':
@@ -786,11 +837,19 @@ class _EditorPageState extends ConsumerState<EditorPage> {
         title: const Text('Nom du preset'),
         content: TextField(
           controller: nameController,
-          decoration: const InputDecoration(hintText: 'Ex: Carte Corporate Pro'),
+          decoration: const InputDecoration(
+            hintText: 'Ex: Carte Corporate Pro',
+          ),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Annuler')),
-          ElevatedButton(onPressed: () => Navigator.pop(context, true), child: const Text('Enregistrer')),
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Annuler'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Enregistrer'),
+          ),
         ],
       ),
     );
@@ -798,8 +857,11 @@ class _EditorPageState extends ConsumerState<EditorPage> {
 
     final preset = CardPreset(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
-      name: nameController.text.isEmpty ? 'Preset ${_presets.length + 1}' : nameController.text,
-      templateId: (_selectedTemplate ?? CardTemplate.predefinedTemplates.first).id,
+      name: nameController.text.isEmpty
+          ? 'Preset ${_presets.length + 1}'
+          : nameController.text,
+      templateId:
+          (_selectedTemplate ?? CardTemplate.predefinedTemplates.first).id,
       eventOverlayId: _selectedEvent?.id,
       customColors: _customColors,
       fontFamily: _fontFamily,
@@ -808,13 +870,18 @@ class _EditorPageState extends ConsumerState<EditorPage> {
     await PresetsService.savePreset(preset);
     await _loadPresets();
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Preset enregistré')));
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Preset enregistré')));
   }
 
   // Applique un preset existant
   void _applyPreset(CardPreset p) {
-    _selectedTemplate = CardTemplate.findById(p.templateId) ?? _selectedTemplate;
-    _selectedEvent = p.eventOverlayId != null ? EventOverlay.findById(p.eventOverlayId!) : _selectedEvent;
+    _selectedTemplate =
+        CardTemplate.findById(p.templateId) ?? _selectedTemplate;
+    _selectedEvent = p.eventOverlayId != null
+        ? EventOverlay.findById(p.eventOverlayId!)
+        : _selectedEvent;
     _customColors = Map<String, String>.from(p.customColors);
     if (p.fontFamily != null) _fontFamily = p.fontFamily!;
     if (p.sizeKey != null) _sizeKey = p.sizeKey!;
@@ -839,12 +906,17 @@ class _EditorPageState extends ConsumerState<EditorPage> {
       ),
       child: Row(
         children: [
-          Icon(ok ? Icons.check_circle : Icons.warning_amber, color: ok ? Colors.green : Colors.orange),
+          Icon(
+            ok ? Icons.check_circle : Icons.warning_amber,
+            color: ok ? Colors.green : Colors.orange,
+          ),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               ok ? 'Contraste OK (WCAG AA)' : 'Contraste à améliorer (WCAG AA)',
-              style: TextStyle(color: ok ? Colors.green[800] : Colors.orange[800]),
+              style: TextStyle(
+                color: ok ? Colors.green[800] : Colors.orange[800],
+              ),
             ),
           ),
         ],
@@ -854,7 +926,8 @@ class _EditorPageState extends ConsumerState<EditorPage> {
 
   // Ouvre une feuille avec le QR Code de contact
   void _openQrSheet() {
-    final fullName = '${_firstNameController.text} ${_lastNameController.text}'.trim();
+    final fullName = '${_firstNameController.text} ${_lastNameController.text}'
+        .trim();
     final phone = _phoneController.text;
     final email = _emailController.text;
     final company = _companyController.text;
@@ -862,7 +935,9 @@ class _EditorPageState extends ConsumerState<EditorPage> {
 
     showModalBottomSheet(
       context: context,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
       builder: (context) => Padding(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
         child: Column(
@@ -870,9 +945,15 @@ class _EditorPageState extends ConsumerState<EditorPage> {
           children: [
             Row(
               children: [
-                const Text('Code QR', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                const Text(
+                  'Code QR',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
                 const Spacer(),
-                IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close)),
+                IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(Icons.close),
+                ),
               ],
             ),
             const SizedBox(height: 12),

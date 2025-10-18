@@ -1,5 +1,6 @@
 /// Renderer pour carte Restaurant/Culinaire
 library;
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mycard/data/models/card_template.dart';
@@ -43,10 +44,7 @@ class RestaurantCulinaryRenderer implements CardRenderer {
             offset: const Offset(0, 4),
           ),
         ],
-        border: Border.all(
-          color: accentColor.withValues(alpha: 0.3),
-          width: 2,
-        ),
+        border: Border.all(color: accentColor.withValues(alpha: 0.3), width: 2),
       ),
       child: Column(
         children: [
@@ -56,10 +54,7 @@ class RestaurantCulinaryRenderer implements CardRenderer {
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [
-                  primaryColor,
-                  primaryColor.withValues(alpha: 0.8),
-                ],
+                colors: [primaryColor, primaryColor.withValues(alpha: 0.8)],
               ),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(10),
@@ -74,10 +69,7 @@ class RestaurantCulinaryRenderer implements CardRenderer {
                   height: 60,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: accentColor,
-                      width: 2,
-                    ),
+                    border: Border.all(color: accentColor, width: 2),
                     color: Colors.white,
                   ),
                   child: logoPath != null && File(logoPath).existsSync()
@@ -87,17 +79,13 @@ class RestaurantCulinaryRenderer implements CardRenderer {
                             File(logoPath),
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) => Icon(
-                                Icons.restaurant,
-                                color: primaryColor,
-                                size: 35,
-                              ),
+                              Icons.restaurant,
+                              color: primaryColor,
+                              size: 35,
+                            ),
                           ),
                         )
-                      : Icon(
-                          Icons.restaurant,
-                          color: primaryColor,
-                          size: 35,
-                        ),
+                      : Icon(Icons.restaurant, color: primaryColor, size: 35),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -201,11 +189,26 @@ class RestaurantCulinaryRenderer implements CardRenderer {
                   const SizedBox(height: 12),
 
                   if (phone.isNotEmpty)
-                    _buildCulinaryContact(Icons.phone, phone, primaryColor, fontFamily),
+                    _buildCulinaryContact(
+                      Icons.phone,
+                      phone,
+                      primaryColor,
+                      fontFamily,
+                    ),
                   if (email.isNotEmpty)
-                    _buildCulinaryContact(Icons.email, email, secondaryColor, fontFamily),
+                    _buildCulinaryContact(
+                      Icons.email,
+                      email,
+                      secondaryColor,
+                      fontFamily,
+                    ),
                   if (website?.isNotEmpty == true)
-                    _buildCulinaryContact(Icons.language, website!, accentColor, fontFamily),
+                    _buildCulinaryContact(
+                      Icons.language,
+                      website!,
+                      accentColor,
+                      fontFamily,
+                    ),
 
                   const SizedBox(height: 16),
 
@@ -240,7 +243,14 @@ class RestaurantCulinaryRenderer implements CardRenderer {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    _buildAddressSection(address, city, postalCode, country, secondaryColor, fontFamily),
+                    _buildAddressSection(
+                      address,
+                      city,
+                      postalCode,
+                      country,
+                      secondaryColor,
+                      fontFamily,
+                    ),
                   ],
 
                   const Spacer(),
@@ -294,50 +304,42 @@ class RestaurantCulinaryRenderer implements CardRenderer {
     String text,
     Color color,
     String? fontFamily,
-  ) =>
-      Padding(
-        padding: const EdgeInsets.only(bottom: 8),
-        child: Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: color.withValues(alpha: 0.2),
-              width: 1,
+  ) => Padding(
+    padding: const EdgeInsets.only(bottom: 8),
+    child: Container(
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: color.withValues(alpha: 0.2), width: 1),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 30,
+            height: 30,
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Icon(icon, size: 16, color: Colors.white),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: 13,
+                color: color,
+                fontWeight: FontWeight.w600,
+                fontFamily: fontFamily,
+              ),
             ),
           ),
-          child: Row(
-            children: [
-              Container(
-                width: 30,
-                height: 30,
-                decoration: BoxDecoration(
-                  color: color,
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Icon(
-                  icon,
-                  size: 16,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  text,
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: color,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: fontFamily,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
+        ],
+      ),
+    ),
+  );
 
   Widget _buildAddressSection(
     String? address,
@@ -361,10 +363,7 @@ class RestaurantCulinaryRenderer implements CardRenderer {
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: color.withValues(alpha: 0.2),
-          width: 1,
-        ),
+        border: Border.all(color: color.withValues(alpha: 0.2), width: 1),
       ),
       child: Row(
         children: [
@@ -375,11 +374,7 @@ class RestaurantCulinaryRenderer implements CardRenderer {
               color: color,
               borderRadius: BorderRadius.circular(6),
             ),
-            child: const Icon(
-              Icons.location_on,
-              size: 16,
-              color: Colors.white,
-            ),
+            child: const Icon(Icons.location_on, size: 16, color: Colors.white),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -399,22 +394,26 @@ class RestaurantCulinaryRenderer implements CardRenderer {
   }
 
   Widget _buildCulinaryBadge(String text, Color color) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Text(
-          text,
-          style: const TextStyle(
-            fontSize: 9,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-      );
+    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+    decoration: BoxDecoration(
+      color: color,
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: Text(
+      text,
+      style: const TextStyle(
+        fontSize: 9,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+      ),
+    ),
+  );
 
-  Color _getColor(String colorType, CardTemplate template, Map<String, String> customColors) {
+  Color _getColor(
+    String colorType,
+    CardTemplate template,
+    Map<String, String> customColors,
+  ) {
     final customColor = customColors[colorType];
     if (customColor != null) {
       final cleanColor = customColor.startsWith('#')

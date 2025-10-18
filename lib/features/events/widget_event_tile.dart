@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:mycard/data/models/event_overlay.dart';
 
 class EventThemeTile extends StatelessWidget {
-
-  const EventThemeTile({super.key, required this.event, required this.onActivate});
+  const EventThemeTile({
+    super.key,
+    required this.event,
+    required this.onActivate,
+  });
   final EventOverlay event;
   final VoidCallback onActivate;
 
@@ -19,10 +22,7 @@ class EventThemeTile extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: Colors.grey[300]!,
-            width: 1,
-          ),
+          border: Border.all(color: Colors.grey[300]!, width: 1),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.05),
@@ -176,4 +176,3 @@ class EventThemeTile extends StatelessWidget {
     }
   }
 }
-

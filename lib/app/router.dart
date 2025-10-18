@@ -45,7 +45,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       final loggedIn = auth.currentUser != null;
       final location = state.matchedLocation;
 
-      final isAuthRoute = location.startsWith('/login') ||
+      final isAuthRoute =
+          location.startsWith('/login') ||
           location.startsWith('/signup') ||
           location.startsWith('/forgot');
 
@@ -64,8 +65,14 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(path: '/login', builder: (context, state) => const LoginPage()),
       GoRoute(path: '/signup', builder: (context, state) => const SignUpPage()),
-      GoRoute(path: '/forgot', builder: (context, state) => const ForgotPasswordPage()),
-      GoRoute(path: '/profile', builder: (context, state) => const ProfilePage()),
+      GoRoute(
+        path: '/forgot',
+        builder: (context, state) => const ForgotPasswordPage(),
+      ),
+      GoRoute(
+        path: '/profile',
+        builder: (context, state) => const ProfilePage(),
+      ),
       ShellRoute(
         builder: (context, state, child) => ScaffoldWithNavBar(child: child),
         routes: [
@@ -101,10 +108,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           return ExportPage(card: card);
         },
       ),
-      GoRoute(
-        path: '/home',
-        builder: (context, state) => const HomePage(),
-      ),
+      GoRoute(path: '/home', builder: (context, state) => const HomePage()),
       // Routes pour les fonctionnalités avancées
       GoRoute(
         path: '/comparison',
@@ -140,7 +144,10 @@ final routerProvider = Provider<GoRouter>((ref) {
                 children: [
                   const Icon(Icons.photo_camera, size: 64, color: Colors.green),
                   const SizedBox(height: 16),
-                  const Text('Intégration Photo', style: TextStyle(fontSize: 24)),
+                  const Text(
+                    'Intégration Photo',
+                    style: TextStyle(fontSize: 24),
+                  ),
                   const SizedBox(height: 8),
                   const Text('Fonctionnalité en cours d\'intégration'),
                   const SizedBox(height: 32),
@@ -191,9 +198,9 @@ class ScaffoldWithNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-      body: child,
-      bottomNavigationBar: MainNavBar(currentIndex: _getCurrentIndex(context)),
-    );
+    body: child,
+    bottomNavigationBar: MainNavBar(currentIndex: _getCurrentIndex(context)),
+  );
 
   static int _getCurrentIndex(BuildContext context) {
     final location = GoRouterState.of(context).uri.toString();
@@ -209,80 +216,80 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(
-        title: const Text('MyCard'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () => _showSettings(context),
-          ),
-        ],
-      ),
-      body: GridView.count(
-        crossAxisCount: 2,
-        padding: const EdgeInsets.all(16),
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
-        children: [
-          _buildFeatureCard(
-            context,
-            title: 'Créer une carte',
-            icon: Icons.add,
-            color: Colors.blue,
-            onTap: () => context.go('/editor'),
-          ),
-          _buildFeatureCard(
-            context,
-            title: 'Mes cartes',
-            icon: Icons.collections_bookmark,
-            color: Colors.green,
-            onTap: () => context.go('/gallery'),
-          ),
-          _buildFeatureCard(
-            context,
-            title: 'Modèles',
-            icon: Icons.style,
-            color: Colors.purple,
-            onTap: () => context.go('/templates'),
-          ),
-          _buildFeatureCard(
-            context,
-            title: 'Événements',
-            icon: Icons.event,
-            color: Colors.orange,
-            onTap: () => context.go('/events'),
-          ),
-          _buildFeatureCard(
-            context,
-            title: 'Générateur IA',
-            icon: Icons.auto_awesome,
-            color: Colors.purple,
-            onTap: () => context.go('/ai-generator'),
-          ),
-          _buildFeatureCard(
-            context,
-            title: 'Comparaison',
-            icon: Icons.compare,
-            color: Colors.teal,
-            onTap: () => context.go('/comparison'),
-          ),
-          _buildFeatureCard(
-            context,
-            title: 'Communauté',
-            icon: Icons.people,
-            color: Colors.red,
-            onTap: () => context.go('/community'),
-          ),
-          _buildFeatureCard(
-            context,
-            title: 'Intégration Photo',
-            icon: Icons.photo_camera,
-            color: Colors.green,
-            onTap: () => context.go('/photo-integration'),
-          ),
-        ],
-      ),
-    );
+    appBar: AppBar(
+      title: const Text('MyCard'),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.settings),
+          onPressed: () => _showSettings(context),
+        ),
+      ],
+    ),
+    body: GridView.count(
+      crossAxisCount: 2,
+      padding: const EdgeInsets.all(16),
+      crossAxisSpacing: 16,
+      mainAxisSpacing: 16,
+      children: [
+        _buildFeatureCard(
+          context,
+          title: 'Créer une carte',
+          icon: Icons.add,
+          color: Colors.blue,
+          onTap: () => context.go('/editor'),
+        ),
+        _buildFeatureCard(
+          context,
+          title: 'Mes cartes',
+          icon: Icons.collections_bookmark,
+          color: Colors.green,
+          onTap: () => context.go('/gallery'),
+        ),
+        _buildFeatureCard(
+          context,
+          title: 'Modèles',
+          icon: Icons.style,
+          color: Colors.purple,
+          onTap: () => context.go('/templates'),
+        ),
+        _buildFeatureCard(
+          context,
+          title: 'Événements',
+          icon: Icons.event,
+          color: Colors.orange,
+          onTap: () => context.go('/events'),
+        ),
+        _buildFeatureCard(
+          context,
+          title: 'Générateur IA',
+          icon: Icons.auto_awesome,
+          color: Colors.purple,
+          onTap: () => context.go('/ai-generator'),
+        ),
+        _buildFeatureCard(
+          context,
+          title: 'Comparaison',
+          icon: Icons.compare,
+          color: Colors.teal,
+          onTap: () => context.go('/comparison'),
+        ),
+        _buildFeatureCard(
+          context,
+          title: 'Communauté',
+          icon: Icons.people,
+          color: Colors.red,
+          onTap: () => context.go('/community'),
+        ),
+        _buildFeatureCard(
+          context,
+          title: 'Intégration Photo',
+          icon: Icons.photo_camera,
+          color: Colors.green,
+          onTap: () => context.go('/photo-integration'),
+        ),
+      ],
+    ),
+  );
 
   Widget _buildFeatureCard(
     BuildContext context, {
@@ -291,42 +298,36 @@ class HomePage extends StatelessWidget {
     required Color color,
     required VoidCallback onTap,
   }) => Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  icon,
-                  size: 30,
-                  color: color,
-                ),
+    elevation: 4,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    child: InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.1),
+                shape: BoxShape.circle,
               ),
-              const SizedBox(height: 16),
-              Text(
-                title,
-                style: Theme.of(context).textTheme.titleLarge,
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
+              child: Icon(icon, size: 30, color: color),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              title,
+              style: Theme.of(context).textTheme.titleLarge,
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
       ),
-    );
+    ),
+  );
 
   void _showSettings(BuildContext context) {
     showModalBottomSheet(

@@ -1,5 +1,6 @@
 /// Repository pour la gestion des templates
 library;
+
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -17,10 +18,12 @@ class TemplatesRepository {
   List<CardTemplate> get templates => List.unmodifiable(_templates);
 
   /// Templates gratuits
-  List<CardTemplate> get freeTemplates => _templates.where((t) => !t.isPremium).toList();
+  List<CardTemplate> get freeTemplates =>
+      _templates.where((t) => !t.isPremium).toList();
 
   /// Templates premium
-  List<CardTemplate> get premiumTemplates => _templates.where((t) => t.isPremium).toList();
+  List<CardTemplate> get premiumTemplates =>
+      _templates.where((t) => t.isPremium).toList();
 
   /// État de chargement
   bool get isLoading => _isLoading;
@@ -89,7 +92,10 @@ class TemplatesRepository {
 
       final eventTemplates = <CardTemplate>[];
       for (final event in EventOverlay.predefinedEvents) {
-        final accentHex = event.color.value.toRadixString(16).substring(2).toUpperCase();
+        final accentHex = event.color.value
+            .toRadixString(16)
+            .substring(2)
+            .toUpperCase();
         final id = 'event_${event.id}';
         // Ne pas dupliquer si déjà présent
         final exists = _templates.any((t) => t.id == id);
@@ -135,12 +141,18 @@ class TemplatesRepository {
     if (query.isEmpty) return _templates;
 
     final lowerQuery = query.toLowerCase();
-    return _templates.where((template) => template.name.toLowerCase().contains(lowerQuery) ||
-             template.description.toLowerCase().contains(lowerQuery)).toList();
+    return _templates
+        .where(
+          (template) =>
+              template.name.toLowerCase().contains(lowerQuery) ||
+              template.description.toLowerCase().contains(lowerQuery),
+        )
+        .toList();
   }
 
   /// Filtre les templates par layout
-  List<CardTemplate> filterByLayout(String layout) => _templates.where((template) => template.layout == layout).toList();
+  List<CardTemplate> filterByLayout(String layout) =>
+      _templates.where((template) => template.layout == layout).toList();
 
   /// Rafraîchit la liste des templates
   Future<void> refresh() async {

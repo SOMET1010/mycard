@@ -1,5 +1,6 @@
 /// Renderer pour carte Artiste Créatif
 library;
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mycard/data/models/card_template.dart';
@@ -88,15 +89,9 @@ class CreativeArtistRenderer implements CardRenderer {
                       height: 70,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: Colors.white,
-                          width: 3,
-                        ),
+                        border: Border.all(color: Colors.white, width: 3),
                         gradient: LinearGradient(
-                          colors: [
-                            accentColor,
-                            secondaryColor,
-                          ],
+                          colors: [accentColor, secondaryColor],
                         ),
                       ),
                       child: logoPath != null && File(logoPath).existsSync()
@@ -105,11 +100,12 @@ class CreativeArtistRenderer implements CardRenderer {
                               child: Image.file(
                                 File(logoPath),
                                 fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) => const Icon(
-                                    Icons.palette,
-                                    color: Colors.white,
-                                    size: 35,
-                                  ),
+                                errorBuilder: (context, error, stackTrace) =>
+                                    const Icon(
+                                      Icons.palette,
+                                      color: Colors.white,
+                                      size: 35,
+                                    ),
                               ),
                             )
                           : const Icon(
@@ -201,11 +197,26 @@ class CreativeArtistRenderer implements CardRenderer {
                         ),
                         const SizedBox(height: 12),
                         if (phone.isNotEmpty)
-                          _buildCreativeContact(Icons.phone, phone, primaryColor, fontFamily),
+                          _buildCreativeContact(
+                            Icons.phone,
+                            phone,
+                            primaryColor,
+                            fontFamily,
+                          ),
                         if (email.isNotEmpty)
-                          _buildCreativeContact(Icons.email, email, secondaryColor, fontFamily),
+                          _buildCreativeContact(
+                            Icons.email,
+                            email,
+                            secondaryColor,
+                            fontFamily,
+                          ),
                         if (website?.isNotEmpty == true)
-                          _buildCreativeContact(Icons.language, website!, accentColor, fontFamily),
+                          _buildCreativeContact(
+                            Icons.language,
+                            website!,
+                            accentColor,
+                            fontFamily,
+                          ),
 
                         const Spacer(),
 
@@ -249,50 +260,42 @@ class CreativeArtistRenderer implements CardRenderer {
     String text,
     Color color,
     String? fontFamily,
-  ) =>
-      Padding(
-        padding: const EdgeInsets.only(bottom: 8),
-        child: Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: color.withValues(alpha: 0.3),
-              width: 1,
+  ) => Padding(
+    padding: const EdgeInsets.only(bottom: 8),
+    child: Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withValues(alpha: 0.3), width: 1),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 30,
+            height: 30,
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(icon, size: 16, color: Colors.white),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: 13,
+                color: color,
+                fontWeight: FontWeight.w600,
+                fontFamily: fontFamily,
+              ),
             ),
           ),
-          child: Row(
-            children: [
-              Container(
-                width: 30,
-                height: 30,
-                decoration: BoxDecoration(
-                  color: color,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(
-                  icon,
-                  size: 16,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  text,
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: color,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: fontFamily,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
+        ],
+      ),
+    ),
+  );
 
   Widget _buildAddressSection(
     String? address,
@@ -317,10 +320,7 @@ class CreativeArtistRenderer implements CardRenderer {
         decoration: BoxDecoration(
           color: color.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: color.withValues(alpha: 0.3),
-            width: 1,
-          ),
+          border: Border.all(color: color.withValues(alpha: 0.3), width: 1),
         ),
         child: Row(
           children: [
@@ -356,22 +356,26 @@ class CreativeArtistRenderer implements CardRenderer {
   }
 
   Widget _buildCreativeBadge(String text, Color color) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Text(
-          text,
-          style: const TextStyle(
-            fontSize: 8,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-      );
+    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+    decoration: BoxDecoration(
+      color: color,
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: Text(
+      text,
+      style: const TextStyle(
+        fontSize: 8,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+      ),
+    ),
+  );
 
-  Color _getColor(String colorType, CardTemplate template, Map<String, String> customColors) {
+  Color _getColor(
+    String colorType,
+    CardTemplate template,
+    Map<String, String> customColors,
+  ) {
     final customColor = customColors[colorType];
     if (customColor != null) {
       final cleanColor = customColor.startsWith('#')

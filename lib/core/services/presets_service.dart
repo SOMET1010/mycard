@@ -1,5 +1,6 @@
 /// Service local pour sauvegarder/charger des presets utilisateur
 library;
+
 import 'dart:convert';
 
 import 'package:mycard/data/models/card_preset.dart';
@@ -14,7 +15,9 @@ class PresetsService {
     final jsonString = prefs.getString(_prefsKey);
     if (jsonString == null || jsonString.isEmpty) return [];
     final list = jsonDecode(jsonString) as List<dynamic>;
-    return list.map((e) => CardPreset.fromJson(e as Map<String, dynamic>)).toList();
+    return list
+        .map((e) => CardPreset.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   /// Sauvegarde (ajoute/remplace) un preset
@@ -42,4 +45,3 @@ class PresetsService {
     await prefs.setString(_prefsKey, jsonEncode(list));
   }
 }
-

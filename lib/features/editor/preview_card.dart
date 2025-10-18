@@ -1,5 +1,6 @@
 /// Widget d'aperçu de la carte de visite
 library;
+
 import 'package:flutter/material.dart';
 import 'package:mycard/data/models/card_template.dart';
 import 'package:mycard/data/models/event_overlay.dart';
@@ -108,10 +109,11 @@ class _CardPreviewState extends State<CardPreview>
     _isBackVisible = !_isBackVisible;
   }
 
-  bool _hasBackContent() => (widget.backNotes?.isNotEmpty == true) ||
-         (widget.backServices?.isNotEmpty == true) ||
-         (widget.backOpeningHours?.isNotEmpty == true) ||
-         (widget.backSocialLinks?.isNotEmpty == true);
+  bool _hasBackContent() =>
+      (widget.backNotes?.isNotEmpty == true) ||
+      (widget.backServices?.isNotEmpty == true) ||
+      (widget.backOpeningHours?.isNotEmpty == true) ||
+      (widget.backSocialLinks?.isNotEmpty == true);
 
   @override
   Widget build(BuildContext context) {
@@ -184,7 +186,8 @@ class _CardPreviewState extends State<CardPreview>
   }
 
   Widget _buildFrontContent() {
-    final effectiveTemplate = widget.template ?? CardTemplate.predefinedTemplates.first;
+    final effectiveTemplate =
+        widget.template ?? CardTemplate.predefinedTemplates.first;
     final renderer = _getRenderer(effectiveTemplate.rendererKey);
 
     return ClipRRect(
@@ -212,14 +215,15 @@ class _CardPreviewState extends State<CardPreview>
 
           // Overlay événementiel
           if (widget.eventOverlay != null)
-              _buildEventOverlay(widget.eventOverlay!),
+            _buildEventOverlay(widget.eventOverlay!),
         ],
       ),
     );
   }
 
   Widget _buildBackContent() {
-    final effectiveTemplate = widget.template ?? CardTemplate.predefinedTemplates.first;
+    final effectiveTemplate =
+        widget.template ?? CardTemplate.predefinedTemplates.first;
     final renderer = _getRenderer(effectiveTemplate.rendererKey);
 
     return ClipRRect(
@@ -248,35 +252,31 @@ class _CardPreviewState extends State<CardPreview>
   }
 
   Widget _buildEventOverlay(EventOverlay event) => Positioned(
-      top: 8,
-      right: 8,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        decoration: BoxDecoration(
-          color: event.color,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              _getEventIcon(event.icon),
-              color: Colors.white,
-              size: 12,
-            ),
-            const SizedBox(width: 4),
-            Text(
-              event.label,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
+    top: 8,
+    right: 8,
+    child: Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: event.color,
+        borderRadius: BorderRadius.circular(12),
       ),
-    );
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(_getEventIcon(event.icon), color: Colors.white, size: 12),
+          const SizedBox(width: 4),
+          Text(
+            event.label,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 
   CardRenderer _getRenderer(String rendererKey) {
     switch (rendererKey) {

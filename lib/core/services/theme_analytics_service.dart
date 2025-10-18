@@ -1,5 +1,6 @@
 /// Service d'analytiques et statistiques pour les thèmes
 library;
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
@@ -9,40 +10,39 @@ import 'package:mycard/data/models/event_overlay.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum AnalyticsEventType {
-  themeCreated,        // Thème créé
-  themeModified,       // Thème modifié
-  themeDeleted,        // Thème supprimé
-  themeExported,       // Thème exporté
-  themeImported,       // Thème importé
-  themeShared,         // Thème partagé
-  themePreviewed,      // Thème prévisualisé
-  colorChanged,        // Couleur changée
-  fontChanged,         // Police changée
-  patternChanged,      // Motif changé
-  animationPlayed,     // Animation jouée
+  themeCreated, // Thème créé
+  themeModified, // Thème modifié
+  themeDeleted, // Thème supprimé
+  themeExported, // Thème exporté
+  themeImported, // Thème importé
+  themeShared, // Thème partagé
+  themePreviewed, // Thème prévisualisé
+  colorChanged, // Couleur changée
+  fontChanged, // Police changée
+  patternChanged, // Motif changé
+  animationPlayed, // Animation jouée
   collaborationStarted, // Collaboration démarrée
-  collaborationEnded,   // Collaboration terminée
-  searchPerformed,     // Recherche effectuée
-  filterApplied,       // Filtre appliqué
-  customRuleCreated,   // Règle personnalisée créée
-  templateUsed,        // Template utilisé
-  errorOccurred,       // Erreur survenue
-  sessionStarted,      // Session démarrée
-  sessionEnded,        // Session terminée
+  collaborationEnded, // Collaboration terminée
+  searchPerformed, // Recherche effectuée
+  filterApplied, // Filtre appliqué
+  customRuleCreated, // Règle personnalisée créée
+  templateUsed, // Template utilisé
+  errorOccurred, // Erreur survenue
+  sessionStarted, // Session démarrée
+  sessionEnded, // Session terminée
 }
 
 enum AnalyticsPeriod {
-  hourly,            // Horaire
-  daily,             // Quotidien
-  weekly,            // Hebdomadaire
-  monthly,           // Mensuel
-  quarterly,         // Trimestriel
-  yearly,            // Annuel
-  custom,            // Personnalisé
+  hourly, // Horaire
+  daily, // Quotidien
+  weekly, // Hebdomadaire
+  monthly, // Mensuel
+  quarterly, // Trimestriel
+  yearly, // Annuel
+  custom, // Personnalisé
 }
 
 class AnalyticsEvent {
-
   const AnalyticsEvent({
     required this.id,
     required this.type,
@@ -54,19 +54,19 @@ class AnalyticsEvent {
   });
 
   factory AnalyticsEvent.fromJson(Map<String, dynamic> json) => AnalyticsEvent(
-      id: json['id'],
-      type: AnalyticsEventType.values.firstWhere(
-        (e) => e.name == json['type'],
-        orElse: () => AnalyticsEventType.sessionStarted,
-      ),
-      timestamp: DateTime.parse(json['timestamp']),
-      userId: json['userId'],
-      sessionId: json['sessionId'],
-      properties: Map<String, dynamic>.from(json['properties'] ?? {}),
-      duration: json['duration'] != null
-          ? Duration(milliseconds: json['duration'])
-          : null,
-    );
+    id: json['id'],
+    type: AnalyticsEventType.values.firstWhere(
+      (e) => e.name == json['type'],
+      orElse: () => AnalyticsEventType.sessionStarted,
+    ),
+    timestamp: DateTime.parse(json['timestamp']),
+    userId: json['userId'],
+    sessionId: json['sessionId'],
+    properties: Map<String, dynamic>.from(json['properties'] ?? {}),
+    duration: json['duration'] != null
+        ? Duration(milliseconds: json['duration'])
+        : null,
+  );
   final String id;
   final AnalyticsEventType type;
   final DateTime timestamp;
@@ -76,18 +76,17 @@ class AnalyticsEvent {
   final Duration? duration;
 
   Map<String, dynamic> toJson() => {
-      'id': id,
-      'type': type.name,
-      'timestamp': timestamp.toIso8601String(),
-      'userId': userId,
-      'sessionId': sessionId,
-      'properties': properties,
-      'duration': duration?.inMilliseconds,
-    };
+    'id': id,
+    'type': type.name,
+    'timestamp': timestamp.toIso8601String(),
+    'userId': userId,
+    'sessionId': sessionId,
+    'properties': properties,
+    'duration': duration?.inMilliseconds,
+  };
 }
 
 class ThemeUsageMetrics {
-
   const ThemeUsageMetrics({
     required this.themeId,
     required this.themeName,
@@ -115,7 +114,6 @@ class ThemeUsageMetrics {
 }
 
 class UserBehaviorAnalytics {
-
   const UserBehaviorAnalytics({
     required this.userId,
     required this.sessionCount,
@@ -295,8 +293,9 @@ class ThemeAnalyticsService {
 
   /// Récupère les métriques d'utilisation pour un thème
   static ThemeUsageMetrics getThemeMetrics(String themeId) {
-    final themeEvents = _events.where((e) =>
-        e.properties['themeId'] == themeId).toList();
+    final themeEvents = _events
+        .where((e) => e.properties['themeId'] == themeId)
+        .toList();
 
     if (themeEvents.isEmpty) {
       return ThemeUsageMetrics(
@@ -315,10 +314,7 @@ class ThemeAnalyticsService {
     }
 
     final totalUsage = themeEvents.length;
-    final uniqueUsers = themeEvents
-        .map((e) => e.userId)
-        .toSet()
-        .length;
+    final uniqueUsers = themeEvents.map((e) => e.userId).toSet().length;
 
     final sessionDurations = themeEvents
         .where((e) => e.duration != null)
@@ -349,14 +345,13 @@ class ThemeAnalyticsService {
       }
     }
 
-    final topFeatures = featureUsage.entries
-        .toList()
-        ..sort((a, b) => b.value.compareTo(a.value))
-        .take(5)
-        .map((e) => e.key)
-        .toList();
+    final topFeatures = featureUsage.entries.toList()
+      ..sort(
+        (a, b) => b.value.compareTo(a.value),
+      ).take(5).map((e) => e.key).toList();
 
-    final themeName = themeEvents.first.properties['themeName'] as String? ?? 'Unknown Theme';
+    final themeName =
+        themeEvents.first.properties['themeName'] as String? ?? 'Unknown Theme';
     final lastUsed = themeEvents
         .map((e) => e.timestamp)
         .reduce((a, b) => a.isAfter(b) ? a : b);
@@ -384,11 +379,19 @@ class ThemeAnalyticsService {
         .where((entry) => entry.key.startsWith(userId))
         .length;
 
-    final sessionEvents = userEvents.where((e) => e.type == AnalyticsEventType.sessionStarted);
-    final sessionEndEvents = userEvents.where((e) => e.type == AnalyticsEventType.sessionEnded);
+    final sessionEvents = userEvents.where(
+      (e) => e.type == AnalyticsEventType.sessionStarted,
+    );
+    final sessionEndEvents = userEvents.where(
+      (e) => e.type == AnalyticsEventType.sessionEnded,
+    );
 
     var totalSessionTime = Duration.zero;
-    for (var i = 0; i < min(sessionEvents.length, sessionEndEvents.length); i++) {
+    for (
+      var i = 0;
+      i < min(sessionEvents.length, sessionEndEvents.length);
+      i++
+    ) {
       final start = sessionEvents.elementAt(i).timestamp;
       final end = sessionEndEvents.elementAt(i).timestamp;
       totalSessionTime += end.difference(start);
@@ -414,12 +417,10 @@ class ThemeAnalyticsService {
       }
     }
 
-    final favoriteFeatures = featureUsage.entries
-        .toList()
-        ..sort((a, b) => b.value.compareTo(a.value))
-        .take(5)
-        .map((e) => e.key)
-        .toList();
+    final favoriteFeatures = featureUsage.entries.toList()
+      ..sort(
+        (a, b) => b.value.compareTo(a.value),
+      ).take(5).map((e) => e.key).toList();
 
     final lastActivity = userEvents
         .map((e) => e.timestamp)
@@ -454,8 +455,9 @@ class ThemeAnalyticsService {
     final start = startDate ?? _getStartDateForPeriod(period, now);
     final end = endDate ?? now;
 
-    final filteredEvents = _events.where((e) =>
-        e.timestamp.isAfter(start) && e.timestamp.isBefore(end)).toList();
+    final filteredEvents = _events
+        .where((e) => e.timestamp.isAfter(start) && e.timestamp.isBefore(end))
+        .toList();
 
     return {
       'period': period.name,
@@ -478,8 +480,9 @@ class ThemeAnalyticsService {
     final now = DateTime.now();
     final startDate = now.subtract(Duration(days: days));
 
-    final filteredEvents = _events.where((e) =>
-        e.timestamp.isAfter(startDate)).toList();
+    final filteredEvents = _events
+        .where((e) => e.timestamp.isAfter(startDate))
+        .toList();
 
     final dailyUsage = <DateTime, int>{};
     for (var i = 0; i < days; i++) {
@@ -497,21 +500,34 @@ class ThemeAnalyticsService {
     }
 
     final sortedDates = dailyUsage.keys.toList()..sort();
-    final usageData = sortedDates.map((date) => {
-      'date': date.toIso8601String(),
-      'count': dailyUsage[date] ?? 0,
-    }).toList();
+    final usageData = sortedDates
+        .map(
+          (date) => {
+            'date': date.toIso8601String(),
+            'count': dailyUsage[date] ?? 0,
+          },
+        )
+        .toList();
 
     // Calculer les tendances
-    final totalCount = usageData.fold(0, (sum, data) => sum + (data['count'] as int));
+    final totalCount = usageData.fold(
+      0,
+      (sum, data) => sum + (data['count'] as int),
+    );
     final averageDaily = totalCount / days;
 
     // Tendance de croissance
     final firstHalf = usageData.take(days ~/ 2);
     final secondHalf = usageData.skip(days ~/ 2);
 
-    final firstHalfCount = firstHalf.fold(0, (sum, data) => sum + (data['count'] as int));
-    final secondHalfCount = secondHalf.fold(0, (sum, data) => sum + (data['count'] as int));
+    final firstHalfCount = firstHalf.fold(
+      0,
+      (sum, data) => sum + (data['count'] as int),
+    );
+    final secondHalfCount = secondHalf.fold(
+      0,
+      (sum, data) => sum + (data['count'] as int),
+    );
 
     final growthRate = firstHalfCount > 0
         ? ((secondHalfCount - firstHalfCount) / firstHalfCount) * 100
@@ -524,7 +540,9 @@ class ThemeAnalyticsService {
       'growthRate': growthRate,
       'dailyData': usageData,
       'peakDay': usageData.isNotEmpty
-          ? usageData.reduce((a, b) => (a['count'] as int) > (b['count'] as int) ? a : b)
+          ? usageData.reduce(
+              (a, b) => (a['count'] as int) > (b['count'] as int) ? a : b,
+            )
           : null,
     };
   }
@@ -536,9 +554,7 @@ class ThemeAnalyticsService {
         .map((e) => e.properties['themeId'] as String)
         .toSet();
 
-    final metrics = themeIds
-        .map(getThemeMetrics)
-        .toList()
+    final metrics = themeIds.map(getThemeMetrics).toList()
       ..sort((a, b) => b.totalUsage.compareTo(a.totalUsage));
 
     return metrics.take(limit).toList();
@@ -575,7 +591,11 @@ class ThemeAnalyticsService {
     // Utilisateurs actifs dans la période précédente
     final previousStartDate = startDate.subtract(Duration(days: days));
     final previousActiveUsers = _events
-        .where((e) => e.timestamp.isAfter(previousStartDate) && e.timestamp.isBefore(startDate))
+        .where(
+          (e) =>
+              e.timestamp.isAfter(previousStartDate) &&
+              e.timestamp.isBefore(startDate),
+        )
         .map((e) => e.userId)
         .toSet();
 
@@ -594,9 +614,7 @@ class ThemeAnalyticsService {
 
       await trackEvent(
         type: AnalyticsEventType.sessionEnded,
-        properties: {
-          'sessionDuration': duration.inMilliseconds,
-        },
+        properties: {'sessionDuration': duration.inMilliseconds},
         duration: duration,
       );
 
@@ -614,11 +632,13 @@ class ThemeAnalyticsService {
     DateTime? endDate,
   }) async {
     final now = DateTime.now();
-    final start = startDate ?? _getStartDateForPeriod(period ?? Analytics.monthly, now);
+    final start =
+        startDate ?? _getStartDateForPeriod(period ?? Analytics.monthly, now);
     final end = endDate ?? now;
 
-    final filteredEvents = _events.where((e) =>
-        e.timestamp.isAfter(start) && e.timestamp.isBefore(end)).toList();
+    final filteredEvents = _events
+        .where((e) => e.timestamp.isAfter(start) && e.timestamp.isBefore(end))
+        .toList();
 
     return {
       'exportInfo': {
@@ -630,7 +650,11 @@ class ThemeAnalyticsService {
       },
       'events': filteredEvents.map((e) => e.toJson()).toList(),
       'sessions': _sessions.map((k, v) => MapEntry(k, v.toIso8601String())),
-      'summary': await generateReport(period: period, startDate: start, endDate: end),
+      'summary': await generateReport(
+        period: period,
+        startDate: start,
+        endDate: end,
+      ),
     };
   }
 
@@ -648,7 +672,8 @@ class ThemeAnalyticsService {
 
   // Méthodes privées
 
-  static String _generateEventId() => 'event_${DateTime.now().millisecondsSinceEpoch}_${Random().nextInt(10000)}';
+  static String _generateEventId() =>
+      'event_${DateTime.now().millisecondsSinceEpoch}_${Random().nextInt(10000)}';
 
   static void _startNewSession() {
     _currentSessionId = 'session_${DateTime.now().millisecondsSinceEpoch}';
@@ -657,9 +682,7 @@ class ThemeAnalyticsService {
 
     trackEvent(
       type: AnalyticsEventType.sessionStarted,
-      properties: {
-        'startTime': _sessionStartTime!.toIso8601String(),
-      },
+      properties: {'startTime': _sessionStartTime!.toIso8601String()},
     );
 
     // Démarrer un timer pour suivre la durée de session
@@ -745,9 +768,15 @@ class ThemeAnalyticsService {
     };
   }
 
-  static Map<String, dynamic> _generateThemeMetrics(List<AnalyticsEvent> events) {
-    final themeEvents = events.where((e) => e.properties.containsKey('themeId')).toList();
-    final themeIds = themeEvents.map((e) => e.properties['themeId'] as String).toSet();
+  static Map<String, dynamic> _generateThemeMetrics(
+    List<AnalyticsEvent> events,
+  ) {
+    final themeEvents = events
+        .where((e) => e.properties.containsKey('themeId'))
+        .toList();
+    final themeIds = themeEvents
+        .map((e) => e.properties['themeId'] as String)
+        .toSet();
 
     final metrics = <String, dynamic>{};
     for (final themeId in themeIds) {
@@ -757,7 +786,9 @@ class ThemeAnalyticsService {
     return metrics;
   }
 
-  static Map<String, dynamic> _generateUserBehaviorMetrics(List<AnalyticsEvent> events) {
+  static Map<String, dynamic> _generateUserBehaviorMetrics(
+    List<AnalyticsEvent> events,
+  ) {
     final userIds = events.map((e) => e.userId).toSet();
     final metrics = <String, dynamic>{};
 
@@ -779,12 +810,16 @@ class ThemeAnalyticsService {
     return featureUsage;
   }
 
-  static Map<String, dynamic> _generateTrends(List<AnalyticsEvent> events, DateTime start, DateTime end) => {
-      'usageGrowth': _calculateUsageGrowth(events, start, end),
-      'popularFeatures': getTopFeatures(limit: 5),
-      'userEngagement': _calculateUserEngagement(events),
-      'sessionDuration': _calculateSessionDurationTrends(events),
-    };
+  static Map<String, dynamic> _generateTrends(
+    List<AnalyticsEvent> events,
+    DateTime start,
+    DateTime end,
+  ) => {
+    'usageGrowth': _calculateUsageGrowth(events, start, end),
+    'popularFeatures': getTopFeatures(limit: 5),
+    'userEngagement': _calculateUserEngagement(events),
+    'sessionDuration': _calculateSessionDurationTrends(events),
+  };
 
   static List<String> _generateRecommendations(List<AnalyticsEvent> events) {
     final recommendations = <String>[];
@@ -796,21 +831,31 @@ class ThemeAnalyticsService {
 
     if (popularFeatures.isNotEmpty) {
       final topFeature = popularFeatures.first.key;
-      recommendations.add('Promouvoir la fonctionnalité "$topFeature" - très utilisée');
+      recommendations.add(
+        'Promouvoir la fonctionnalité "$topFeature" - très utilisée',
+      );
     }
 
-    final errorEvents = events.where((e) => e.type == AnalyticsEventType.errorOccurred);
+    final errorEvents = events.where(
+      (e) => e.type == AnalyticsEventType.errorOccurred,
+    );
     if (errorEvents.length > events.length * 0.05) {
       recommendations.add('Améliorer la stabilité - taux d\'erreurs élevé');
     }
 
-    recommendations.add('Optimiser les performances des thèmes les plus utilisés');
-    recommendations.add('Ajouter des tutoriels pour les fonctionnalités complexes');
+    recommendations.add(
+      'Optimiser les performances des thèmes les plus utilisés',
+    );
+    recommendations.add(
+      'Ajouter des tutoriels pour les fonctionnalités complexes',
+    );
 
     return recommendations;
   }
 
-  static Duration _calculateAverageSessionDuration(List<AnalyticsEvent> events) {
+  static Duration _calculateAverageSessionDuration(
+    List<AnalyticsEvent> events,
+  ) {
     final sessionDurations = events
         .where((e) => e.duration != null)
         .map((e) => e.duration!)
@@ -818,15 +863,26 @@ class ThemeAnalyticsService {
 
     if (sessionDurations.isEmpty) return Duration.zero;
 
-    final totalMs = sessionDurations.fold(0, (sum, d) => sum + d.inMilliseconds);
+    final totalMs = sessionDurations.fold(
+      0,
+      (sum, d) => sum + d.inMilliseconds,
+    );
     return Duration(milliseconds: totalMs ~/ sessionDurations.length);
   }
 
-  static double _calculateUsageGrowth(List<AnalyticsEvent> events, DateTime start, DateTime end) {
+  static double _calculateUsageGrowth(
+    List<AnalyticsEvent> events,
+    DateTime start,
+    DateTime end,
+  ) {
     final midPoint = start.add(end.difference(start) ~/ 2);
 
-    final firstHalf = events.where((e) => e.timestamp.isBefore(midPoint)).length;
-    final secondHalf = events.where((e) => e.timestamp.isAfter(midPoint)).length;
+    final firstHalf = events
+        .where((e) => e.timestamp.isBefore(midPoint))
+        .length;
+    final secondHalf = events
+        .where((e) => e.timestamp.isAfter(midPoint))
+        .length;
 
     if (firstHalf == 0) return 0.0;
     return ((secondHalf - firstHalf) / firstHalf) * 100;
@@ -845,23 +901,23 @@ class ThemeAnalyticsService {
     return totalEngagement / userIds.length;
   }
 
-  static Map<String, dynamic> _calculateSessionDurationTrends(List<AnalyticsEvent> events) {
-    final sessions = events.where((e) => e.type == AnalyticsEventType.sessionEnded);
+  static Map<String, dynamic> _calculateSessionDurationTrends(
+    List<AnalyticsEvent> events,
+  ) {
+    final sessions = events.where(
+      (e) => e.type == AnalyticsEventType.sessionEnded,
+    );
 
     if (sessions.isEmpty) {
-      return {
-        'average': 0.0,
-        'median': 0.0,
-        'shortest': 0.0,
-        'longest': 0.0,
-      };
+      return {'average': 0.0, 'median': 0.0, 'shortest': 0.0, 'longest': 0.0};
     }
 
-    final durations = sessions
-        .where((e) => e.duration != null)
-        .map((e) => e.duration!.inMinutes.toDouble())
-        .toList()
-      ..sort();
+    final durations =
+        sessions
+            .where((e) => e.duration != null)
+            .map((e) => e.duration!.inMinutes.toDouble())
+            .toList()
+          ..sort();
 
     return {
       'average': durations.reduce((a, b) => a + b) / durations.length,
@@ -886,7 +942,9 @@ class ThemeAnalyticsService {
       if (sessionsJson != null) {
         final sessionsData = json.decode(sessionsJson) as Map<String, dynamic>;
         _sessions.clear();
-        _sessions.addAll(sessionsData.map((k, v) => MapEntry(k, DateTime.parse(v))));
+        _sessions.addAll(
+          sessionsData.map((k, v) => MapEntry(k, DateTime.parse(v))),
+        );
       }
     } catch (e) {
       // Gérer l'erreur de chargement
@@ -902,7 +960,10 @@ class ThemeAnalyticsService {
           ? _events.skip(_events.length - 10000).toList()
           : _events;
 
-      await prefs.setString(_eventsKey, json.encode(eventsToSave.map((e) => e.toJson()).toList()));
+      await prefs.setString(
+        _eventsKey,
+        json.encode(eventsToSave.map((e) => e.toJson()).toList()),
+      );
     } catch (e) {
       // Gérer l'erreur de sauvegarde
     }
@@ -911,9 +972,10 @@ class ThemeAnalyticsService {
   static Future<void> _saveSessions() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString(_sessionsKey, json.encode(
-        _sessions.map((k, v) => MapEntry(k, v.toIso8601String()))
-      ));
+      await prefs.setString(
+        _sessionsKey,
+        json.encode(_sessions.map((k, v) => MapEntry(k, v.toIso8601String()))),
+      );
     } catch (e) {
       // Gérer l'erreur de sauvegarde
     }

@@ -1,12 +1,12 @@
 /// Widget pour afficher une tuile de carte dans la galerie
 library;
+
 import 'package:flutter/material.dart';
 import 'package:mycard/data/models/business_card.dart';
 import 'package:mycard/data/models/card_template.dart';
 import 'package:mycard/data/models/event_overlay.dart';
 
 class CardTile extends StatelessWidget {
-
   const CardTile({
     super.key,
     required this.card,
@@ -24,7 +24,9 @@ class CardTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final template = CardTemplate.findById(card.templateId);
-    final event = card.eventOverlayId != null ? EventOverlay.findById(card.eventOverlayId!) : null;
+    final event = card.eventOverlayId != null
+        ? EventOverlay.findById(card.eventOverlayId!)
+        : null;
 
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
@@ -102,7 +104,10 @@ class CardTile extends StatelessWidget {
                           children: [
                             Icon(Icons.delete, color: Colors.red),
                             SizedBox(width: 8),
-                            Text('Supprimer', style: TextStyle(color: Colors.red)),
+                            Text(
+                              'Supprimer',
+                              style: TextStyle(color: Colors.red),
+                            ),
                           ],
                         ),
                       ),
@@ -116,10 +121,8 @@ class CardTile extends StatelessWidget {
               // Informations de contact
               if (card.company?.isNotEmpty == true)
                 _buildInfoRow(Icons.business, card.company!),
-              if (card.phone.isNotEmpty)
-                _buildInfoRow(Icons.phone, card.phone),
-              if (card.email.isNotEmpty)
-                _buildInfoRow(Icons.email, card.email),
+              if (card.phone.isNotEmpty) _buildInfoRow(Icons.phone, card.phone),
+              if (card.email.isNotEmpty) _buildInfoRow(Icons.email, card.email),
 
               const SizedBox(height: 12),
 
@@ -129,7 +132,10 @@ class CardTile extends StatelessWidget {
                   // Template
                   if (template != null)
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: template.primaryColor.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(12),
@@ -150,7 +156,10 @@ class CardTile extends StatelessWidget {
                   // Événement
                   if (event != null)
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: event.color.withOpacity(0.2),
                         borderRadius: BorderRadius.circular(12),
@@ -170,10 +179,7 @@ class CardTile extends StatelessWidget {
                   // Date de modification
                   Text(
                     _formatDate(card.updatedAt),
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[500],
-                    ),
+                    style: TextStyle(fontSize: 12, color: Colors.grey[500]),
                   ),
                 ],
               ),
@@ -185,27 +191,20 @@ class CardTile extends StatelessWidget {
   }
 
   Widget _buildInfoRow(IconData icon, String text) => Padding(
-      padding: const EdgeInsets.only(bottom: 4),
-      child: Row(
-        children: [
-          Icon(
-            icon,
-            size: 16,
-            color: Colors.grey[600],
+    padding: const EdgeInsets.only(bottom: 4),
+    child: Row(
+      children: [
+        Icon(icon, size: 16, color: Colors.grey[600]),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            text,
+            style: TextStyle(fontSize: 14, color: Colors.grey[700]),
           ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              text,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[700],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+        ),
+      ],
+    ),
+  );
 
   String _formatDate(DateTime date) {
     final now = DateTime.now();

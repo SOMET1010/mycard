@@ -1,12 +1,12 @@
 /// Page pour exporter une carte de visite
 library;
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mycard/data/models/business_card.dart';
 import 'package:mycard/features/export/widget_export_result.dart';
 
 class ExportPage extends StatefulWidget {
-
   const ExportPage({super.key, required this.card});
   final BusinessCard card;
 
@@ -22,74 +22,70 @@ class _ExportPageState extends State<ExportPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(
-        title: const Text('Exporter la carte'),
+    appBar: AppBar(title: const Text('Exporter la carte')),
+    body: SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Aperçu de la carte
+          _buildCardPreview(),
+          const SizedBox(height: 24),
+
+          // Format d'export
+          _buildFormatSection(),
+          const SizedBox(height: 24),
+
+          // Options d'export
+          _buildOptionsSection(),
+          const SizedBox(height: 24),
+
+          // Actions
+          _buildActionsSection(),
+        ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Aperçu de la carte
-            _buildCardPreview(),
-            const SizedBox(height: 24),
-
-            // Format d'export
-            _buildFormatSection(),
-            const SizedBox(height: 24),
-
-            // Options d'export
-            _buildOptionsSection(),
-            const SizedBox(height: 24),
-
-            // Actions
-            _buildActionsSection(),
-          ],
-        ),
-      ),
-    );
+    ),
+  );
 
   Widget _buildCardPreview() => Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Aperçu',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Text(
+        'Aperçu',
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      ),
+      const SizedBox(height: 12),
+      Container(
+        width: double.infinity,
+        height: 200,
+        decoration: BoxDecoration(
+          color: Colors.grey[100],
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.grey[300]!),
         ),
-        const SizedBox(height: 12),
-        Container(
-          width: double.infinity,
-          height: 200,
-          decoration: BoxDecoration(
-            color: Colors.grey[100],
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Colors.grey[300]!),
-          ),
-          child: const Center(
-            child: Text('Aperçu de la carte'),
-          ),
-        ),
-      ],
-    );
+        child: const Center(child: Text('Aperçu de la carte')),
+      ),
+    ],
+  );
 
   Widget _buildFormatSection() => Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Format d\'export',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 12),
-        Wrap(
-          spacing: 8,
-          children: [
-            _buildFormatChip('png', 'PNG'),
-            _buildFormatChip('jpg', 'JPG'),
-            _buildFormatChip('pdf', 'PDF'),
-          ],
-        ),
-      ],
-    );
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Text(
+        'Format d\'export',
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      ),
+      const SizedBox(height: 12),
+      Wrap(
+        spacing: 8,
+        children: [
+          _buildFormatChip('png', 'PNG'),
+          _buildFormatChip('jpg', 'JPG'),
+          _buildFormatChip('pdf', 'PDF'),
+        ],
+      ),
+    ],
+  );
 
   Widget _buildFormatChip(String format, String label) {
     final isSelected = _selectedFormat == format;
@@ -119,73 +115,75 @@ class _ExportPageState extends State<ExportPage> {
   }
 
   Widget _buildOptionsSection() => Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Options',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Text(
+        'Options',
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      ),
+      const SizedBox(height: 12),
+      CheckboxListTile(
+        title: const Text('Inclure le code QR'),
+        subtitle: const Text(
+          'Ajoute un code QR avec les informations de contact',
         ),
-        const SizedBox(height: 12),
+        value: _includeQRCode,
+        onChanged: (value) {
+          setState(() {
+            _includeQRCode = value ?? false;
+          });
+        },
+      ),
+      if (_selectedFormat == 'pdf')
         CheckboxListTile(
-          title: const Text('Inclure le code QR'),
-          subtitle: const Text('Ajoute un code QR avec les informations de contact'),
-          value: _includeQRCode,
+          title: const Text('Inclure la vCard'),
+          subtitle: const Text('Ajoute un fichier vCard téléchargeable'),
+          value: _includeVCard,
           onChanged: (value) {
             setState(() {
-              _includeQRCode = value ?? false;
+              _includeVCard = value ?? false;
             });
           },
         ),
-        if (_selectedFormat == 'pdf')
-          CheckboxListTile(
-            title: const Text('Inclure la vCard'),
-            subtitle: const Text('Ajoute un fichier vCard téléchargeable'),
-            value: _includeVCard,
-            onChanged: (value) {
-              setState(() {
-                _includeVCard = value ?? false;
-              });
-            },
-          ),
-      ],
-    );
+    ],
+  );
 
   Widget _buildActionsSection() => Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Actions',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 12),
-        SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed: _isExporting ? null : _exportCard,
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-            ),
-            child: _isExporting
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    ),
-                  )
-                : const Text('Exporter'),
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Text(
+        'Actions',
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      ),
+      const SizedBox(height: 12),
+      SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+          onPressed: _isExporting ? null : _exportCard,
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 16),
           ),
+          child: _isExporting
+              ? const SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                )
+              : const Text('Exporter'),
         ),
-        const SizedBox(height: 12),
-        OutlinedButton(
-          onPressed: () {
-            context.pop();
-          },
-          child: const Text('Annuler'),
-        ),
-      ],
-    );
+      ),
+      const SizedBox(height: 12),
+      OutlinedButton(
+        onPressed: () {
+          context.pop();
+        },
+        child: const Text('Annuler'),
+      ),
+    ],
+  );
 
   Future<void> _exportCard() async {
     setState(() {

@@ -17,7 +17,8 @@ class DPIUtils {
   }
 
   /// Convertit les pixels d'un DPI à un autre
-  static double convertDPI(double pixels, int fromDPI, int toDPI) => (pixels * toDPI) / fromDPI;
+  static double convertDPI(double pixels, int fromDPI, int toDPI) =>
+      (pixels * toDPI) / fromDPI;
 
   /// Calcule la taille d'une image pour un format d'impression
   static Size getPrintSize(double widthPx, double heightPx, int targetDPI) {

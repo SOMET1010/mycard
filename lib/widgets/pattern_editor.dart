@@ -1,5 +1,6 @@
 /// Éditeur visuel de motifs personnalisés
 library;
+
 import 'dart:math';
 import 'package:flutter/material.dart';
 
@@ -96,356 +97,347 @@ class _PatternEditorState extends State<PatternEditor>
 
   @override
   Widget build(BuildContext context) => Column(
-        children: [
-          // Aperçu du motif
-          _buildPatternPreview(),
-          const SizedBox(height: 20),
+    children: [
+      // Aperçu du motif
+      _buildPatternPreview(),
+      const SizedBox(height: 20),
 
-          // Contrôles
-          Expanded(child: _buildControls()),
-        ],
-      );
+      // Contrôles
+      Expanded(child: _buildControls()),
+    ],
+  );
 
   Widget _buildPatternPreview() => Container(
-        height: 150,
-        decoration: BoxDecoration(
-          color: Colors.grey[100],
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.grey[300]!),
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: CustomPaint(
-            painter: PatternPainter(
-              pattern: PatternData(
-                type: _selectedType,
-                color: _patternColor,
-                size: _patternSize,
-                spacing: _patternSpacing,
-                opacity: _patternOpacity,
-                customPoints: _customPoints.isEmpty ? null : _customPoints,
-              ),
-              animation: _animation.value,
-            ),
-            child: _selectedType == PatternType.custom
-                ? GestureDetector(
-                    onPanStart: (details) {
-                      setState(() {
-                        _isDrawing = true;
-                        _customPoints.add(details.localPosition);
-                      });
-                    },
-                    onPanUpdate: (details) {
-                      if (_isDrawing) {
-                        setState(() {
-                          _customPoints.add(details.localPosition);
-                        });
-                      }
-                    },
-                    onPanEnd: (details) {
-                      setState(() {
-                        _isDrawing = false;
-                      });
-                      _notifyPatternChanged();
-                    },
-                    child: ColoredBox(
-                      color: Colors.transparent,
-                      child: _isDrawing
-                          ? const Center(
-                              child: Text(
-                                'Dessinez votre motif...',
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            )
-                          : const Center(
-                              child: Text(
-                                'Touchez pour dessiner',
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                    ),
-                  )
-                : null,
+    height: 150,
+    decoration: BoxDecoration(
+      color: Colors.grey[100],
+      borderRadius: BorderRadius.circular(12),
+      border: Border.all(color: Colors.grey[300]!),
+    ),
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: CustomPaint(
+        painter: PatternPainter(
+          pattern: PatternData(
+            type: _selectedType,
+            color: _patternColor,
+            size: _patternSize,
+            spacing: _patternSpacing,
+            opacity: _patternOpacity,
+            customPoints: _customPoints.isEmpty ? null : _customPoints,
           ),
+          animation: _animation.value,
         ),
-      );
-
-  Widget _buildControls() => SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Sélection du type de motif
-            _buildTypeSelector(),
-            const SizedBox(height: 20),
-
-            // Couleur du motif
-            _buildColorPicker(),
-            const SizedBox(height: 20),
-
-            // Taille du motif
-            _buildSizeSlider(),
-            const SizedBox(height: 20),
-
-            // Espacement
-            _buildSpacingSlider(),
-            const SizedBox(height: 20),
-
-            // Opacité
-            _buildOpacitySlider(),
-            const SizedBox(height: 20),
-
-            // Actions pour motif personnalisé
-            if (_selectedType == PatternType.custom) ...[
-              _buildCustomPatternActions(),
-              const SizedBox(height: 20),
-            ],
-
-            // Bouton appliquer
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  _notifyPatternChanged();
-                  Navigator.pop(context);
-                },
-                child: const Text('Appliquer le motif'),
-              ),
-            ),
-          ],
-        ),
-      );
-
-  Widget _buildTypeSelector() => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Type de motif',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: PatternType.values.map((type) {
-              final isSelected = _selectedType == type;
-              return InkWell(
-                onTap: () {
+        child: _selectedType == PatternType.custom
+            ? GestureDetector(
+                onPanStart: (details) {
                   setState(() {
-                    _selectedType = type;
-                    if (type != PatternType.custom) {
-                      _customPoints.clear();
-                    }
+                    _isDrawing = true;
+                    _customPoints.add(details.localPosition);
+                  });
+                },
+                onPanUpdate: (details) {
+                  if (_isDrawing) {
+                    setState(() {
+                      _customPoints.add(details.localPosition);
+                    });
+                  }
+                },
+                onPanEnd: (details) {
+                  setState(() {
+                    _isDrawing = false;
                   });
                   _notifyPatternChanged();
                 },
-                borderRadius: BorderRadius.circular(8),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    color: isSelected ? _patternColor.withValues(alpha: 0.2) : Colors.transparent,
-                    border: Border.all(
-                      color: isSelected ? _patternColor : Colors.grey[300]!,
-                      width: isSelected ? 2 : 1,
-                    ),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(_getIconForType(type), size: 16),
-                      const SizedBox(width: 4),
-                      Text(
-                        _getLabelForType(type),
-                        style: TextStyle(
-                          color: isSelected ? _patternColor : Colors.grey[700],
-                          fontSize: 12,
-                          fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                child: ColoredBox(
+                  color: Colors.transparent,
+                  child: _isDrawing
+                      ? const Center(
+                          child: Text(
+                            'Dessinez votre motif...',
+                            style: TextStyle(color: Colors.grey, fontSize: 16),
+                          ),
+                        )
+                      : const Center(
+                          child: Text(
+                            'Touchez pour dessiner',
+                            style: TextStyle(color: Colors.grey, fontSize: 16),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
                 ),
-              );
-            }).toList(),
-          ),
+              )
+            : null,
+      ),
+    ),
+  );
+
+  Widget _buildControls() => SingleChildScrollView(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Sélection du type de motif
+        _buildTypeSelector(),
+        const SizedBox(height: 20),
+
+        // Couleur du motif
+        _buildColorPicker(),
+        const SizedBox(height: 20),
+
+        // Taille du motif
+        _buildSizeSlider(),
+        const SizedBox(height: 20),
+
+        // Espacement
+        _buildSpacingSlider(),
+        const SizedBox(height: 20),
+
+        // Opacité
+        _buildOpacitySlider(),
+        const SizedBox(height: 20),
+
+        // Actions pour motif personnalisé
+        if (_selectedType == PatternType.custom) ...[
+          _buildCustomPatternActions(),
+          const SizedBox(height: 20),
         ],
-      );
+
+        // Bouton appliquer
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: () {
+              _notifyPatternChanged();
+              Navigator.pop(context);
+            },
+            child: const Text('Appliquer le motif'),
+          ),
+        ),
+      ],
+    ),
+  );
+
+  Widget _buildTypeSelector() => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Text(
+        'Type de motif',
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      ),
+      const SizedBox(height: 8),
+      Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: PatternType.values.map((type) {
+          final isSelected = _selectedType == type;
+          return InkWell(
+            onTap: () {
+              setState(() {
+                _selectedType = type;
+                if (type != PatternType.custom) {
+                  _customPoints.clear();
+                }
+              });
+              _notifyPatternChanged();
+            },
+            borderRadius: BorderRadius.circular(8),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? _patternColor.withValues(alpha: 0.2)
+                    : Colors.transparent,
+                border: Border.all(
+                  color: isSelected ? _patternColor : Colors.grey[300]!,
+                  width: isSelected ? 2 : 1,
+                ),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(_getIconForType(type), size: 16),
+                  const SizedBox(width: 4),
+                  Text(
+                    _getLabelForType(type),
+                    style: TextStyle(
+                      color: isSelected ? _patternColor : Colors.grey[700],
+                      fontSize: 12,
+                      fontWeight: isSelected
+                          ? FontWeight.w600
+                          : FontWeight.normal,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    ],
+  );
 
   Widget _buildColorPicker() => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Couleur du motif',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: _patternColor,
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.grey[300]!),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              ElevatedButton(
-                onPressed: _showColorPicker,
-                child: const Text('Choisir'),
-              ),
-            ],
-          ),
-        ],
-      );
-
-  Widget _buildSizeSlider() => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Taille',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              Text('${_patternSize.round()}px'),
-            ],
-          ),
-          Slider(
-            value: _patternSize,
-            min: 5.0,
-            max: 50.0,
-            divisions: 45,
-            onChanged: (value) {
-              setState(() {
-                _patternSize = value;
-              });
-              _notifyPatternChanged();
-            },
-          ),
-        ],
-      );
-
-  Widget _buildSpacingSlider() => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Espacement',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              Text('${_patternSpacing.round()}px'),
-            ],
-          ),
-          Slider(
-            value: _patternSpacing,
-            min: 5.0,
-            max: 50.0,
-            divisions: 45,
-            onChanged: (value) {
-              setState(() {
-                _patternSpacing = value;
-              });
-              _notifyPatternChanged();
-            },
-          ),
-        ],
-      );
-
-  Widget _buildOpacitySlider() => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Opacité',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              Text('${(_patternOpacity * 100).round()}%'),
-            ],
-          ),
-          Slider(
-            value: _patternOpacity,
-            min: 0.1,
-            max: 1.0,
-            divisions: 18,
-            onChanged: (value) {
-              setState(() {
-                _patternOpacity = value;
-              });
-              _notifyPatternChanged();
-            },
-          ),
-        ],
-      );
-
-  Widget _buildCustomPatternActions() => Row(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Text(
+        'Couleur du motif',
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      ),
+      const SizedBox(height: 8),
+      Row(
         children: [
           Expanded(
-            child: OutlinedButton.icon(
-              onPressed: () {
-                setState(_customPoints.clear);
-                _notifyPatternChanged();
-              },
-              icon: const Icon(Icons.clear),
-              label: const Text('Effacer'),
+            child: Container(
+              height: 40,
+              decoration: BoxDecoration(
+                color: _patternColor,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.grey[300]!),
+              ),
             ),
           ),
           const SizedBox(width: 12),
-          Expanded(
-            child: OutlinedButton.icon(
-              onPressed: () {
-                setState(() {
-                  _customPoints.clear();
-                  // Ajouter des points prédéfinis
-                  const size = 150.0;
-                  const center = Offset(size / 2, size / 2);
-                  const radius = 30.0;
-
-                  for (var i = 0; i < 8; i++) {
-                    final angle = (i * pi * 2) / 8;
-                    _customPoints.add(
-                      Offset(
-                        center.dx + cos(angle) * radius,
-                        center.dy + sin(angle) * radius,
-                      ),
-                    );
-                  }
-                });
-                _notifyPatternChanged();
-              },
-              icon: const Icon(Icons.auto_awesome),
-              label: const Text('Cercle'),
-            ),
+          ElevatedButton(
+            onPressed: _showColorPicker,
+            child: const Text('Choisir'),
           ),
         ],
-      );
+      ),
+    ],
+  );
+
+  Widget _buildSizeSlider() => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            'Taille',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          Text('${_patternSize.round()}px'),
+        ],
+      ),
+      Slider(
+        value: _patternSize,
+        min: 5.0,
+        max: 50.0,
+        divisions: 45,
+        onChanged: (value) {
+          setState(() {
+            _patternSize = value;
+          });
+          _notifyPatternChanged();
+        },
+      ),
+    ],
+  );
+
+  Widget _buildSpacingSlider() => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            'Espacement',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          Text('${_patternSpacing.round()}px'),
+        ],
+      ),
+      Slider(
+        value: _patternSpacing,
+        min: 5.0,
+        max: 50.0,
+        divisions: 45,
+        onChanged: (value) {
+          setState(() {
+            _patternSpacing = value;
+          });
+          _notifyPatternChanged();
+        },
+      ),
+    ],
+  );
+
+  Widget _buildOpacitySlider() => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            'Opacité',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          Text('${(_patternOpacity * 100).round()}%'),
+        ],
+      ),
+      Slider(
+        value: _patternOpacity,
+        min: 0.1,
+        max: 1.0,
+        divisions: 18,
+        onChanged: (value) {
+          setState(() {
+            _patternOpacity = value;
+          });
+          _notifyPatternChanged();
+        },
+      ),
+    ],
+  );
+
+  Widget _buildCustomPatternActions() => Row(
+    children: [
+      Expanded(
+        child: OutlinedButton.icon(
+          onPressed: () {
+            setState(_customPoints.clear);
+            _notifyPatternChanged();
+          },
+          icon: const Icon(Icons.clear),
+          label: const Text('Effacer'),
+        ),
+      ),
+      const SizedBox(width: 12),
+      Expanded(
+        child: OutlinedButton.icon(
+          onPressed: () {
+            setState(() {
+              _customPoints.clear();
+              // Ajouter des points prédéfinis
+              const size = 150.0;
+              const center = Offset(size / 2, size / 2);
+              const radius = 30.0;
+
+              for (var i = 0; i < 8; i++) {
+                final angle = (i * pi * 2) / 8;
+                _customPoints.add(
+                  Offset(
+                    center.dx + cos(angle) * radius,
+                    center.dy + sin(angle) * radius,
+                  ),
+                );
+              }
+            });
+            _notifyPatternChanged();
+          },
+          icon: const Icon(Icons.auto_awesome),
+          label: const Text('Cercle'),
+        ),
+      ),
+    ],
+  );
 
   void _showColorPicker() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Choisir une couleur'),
-        content: SizedBox(
-          width: 300,
-          height: 300,
-          child: _buildColorGrid(),
-        ),
+        content: SizedBox(width: 300, height: 300, child: _buildColorGrid()),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -458,11 +450,26 @@ class _PatternEditorState extends State<PatternEditor>
 
   Widget _buildColorGrid() {
     final colors = [
-      Colors.red, Colors.pink, Colors.purple, Colors.deepPurple,
-      Colors.indigo, Colors.blue, Colors.lightBlue, Colors.cyan,
-      Colors.teal, Colors.green, Colors.lightGreen, Colors.lime,
-      Colors.yellow, Colors.amber, Colors.orange, Colors.deepOrange,
-      Colors.brown, Colors.grey, Colors.blueGrey, Colors.black,
+      Colors.red,
+      Colors.pink,
+      Colors.purple,
+      Colors.deepPurple,
+      Colors.indigo,
+      Colors.blue,
+      Colors.lightBlue,
+      Colors.cyan,
+      Colors.teal,
+      Colors.green,
+      Colors.lightGreen,
+      Colors.lime,
+      Colors.yellow,
+      Colors.amber,
+      Colors.orange,
+      Colors.deepOrange,
+      Colors.brown,
+      Colors.grey,
+      Colors.blueGrey,
+      Colors.black,
     ];
 
     return GridView.builder(
@@ -574,7 +581,6 @@ class _PatternEditorState extends State<PatternEditor>
 }
 
 class PatternData {
-
   const PatternData({
     required this.type,
     required this.color,
@@ -603,21 +609,17 @@ class PatternData {
   final List<Offset>? customPoints;
 
   Map<String, dynamic> toJson() => {
-        'type': type.name,
-        'color': color.value,
-        'size': size,
-        'spacing': spacing,
-        'opacity': opacity,
-        'customPoints': customPoints?.map((p) => {'dx': p.dx, 'dy': p.dy}).toList(),
-      };
+    'type': type.name,
+    'color': color.value,
+    'size': size,
+    'spacing': spacing,
+    'opacity': opacity,
+    'customPoints': customPoints?.map((p) => {'dx': p.dx, 'dy': p.dy}).toList(),
+  };
 }
 
 class PatternPainter extends CustomPainter {
-
-  PatternPainter({
-    required this.pattern,
-    required this.animation,
-  });
+  PatternPainter({required this.pattern, required this.animation});
   final PatternData pattern;
   final double animation;
 
@@ -693,11 +695,7 @@ class PatternPainter extends CustomPainter {
     paint.strokeWidth = 2;
 
     for (double y = 0; y < size.height; y += spacing) {
-      canvas.drawLine(
-        Offset(0, y),
-        Offset(size.width, y),
-        paint,
-      );
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
     }
   }
 
@@ -707,20 +705,12 @@ class PatternPainter extends CustomPainter {
 
     // Lignes horizontales
     for (double y = 0; y < size.height; y += spacing) {
-      canvas.drawLine(
-        Offset(0, y),
-        Offset(size.width, y),
-        paint,
-      );
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
     }
 
     // Lignes verticales
     for (double x = 0; x < size.width; x += spacing) {
-      canvas.drawLine(
-        Offset(x, 0),
-        Offset(x, size.height),
-        paint,
-      );
+      canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
     }
   }
 
@@ -790,7 +780,9 @@ class PatternPainter extends CustomPainter {
 
     for (double x = 0; x < size.width; x += spacing * 1.5) {
       for (double y = 0; y < size.height; y += spacing * 0.866) {
-        final offset = (x / (spacing * 1.5)).floor() % 2 == 0 ? 0 : spacing * 0.433;
+        final offset = (x / (spacing * 1.5)).floor() % 2 == 0
+            ? 0
+            : spacing * 0.433;
         _drawHexagon(canvas, Offset(x, y + offset), pattern.size / 2, paint);
       }
     }
@@ -859,27 +851,39 @@ class PatternPainter extends CustomPainter {
     path.moveTo(center.dx, center.dy + size * 0.3);
 
     path.cubicTo(
-      center.dx - size * 0.5, center.dy - size * 0.3,
-      center.dx - size, center.dy - size * 0.1,
-      center.dx - size, center.dy,
+      center.dx - size * 0.5,
+      center.dy - size * 0.3,
+      center.dx - size,
+      center.dy - size * 0.1,
+      center.dx - size,
+      center.dy,
     );
 
     path.cubicTo(
-      center.dx - size, center.dy + size * 0.2,
-      center.dx - size * 0.5, center.dy + size * 0.5,
-      center.dx, center.dy + size,
+      center.dx - size,
+      center.dy + size * 0.2,
+      center.dx - size * 0.5,
+      center.dy + size * 0.5,
+      center.dx,
+      center.dy + size,
     );
 
     path.cubicTo(
-      center.dx + size * 0.5, center.dy + size * 0.5,
-      center.dx + size, center.dy + size * 0.2,
-      center.dx + size, center.dy,
+      center.dx + size * 0.5,
+      center.dy + size * 0.5,
+      center.dx + size,
+      center.dy + size * 0.2,
+      center.dx + size,
+      center.dy,
     );
 
     path.cubicTo(
-      center.dx + size, center.dy - size * 0.1,
-      center.dx + size * 0.5, center.dy - size * 0.3,
-      center.dx, center.dy + size * 0.3,
+      center.dx + size,
+      center.dy - size * 0.1,
+      center.dx + size * 0.5,
+      center.dy - size * 0.3,
+      center.dx,
+      center.dy + size * 0.3,
     );
 
     canvas.drawPath(path, paint);
@@ -904,11 +908,7 @@ class PatternPainter extends CustomPainter {
             );
             break;
           case 1: // Circle
-            canvas.drawCircle(
-              Offset(x, y),
-              pattern.size * 0.4,
-              paint,
-            );
+            canvas.drawCircle(Offset(x, y), pattern.size * 0.4, paint);
             break;
           case 2: // Triangle
             final path = Path();
@@ -931,14 +931,11 @@ class PatternPainter extends CustomPainter {
       final y = random.nextDouble() * size.height;
       final radius = random.nextDouble() * pattern.size + 5;
 
-      canvas.drawCircle(
-        Offset(x, y),
-        radius,
-        paint,
-      );
+      canvas.drawCircle(Offset(x, y), radius, paint);
     }
   }
 
   @override
-  bool shouldRepaint(PatternPainter oldDelegate) => oldDelegate.pattern != pattern || oldDelegate.animation != animation;
+  bool shouldRepaint(PatternPainter oldDelegate) =>
+      oldDelegate.pattern != pattern || oldDelegate.animation != animation;
 }

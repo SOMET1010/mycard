@@ -2,7 +2,6 @@ import 'dart:io';
 
 /// Classe pour représenter une vCard parsée
 class VCardData {
-
   VCardData({
     required this.firstName,
     required this.lastName,
@@ -77,12 +76,15 @@ class VCardService {
     }
 
     // Adresse complète
-    if (address != null || city != null || postalCode != null || country != null) {
+    if (address != null ||
+        city != null ||
+        postalCode != null ||
+        country != null) {
       final addressParts = [
         address ?? '',
         city ?? '',
         postalCode ?? '',
-        country ?? ''
+        country ?? '',
       ].where((part) => part.isNotEmpty).join(';');
 
       buffer.writeln('ADR;TYPE=WORK:;;$addressParts;;;;');
@@ -115,12 +117,13 @@ class VCardService {
     required String lastName,
     required String phone,
     required String email,
-  }) => firstName.isNotEmpty &&
-           lastName.isNotEmpty &&
-           phone.isNotEmpty &&
-           email.isNotEmpty &&
-           _validateEmail(email) == null &&
-           _validatePhone(phone) == null;
+  }) =>
+      firstName.isNotEmpty &&
+      lastName.isNotEmpty &&
+      phone.isNotEmpty &&
+      email.isNotEmpty &&
+      _validateEmail(email) == null &&
+      _validatePhone(phone) == null;
 
   static String? _validateEmail(String email) {
     if (email.isEmpty) return 'Email is required';
@@ -137,7 +140,11 @@ class VCardService {
 
   /// Extrait les informations d'une vCard (implémentation avancée)
   static VCardData parseVCard(String vCardContent) {
-    final lines = vCardContent.split('\n').map((line) => line.trim()).where((line) => line.isNotEmpty).toList();
+    final lines = vCardContent
+        .split('\n')
+        .map((line) => line.trim())
+        .where((line) => line.isNotEmpty)
+        .toList();
 
     String? fullName;
     String? firstName;
@@ -185,9 +192,9 @@ class VCardService {
         final addressParts = extractValue(line, 'ADR').split(';');
         if (addressParts.length >= 7) {
           address = addressParts[2]; // Street
-          city = addressParts[3];   // City
+          city = addressParts[3]; // City
           postalCode = addressParts[5]; // Postal code
-          country = addressParts[6];   // Country
+          country = addressParts[6]; // Country
         }
       }
     }
@@ -229,7 +236,10 @@ class VCardService {
   }
 
   /// Parse un nom complet en prénom et nom
-  static void parseFullName(String fullName, void Function(String? firstName, String? lastName) callback) {
+  static void parseFullName(
+    String fullName,
+    void Function(String? firstName, String? lastName) callback,
+  ) {
     final parts = fullName.trim().split(RegExp(r'\s+'));
     if (parts.length == 1) {
       callback(parts[0], null);
@@ -242,9 +252,10 @@ class VCardService {
   }
 
   /// Valide si le contenu ressemble à une vCard
-  static bool isValidVCardFormat(String content) => content.toUpperCase().contains('BEGIN:VCARD') &&
-           content.toUpperCase().contains('END:VCARD') &&
-           (content.contains('FN:') || content.contains('N:'));
+  static bool isValidVCardFormat(String content) =>
+      content.toUpperCase().contains('BEGIN:VCARD') &&
+      content.toUpperCase().contains('END:VCARD') &&
+      (content.contains('FN:') || content.contains('N:'));
 
   /// Lit et parse un fichier vCard depuis le système de fichiers
   static Future<VCardData?> parseVCardFile(String filePath) async {

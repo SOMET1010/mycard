@@ -48,10 +48,7 @@ class EventsPickerPage extends StatelessWidget {
     );
   }
 
-  void _showEventPreview(
-    BuildContext context,
-    EventOverlay event,
-  ) {
+  void _showEventPreview(BuildContext context, EventOverlay event) {
     Navigator.push(
       context,
       MaterialPageRoute(

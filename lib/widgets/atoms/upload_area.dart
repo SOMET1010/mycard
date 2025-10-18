@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UploadArea extends StatefulWidget {
-
   const UploadArea({super.key, this.initialPath, this.onSelected});
   final String? initialPath;
   final Future<void> Function(String path)? onSelected;
@@ -46,7 +45,11 @@ class _UploadAreaState extends State<UploadArea> {
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: borderColor, width: 1, style: BorderStyle.solid),
+          border: Border.all(
+            color: borderColor,
+            width: 1,
+            style: BorderStyle.solid,
+          ),
         ),
         child: _path == null
             ? _buildPlaceholder(context)
@@ -71,7 +74,10 @@ class _UploadAreaState extends State<UploadArea> {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  Icon(Icons.edit, color: Theme.of(context).colorScheme.primary),
+                  Icon(
+                    Icons.edit,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ],
               ),
       ),
@@ -79,19 +85,18 @@ class _UploadAreaState extends State<UploadArea> {
   }
 
   Widget _buildPlaceholder(BuildContext context) => Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(Icons.image_outlined, color: Theme.of(context).colorScheme.primary),
-        const SizedBox(height: 8),
-        Text(
-          'Tap to upload a logo or photo',
-          style: TextStyle(color: Colors.grey[700]),
-        ),
-        Text(
-          'PNG, JPG, SVG up to 5MB',
-          style: TextStyle(color: Colors.grey[500], fontSize: 12),
-        ),
-      ],
-    );
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Icon(Icons.image_outlined, color: Theme.of(context).colorScheme.primary),
+      const SizedBox(height: 8),
+      Text(
+        'Tap to upload a logo or photo',
+        style: TextStyle(color: Colors.grey[700]),
+      ),
+      Text(
+        'PNG, JPG, SVG up to 5MB',
+        style: TextStyle(color: Colors.grey[500], fontSize: 12),
+      ),
+    ],
+  );
 }
-

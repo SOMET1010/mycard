@@ -1,5 +1,6 @@
 /// Renderer pour carte Chercheur Académique
 library;
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mycard/data/models/card_template.dart';
@@ -35,10 +36,7 @@ class AcademicResearcherRenderer implements CardRenderer {
       height: double.infinity,
       decoration: BoxDecoration(
         color: Colors.white,
-        border: Border.all(
-          color: primaryColor,
-          width: 3,
-        ),
+        border: Border.all(color: primaryColor, width: 3),
       ),
       child: Column(
         children: [
@@ -46,9 +44,7 @@ class AcademicResearcherRenderer implements CardRenderer {
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: primaryColor,
-            ),
+            decoration: BoxDecoration(color: primaryColor),
             child: Row(
               children: [
                 // Logo université ou icône
@@ -59,21 +55,15 @@ class AcademicResearcherRenderer implements CardRenderer {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: accentColor,
-                        width: 2,
-                      ),
+                      border: Border.all(color: accentColor, width: 2),
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(6),
                       child: Image.file(
                         File(logoPath),
                         fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) => Icon(
-                            Icons.school,
-                            color: primaryColor,
-                            size: 40,
-                          ),
+                        errorBuilder: (context, error, stackTrace) =>
+                            Icon(Icons.school, color: primaryColor, size: 40),
                       ),
                     ),
                   )
@@ -84,16 +74,9 @@ class AcademicResearcherRenderer implements CardRenderer {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: accentColor,
-                        width: 2,
-                      ),
+                      border: Border.all(color: accentColor, width: 2),
                     ),
-                    child: Icon(
-                      Icons.school,
-                      color: primaryColor,
-                      size: 40,
-                    ),
+                    child: Icon(Icons.school, color: primaryColor, size: 40),
                   ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -171,11 +154,26 @@ class AcademicResearcherRenderer implements CardRenderer {
                   const SizedBox(height: 12),
 
                   if (email.isNotEmpty)
-                    _buildAcademicContact(Icons.email, email, primaryColor, fontFamily),
+                    _buildAcademicContact(
+                      Icons.email,
+                      email,
+                      primaryColor,
+                      fontFamily,
+                    ),
                   if (phone.isNotEmpty)
-                    _buildAcademicContact(Icons.phone, phone, secondaryColor, fontFamily),
+                    _buildAcademicContact(
+                      Icons.phone,
+                      phone,
+                      secondaryColor,
+                      fontFamily,
+                    ),
                   if (website?.isNotEmpty == true)
-                    _buildAcademicContact(Icons.language, website!, accentColor, fontFamily),
+                    _buildAcademicContact(
+                      Icons.language,
+                      website!,
+                      accentColor,
+                      fontFamily,
+                    ),
 
                   const SizedBox(height: 16),
 
@@ -194,7 +192,14 @@ class AcademicResearcherRenderer implements CardRenderer {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    _buildAddressSection(address, city, postalCode, country, secondaryColor, fontFamily),
+                    _buildAddressSection(
+                      address,
+                      city,
+                      postalCode,
+                      country,
+                      secondaryColor,
+                      fontFamily,
+                    ),
                   ],
 
                   const Spacer(),
@@ -259,43 +264,35 @@ class AcademicResearcherRenderer implements CardRenderer {
     String text,
     Color color,
     String? fontFamily,
-  ) =>
-      Padding(
-        padding: const EdgeInsets.only(bottom: 8),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 28,
-              height: 28,
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(4),
-                border: Border.all(
-                  color: color.withValues(alpha: 0.3),
-                  width: 1,
-                ),
-              ),
-              child: Icon(
-                icon,
-                size: 16,
-                color: color,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                text,
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Colors.grey.shade700,
-                  fontFamily: fontFamily,
-                ),
-              ),
-            ),
-          ],
+  ) => Padding(
+    padding: const EdgeInsets.only(bottom: 8),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 28,
+          height: 28,
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(4),
+            border: Border.all(color: color.withValues(alpha: 0.3), width: 1),
+          ),
+          child: Icon(icon, size: 16, color: color),
         ),
-      );
+        const SizedBox(width: 12),
+        Expanded(
+          child: Text(
+            text,
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.grey.shade700,
+              fontFamily: fontFamily,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 
   Widget _buildAddressSection(
     String? address,
@@ -335,7 +332,11 @@ class AcademicResearcherRenderer implements CardRenderer {
     );
   }
 
-  Color _getColor(String colorType, CardTemplate template, Map<String, String> customColors) {
+  Color _getColor(
+    String colorType,
+    CardTemplate template,
+    Map<String, String> customColors,
+  ) {
     final customColor = customColors[colorType];
     if (customColor != null) {
       final cleanColor = customColor.startsWith('#')

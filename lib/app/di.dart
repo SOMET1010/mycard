@@ -1,5 +1,6 @@
 /// Configuration de l'injection de dépendances
 library;
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mycard/core/services/ai_color_generator_service.dart';
@@ -13,15 +14,25 @@ import 'package:mycard/data/repo/templates_repo.dart';
 // import 'package:mycard/core/services/theme_analytics_service.dart';
 
 // Providers pour les repositories
-final templatesRepositoryProvider = Provider<TemplatesRepository>((ref) => TemplatesRepository());
+final templatesRepositoryProvider = Provider<TemplatesRepository>(
+  (ref) => TemplatesRepository(),
+);
 
-final eventsRepositoryProvider = Provider<EventsRepository>((ref) => EventsRepository());
+final eventsRepositoryProvider = Provider<EventsRepository>(
+  (ref) => EventsRepository(),
+);
 
-final cardsRepositoryProvider = Provider<CardsRepository>((ref) => CardsRepository());
+final cardsRepositoryProvider = Provider<CardsRepository>(
+  (ref) => CardsRepository(),
+);
 
 // Auth
-final authRepositoryProvider = Provider<AuthRepository>((ref) => AuthRepository());
-final authStateProvider = StreamProvider<User?>((ref) => ref.read(authRepositoryProvider).authStateChanges);
+final authRepositoryProvider = Provider<AuthRepository>(
+  (ref) => AuthRepository(),
+);
+final authStateProvider = StreamProvider<User?>(
+  (ref) => ref.read(authRepositoryProvider).authStateChanges,
+);
 
 // Service d'authentification amélioré
 final authServiceProvider = Provider<AuthService>((ref) => AuthService());
@@ -33,9 +44,13 @@ final authInitializationProvider = FutureProvider<void>((ref) async {
 });
 
 // Providers pour les services avancés
-final aiColorGeneratorProvider = Provider<AIColorGeneratorService>((ref) => AIColorGeneratorService());
+final aiColorGeneratorProvider = Provider<AIColorGeneratorService>(
+  (ref) => AIColorGeneratorService(),
+);
 
-final communityThemeProvider = Provider<CommunityThemeService>((ref) => CommunityThemeService());
+final communityThemeProvider = Provider<CommunityThemeService>(
+  (ref) => CommunityThemeService(),
+);
 
 // Services temporaires pour éviter les erreurs (à implémenter plus tard)
 class PhotoIntegrationService {
@@ -45,17 +60,53 @@ class PhotoIntegrationService {
 
 class ThemeAnalyticsWrapper {
   static Future<void> initialize() async {}
-  static Future<void> trackEvent({required String type, String? userId, Map<String, dynamic> properties = const {}, Duration? duration}) async {}
-  static Future<void> trackThemeCreated({required String themeId, required String themeName, String? templateUsed, Map<String, dynamic>? themeProperties}) async {}
-  static Future<void> trackThemeModified({required String themeId, required List<String> changedProperties, Map<String, dynamic>? oldValues, Map<String, dynamic>? newValues}) async {}
-  static Future<void> trackThemeExported({required String themeId, required String format, int? fileSize, bool? includePreview}) async {}
-  static Future<void> trackFeatureUsed({required String featureName, required String action, Map<String, dynamic>? parameters}) async {}
-  static Future<void> trackSearch({required String query, required int resultsCount, String? category, List<String>? filters}) async {}
-  static Future<void> trackError({required String errorType, required String errorMessage, String? stackTrace, Map<String, dynamic>? context}) async {}
+  static Future<void> trackEvent({
+    required String type,
+    String? userId,
+    Map<String, dynamic> properties = const {},
+    Duration? duration,
+  }) async {}
+  static Future<void> trackThemeCreated({
+    required String themeId,
+    required String themeName,
+    String? templateUsed,
+    Map<String, dynamic>? themeProperties,
+  }) async {}
+  static Future<void> trackThemeModified({
+    required String themeId,
+    required List<String> changedProperties,
+    Map<String, dynamic>? oldValues,
+    Map<String, dynamic>? newValues,
+  }) async {}
+  static Future<void> trackThemeExported({
+    required String themeId,
+    required String format,
+    int? fileSize,
+    bool? includePreview,
+  }) async {}
+  static Future<void> trackFeatureUsed({
+    required String featureName,
+    required String action,
+    Map<String, dynamic>? parameters,
+  }) async {}
+  static Future<void> trackSearch({
+    required String query,
+    required int resultsCount,
+    String? category,
+    List<String>? filters,
+  }) async {}
+  static Future<void> trackError({
+    required String errorType,
+    required String errorMessage,
+    String? stackTrace,
+    Map<String, dynamic>? context,
+  }) async {}
   static Future<void> endSession() async {}
 }
 
-final themeAnalyticsProvider = Provider<ThemeAnalyticsWrapper>((ref) => ThemeAnalyticsWrapper());
+final themeAnalyticsProvider = Provider<ThemeAnalyticsWrapper>(
+  (ref) => ThemeAnalyticsWrapper(),
+);
 
 // Services temporaires pour éviter les erreurs (à implémenter plus tard)
 class AdaptiveThemeWrapper {
@@ -71,13 +122,21 @@ class CollaborativeThemeWrapper {
   static Future<String> createSession(String themeId) async => 'session_id';
   static Future<void> joinSession(String sessionId) async {}
   static Future<void> leaveSession(String sessionId) async {}
-  static Stream<Map<String, dynamic>> getSessionUpdates(String sessionId) => const Stream.empty();
-  static Future<void> updateTheme(String sessionId, Map<String, dynamic> updates) async {}
+  static Stream<Map<String, dynamic>> getSessionUpdates(String sessionId) =>
+      const Stream.empty();
+  static Future<void> updateTheme(
+    String sessionId,
+    Map<String, dynamic> updates,
+  ) async {}
 }
 
-final adaptiveThemeProvider = Provider<AdaptiveThemeWrapper>((ref) => AdaptiveThemeWrapper());
+final adaptiveThemeProvider = Provider<AdaptiveThemeWrapper>(
+  (ref) => AdaptiveThemeWrapper(),
+);
 
-final collaborativeThemeProvider = Provider<CollaborativeThemeWrapper>((ref) => CollaborativeThemeWrapper());
+final collaborativeThemeProvider = Provider<CollaborativeThemeWrapper>(
+  (ref) => CollaborativeThemeWrapper(),
+);
 
 // Providers pour l'état de l'application
 final isLoadingProvider = StateProvider<bool>((ref) => false);

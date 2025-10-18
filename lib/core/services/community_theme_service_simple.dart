@@ -1,12 +1,12 @@
 /// Service simplifié pour la gestion de la bibliothèque de thèmes communautaires
 library;
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mycard/data/models/event_theme_customization.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CommunityTheme {
-
   const CommunityTheme({
     required this.id,
     required this.name,
@@ -22,18 +22,20 @@ class CommunityTheme {
   });
 
   factory CommunityTheme.fromJson(Map<String, dynamic> json) => CommunityTheme(
-      id: json['id'] ?? '',
-      name: json['name'] ?? '',
-      description: json['description'] ?? '',
-      theme: EventThemeCustomization.fromJson(json['theme'] ?? {}),
-      authorId: json['authorId'] ?? '',
-      authorName: json['authorName'] ?? 'Anonyme',
-      createdAt: DateTime.parse(json['createdAt'] ?? DateTime.now().toIso8601String()),
-      downloads: json['downloads'] ?? 0,
-      rating: (json['rating'] ?? 0.0).toDouble(),
-      tags: List<String>.from(json['tags'] ?? []),
-      isPublic: json['isPublic'] ?? true,
-    );
+    id: json['id'] ?? '',
+    name: json['name'] ?? '',
+    description: json['description'] ?? '',
+    theme: EventThemeCustomization.fromJson(json['theme'] ?? {}),
+    authorId: json['authorId'] ?? '',
+    authorName: json['authorName'] ?? 'Anonyme',
+    createdAt: DateTime.parse(
+      json['createdAt'] ?? DateTime.now().toIso8601String(),
+    ),
+    downloads: json['downloads'] ?? 0,
+    rating: (json['rating'] ?? 0.0).toDouble(),
+    tags: List<String>.from(json['tags'] ?? []),
+    isPublic: json['isPublic'] ?? true,
+  );
   final String id;
   final String name;
   final String description;
@@ -47,18 +49,18 @@ class CommunityTheme {
   final bool isPublic;
 
   Map<String, dynamic> toJson() => {
-      'id': id,
-      'name': name,
-      'description': description,
-      'theme': theme.toJson(),
-      'authorId': authorId,
-      'authorName': authorName,
-      'createdAt': createdAt.toIso8601String(),
-      'downloads': downloads,
-      'rating': rating,
-      'tags': tags,
-      'isPublic': isPublic,
-    };
+    'id': id,
+    'name': name,
+    'description': description,
+    'theme': theme.toJson(),
+    'authorId': authorId,
+    'authorName': authorName,
+    'createdAt': createdAt.toIso8601String(),
+    'downloads': downloads,
+    'rating': rating,
+    'tags': tags,
+    'isPublic': isPublic,
+  };
 }
 
 class CommunityThemeService {
@@ -82,8 +84,10 @@ class CommunityThemeService {
   }
 
   static Future<void> _loadThemes() async {
-    if (_themes.isNotEmpty && _lastCacheUpdate != null &&
-        DateTime.now().difference(_lastCacheUpdate!).inMilliseconds < _cacheTimeout) {
+    if (_themes.isNotEmpty &&
+        _lastCacheUpdate != null &&
+        DateTime.now().difference(_lastCacheUpdate!).inMilliseconds <
+            _cacheTimeout) {
       return;
     }
 
@@ -94,7 +98,9 @@ class CommunityThemeService {
     if (cachedThemes != null) {
       try {
         final List<dynamic> jsonList = json.decode(cachedThemes);
-        _themes = jsonList.map((json) => CommunityTheme.fromJson(json)).toList();
+        _themes = jsonList
+            .map((json) => CommunityTheme.fromJson(json))
+            .toList();
         _lastCacheUpdate = DateTime.now();
         return;
       } catch (e) {
@@ -107,80 +113,83 @@ class CommunityThemeService {
     _lastCacheUpdate = DateTime.now();
 
     // Sauvegarder en cache
-    await prefs.setString(_cacheKey, json.encode(_themes.map((t) => t.toJson()).toList()));
+    await prefs.setString(
+      _cacheKey,
+      json.encode(_themes.map((t) => t.toJson()).toList()),
+    );
   }
 
   static List<CommunityTheme> _generateDemoThemes() => [
-      CommunityTheme(
+    CommunityTheme(
+      id: 'theme-1',
+      name: 'Élégance Professionnelle',
+      description: 'Un thème sobre et professionnel pour les entreprises',
+      theme: EventThemeCustomization(
         id: 'theme-1',
         name: 'Élégance Professionnelle',
-        description: 'Un thème sobre et professionnel pour les entreprises',
-        theme: EventThemeCustomization(
-          id: 'theme-1',
-          name: 'Élégance Professionnelle',
-          description: 'Un thème sobre et professionnel',
-          colors: const {
-            'primary': Color(0xFF37474F),
-            'secondary': Color(0xFF607D8B),
-            'background': Color(0xFFF5F5F5),
-            'text': Color(0xFF37474F),
-          },
-          createdAt: DateTime(2024, 1, 1),
-        ),
-        authorId: 'demo-user-1',
-        authorName: 'Designer Pro',
-        createdAt: DateTime.now().subtract(const Duration(days: 30)),
-        downloads: 150,
-        rating: 4.5,
-        tags: ['professionnel', 'entreprise', 'sobre'],
+        description: 'Un thème sobre et professionnel',
+        colors: const {
+          'primary': Color(0xFF37474F),
+          'secondary': Color(0xFF607D8B),
+          'background': Color(0xFFF5F5F5),
+          'text': Color(0xFF37474F),
+        },
+        createdAt: DateTime(2024, 1, 1),
       ),
-      CommunityTheme(
+      authorId: 'demo-user-1',
+      authorName: 'Designer Pro',
+      createdAt: DateTime.now().subtract(const Duration(days: 30)),
+      downloads: 150,
+      rating: 4.5,
+      tags: ['professionnel', 'entreprise', 'sobre'],
+    ),
+    CommunityTheme(
+      id: 'theme-2',
+      name: 'Créativité Colorée',
+      description: 'Un thème vibrant et créatif pour les artistes',
+      theme: EventThemeCustomization(
         id: 'theme-2',
         name: 'Créativité Colorée',
-        description: 'Un thème vibrant et créatif pour les artistes',
-        theme: EventThemeCustomization(
-          id: 'theme-2',
-          name: 'Créativité Colorée',
-          description: 'Un thème vibrant et créatif',
-          colors: const {
-            'primary': Color(0xFFFF6B6B),
-            'secondary': Color(0xFF4ECDC4),
-            'background': Color(0xFFFFF8E1),
-            'text': Color(0xFF37474F),
-          },
-          createdAt: DateTime(2024, 1, 2),
-        ),
-        authorId: 'demo-user-2',
-        authorName: 'Artiste Créatif',
-        createdAt: DateTime.now().subtract(const Duration(days: 25)),
-        downloads: 200,
-        rating: 4.8,
-        tags: ['créatif', 'coloré', 'artiste'],
+        description: 'Un thème vibrant et créatif',
+        colors: const {
+          'primary': Color(0xFFFF6B6B),
+          'secondary': Color(0xFF4ECDC4),
+          'background': Color(0xFFFFF8E1),
+          'text': Color(0xFF37474F),
+        },
+        createdAt: DateTime(2024, 1, 2),
       ),
-      CommunityTheme(
+      authorId: 'demo-user-2',
+      authorName: 'Artiste Créatif',
+      createdAt: DateTime.now().subtract(const Duration(days: 25)),
+      downloads: 200,
+      rating: 4.8,
+      tags: ['créatif', 'coloré', 'artiste'],
+    ),
+    CommunityTheme(
+      id: 'theme-3',
+      name: 'Moderne Minimaliste',
+      description: 'Un thème épuré et moderne',
+      theme: EventThemeCustomization(
         id: 'theme-3',
         name: 'Moderne Minimaliste',
         description: 'Un thème épuré et moderne',
-        theme: EventThemeCustomization(
-          id: 'theme-3',
-          name: 'Moderne Minimaliste',
-          description: 'Un thème épuré et moderne',
-          colors: const {
-            'primary': Color(0xFF212121),
-            'secondary': Color(0xFF757575),
-            'background': Color(0xFFFAFAFA),
-            'text': Color(0xFF212121),
-          },
-          createdAt: DateTime(2024, 1, 3),
-        ),
-        authorId: 'demo-user-3',
-        authorName: 'Minimaliste Designer',
-        createdAt: DateTime.now().subtract(const Duration(days: 20)),
-        downloads: 120,
-        rating: 4.2,
-        tags: ['moderne', 'minimaliste', 'épuré'],
+        colors: const {
+          'primary': Color(0xFF212121),
+          'secondary': Color(0xFF757575),
+          'background': Color(0xFFFAFAFA),
+          'text': Color(0xFF212121),
+        },
+        createdAt: DateTime(2024, 1, 3),
       ),
-    ];
+      authorId: 'demo-user-3',
+      authorName: 'Minimaliste Designer',
+      createdAt: DateTime.now().subtract(const Duration(days: 20)),
+      downloads: 120,
+      rating: 4.2,
+      tags: ['moderne', 'minimaliste', 'épuré'],
+    ),
+  ];
 
   static Future<void> toggleFavorite(String themeId) async {
     final prefs = await SharedPreferences.getInstance();
@@ -225,7 +234,10 @@ class CommunityThemeService {
 
     // Mettre à jour le cache
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_cacheKey, json.encode(_themes.map((t) => t.toJson()).toList()));
+    await prefs.setString(
+      _cacheKey,
+      json.encode(_themes.map((t) => t.toJson()).toList()),
+    );
 
     return newTheme;
   }
@@ -234,18 +246,28 @@ class CommunityThemeService {
     await _loadThemes();
     final lowercaseQuery = query.toLowerCase();
 
-    return _themes.where((theme) =>
-        theme.name.toLowerCase().contains(lowercaseQuery) ||
-        theme.description.toLowerCase().contains(lowercaseQuery) ||
-        theme.tags.any((tag) => tag.toLowerCase().contains(lowercaseQuery))
-    ).toList();
+    return _themes
+        .where(
+          (theme) =>
+              theme.name.toLowerCase().contains(lowercaseQuery) ||
+              theme.description.toLowerCase().contains(lowercaseQuery) ||
+              theme.tags.any(
+                (tag) => tag.toLowerCase().contains(lowercaseQuery),
+              ),
+        )
+        .toList();
   }
 
-  static Future<List<CommunityTheme>> getThemesByCategory(String category) async {
+  static Future<List<CommunityTheme>> getThemesByCategory(
+    String category,
+  ) async {
     await _loadThemes();
-    return _themes.where((theme) =>
-        theme.tags.contains(category.toLowerCase()) ||
-        theme.name.toLowerCase().contains(category.toLowerCase())
-    ).toList();
+    return _themes
+        .where(
+          (theme) =>
+              theme.tags.contains(category.toLowerCase()) ||
+              theme.name.toLowerCase().contains(category.toLowerCase()),
+        )
+        .toList();
   }
 }

@@ -1,5 +1,6 @@
 /// Page de gestion des thèmes personnalisés
 library;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mycard/core/services/theme_service.dart';
@@ -10,7 +11,8 @@ class CustomThemesManagerPage extends StatefulWidget {
   const CustomThemesManagerPage({super.key});
 
   @override
-  State<CustomThemesManagerPage> createState() => _CustomThemesManagerPageState();
+  State<CustomThemesManagerPage> createState() =>
+      _CustomThemesManagerPageState();
 }
 
 class _CustomThemesManagerPageState extends State<CustomThemesManagerPage> {
@@ -123,172 +125,166 @@ class _CustomThemesManagerPageState extends State<CustomThemesManagerPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: const Text('Thèmes personnalisés'),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.file_download),
-              onPressed: _importTheme,
-              tooltip: 'Importer un thème',
-            ),
-            IconButton(
-              icon: const Icon(Icons.refresh),
-              onPressed: _loadCustomThemes,
-              tooltip: 'Actualiser',
-            ),
-          ],
+    appBar: AppBar(
+      title: const Text('Thèmes personnalisés'),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.file_download),
+          onPressed: _importTheme,
+          tooltip: 'Importer un thème',
         ),
-        body: _isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : _customThemes.isEmpty
-                ? _buildEmptyState()
-                : _buildThemesList(),
-      );
+        IconButton(
+          icon: const Icon(Icons.refresh),
+          onPressed: _loadCustomThemes,
+          tooltip: 'Actualiser',
+        ),
+      ],
+    ),
+    body: _isLoading
+        ? const Center(child: CircularProgressIndicator())
+        : _customThemes.isEmpty
+        ? _buildEmptyState()
+        : _buildThemesList(),
+  );
 
   Widget _buildEmptyState() => Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.palette_outlined,
-              size: 64,
-              color: Colors.grey[400],
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Aucun thème personnalisé',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey[600],
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Créez des thèmes personnalisés pour vos événements préférés',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[500],
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton.icon(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(Icons.arrow_back),
-              label: const Text('Retour aux événements'),
-            ),
-          ],
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(Icons.palette_outlined, size: 64, color: Colors.grey[400]),
+        const SizedBox(height: 16),
+        Text(
+          'Aucun thème personnalisé',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.grey[600],
+          ),
         ),
-      );
+        const SizedBox(height: 8),
+        Text(
+          'Créez des thèmes personnalisés pour vos événements préférés',
+          style: TextStyle(fontSize: 14, color: Colors.grey[500]),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 24),
+        ElevatedButton.icon(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(Icons.arrow_back),
+          label: const Text('Retour aux événements'),
+        ),
+      ],
+    ),
+  );
 
   Widget _buildThemesList() => ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemCount: _customThemes.length,
-        itemBuilder: (context, index) {
-          final entry = _customThemes.entries.elementAt(index);
-          final eventId = entry.key;
-          final themeData = entry.value;
-          final eventName = themeData['eventName'] as String;
-          final savedAt = DateTime.parse(themeData['savedAt'] as String);
+    padding: const EdgeInsets.all(16),
+    itemCount: _customThemes.length,
+    itemBuilder: (context, index) {
+      final entry = _customThemes.entries.elementAt(index);
+      final eventId = entry.key;
+      final themeData = entry.value;
+      final eventName = themeData['eventName'] as String;
+      final savedAt = DateTime.parse(themeData['savedAt'] as String);
 
-          return Card(
-            margin: const EdgeInsets.only(bottom: 12),
-            child: ListTile(
-              leading: Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Icon(Icons.palette, color: Colors.grey),
-              ),
-              title: Text(
-                eventName,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('ID: $eventId'),
-                  Text(
-                    'Sauvegardé le: ${_formatDate(savedAt)}',
-                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                  ),
-                ],
-              ),
-              trailing: PopupMenuButton<String>(
-                onSelected: (value) {
-                  switch (value) {
-                    case 'edit':
-                      _editTheme(eventId);
-                      break;
-                    case 'duplicate':
-                      _duplicateTheme(eventId);
-                      break;
-                    case 'export':
-                      _exportTheme(eventId);
-                      break;
-                    case 'delete':
-                      _deleteTheme(eventId);
-                      break;
-                  }
-                },
-                itemBuilder: (context) => [
-                  const PopupMenuItem(
-                    value: 'edit',
-                    child: Row(
-                      children: [
-                        Icon(Icons.edit),
-                        SizedBox(width: 8),
-                        Text('Modifier'),
-                      ],
-                    ),
-                  ),
-                  const PopupMenuItem(
-                    value: 'duplicate',
-                    child: Row(
-                      children: [
-                        Icon(Icons.copy),
-                        SizedBox(width: 8),
-                        Text('Dupliquer'),
-                      ],
-                    ),
-                  ),
-                  const PopupMenuItem(
-                    value: 'export',
-                    child: Row(
-                      children: [
-                        Icon(Icons.share),
-                        SizedBox(width: 8),
-                        Text('Exporter'),
-                      ],
-                    ),
-                  ),
-                  const PopupMenuItem(
-                    value: 'delete',
-                    child: Row(
-                      children: [
-                        Icon(Icons.delete, color: Colors.red),
-                        SizedBox(width: 8),
-                        Text('Supprimer', style: TextStyle(color: Colors.red)),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              onTap: () => _viewTheme(eventId),
+      return Card(
+        margin: const EdgeInsets.only(bottom: 12),
+        child: ListTile(
+          leading: Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(8),
             ),
-          );
-        },
+            child: const Icon(Icons.palette, color: Colors.grey),
+          ),
+          title: Text(
+            eventName,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('ID: $eventId'),
+              Text(
+                'Sauvegardé le: ${_formatDate(savedAt)}',
+                style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+              ),
+            ],
+          ),
+          trailing: PopupMenuButton<String>(
+            onSelected: (value) {
+              switch (value) {
+                case 'edit':
+                  _editTheme(eventId);
+                  break;
+                case 'duplicate':
+                  _duplicateTheme(eventId);
+                  break;
+                case 'export':
+                  _exportTheme(eventId);
+                  break;
+                case 'delete':
+                  _deleteTheme(eventId);
+                  break;
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 'edit',
+                child: Row(
+                  children: [
+                    Icon(Icons.edit),
+                    SizedBox(width: 8),
+                    Text('Modifier'),
+                  ],
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'duplicate',
+                child: Row(
+                  children: [
+                    Icon(Icons.copy),
+                    SizedBox(width: 8),
+                    Text('Dupliquer'),
+                  ],
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'export',
+                child: Row(
+                  children: [
+                    Icon(Icons.share),
+                    SizedBox(width: 8),
+                    Text('Exporter'),
+                  ],
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'delete',
+                child: Row(
+                  children: [
+                    Icon(Icons.delete, color: Colors.red),
+                    SizedBox(width: 8),
+                    Text('Supprimer', style: TextStyle(color: Colors.red)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          onTap: () => _viewTheme(eventId),
+        ),
       );
+    },
+  );
 
-  String _formatDate(DateTime date) => '${date.day.toString().padLeft(2, '0')}/'
-           '${date.month.toString().padLeft(2, '0')}/'
-           '${date.year} à '
-           '${date.hour.toString().padLeft(2, '0')}:'
-           '${date.minute.toString().padLeft(2, '0')}';
+  String _formatDate(DateTime date) =>
+      '${date.day.toString().padLeft(2, '0')}/'
+      '${date.month.toString().padLeft(2, '0')}/'
+      '${date.year} à '
+      '${date.hour.toString().padLeft(2, '0')}:'
+      '${date.minute.toString().padLeft(2, '0')}';
 
   void _viewTheme(String eventId) async {
     // Trouver l'événement correspondant
@@ -321,9 +317,7 @@ class _CustomThemesManagerPageState extends State<CustomThemesManagerPage> {
   void _duplicateTheme(String eventId) {
     // TODO: Implement theme duplication
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Fonction de duplication à implémenter'),
-      ),
+      const SnackBar(content: Text('Fonction de duplication à implémenter')),
     );
   }
 

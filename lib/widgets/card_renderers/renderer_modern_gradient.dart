@@ -1,5 +1,6 @@
 /// Renderer: fond dégradé moderne avec texte contrasté
 library;
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mycard/app/theme.dart';
@@ -33,10 +34,7 @@ class ModernGradientRenderer implements CardRenderer {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            secondary.withValues(alpha: 0.25),
-            AppTheme.greenWhite
-          ],
+          colors: [secondary.withValues(alpha: 0.25), AppTheme.greenWhite],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -65,26 +63,22 @@ class ModernGradientRenderer implements CardRenderer {
                         logoPath,
                         fit: BoxFit.contain,
                         errorBuilder: (context, error, stackTrace) => Icon(
-                            Icons.business,
-                            color: Colors.grey[400],
-                            size: 24,
-                          ),
+                          Icons.business,
+                          color: Colors.grey[400],
+                          size: 24,
+                        ),
                       )
                     : File(logoPath).existsSync()
-                        ? Image.file(
-                            File(logoPath),
-                            fit: BoxFit.contain,
-                            errorBuilder: (context, error, stackTrace) => Icon(
-                                Icons.business,
-                                color: Colors.grey[400],
-                                size: 24,
-                              ),
-                          )
-                        : Icon(
-                            Icons.business,
-                            color: Colors.grey[400],
-                            size: 24,
-                          ),
+                    ? Image.file(
+                        File(logoPath),
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) => Icon(
+                          Icons.business,
+                          color: Colors.grey[400],
+                          size: 24,
+                        ),
+                      )
+                    : Icon(Icons.business, color: Colors.grey[400], size: 24),
               ),
             ),
           ],
@@ -149,10 +143,24 @@ class ModernGradientRenderer implements CardRenderer {
                 Row(
                   children: [
                     if (phone.isNotEmpty)
-                      Expanded(child: _contact(Icons.phone, phone, primary, fontFamily)),
+                      Expanded(
+                        child: _contact(
+                          Icons.phone,
+                          phone,
+                          primary,
+                          fontFamily,
+                        ),
+                      ),
                     if (email.isNotEmpty) ...[
                       const SizedBox(width: 8),
-                      Expanded(child: _contact(Icons.email, email, primary, fontFamily)),
+                      Expanded(
+                        child: _contact(
+                          Icons.email,
+                          email,
+                          primary,
+                          fontFamily,
+                        ),
+                      ),
                     ],
                   ],
                 ),
@@ -163,7 +171,11 @@ class ModernGradientRenderer implements CardRenderer {
 
                 const Spacer(),
                 // Liseré bas
-                Container(height: 2, width: double.infinity, color: primary.withValues(alpha: 0.6)),
+                Container(
+                  height: 2,
+                  width: double.infinity,
+                  color: primary.withValues(alpha: 0.6),
+                ),
               ],
             ),
           ),
@@ -172,21 +184,26 @@ class ModernGradientRenderer implements CardRenderer {
     );
   }
 
-  Widget _contact(IconData icon, String text, Color color, String? fontFamily) => Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(icon, size: 14, color: color),
-          const SizedBox(width: 6),
-          Expanded(
-            child: Text(
-              text,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 12, color: color, fontFamily: fontFamily),
-            ),
-          ),
-        ],
-      );
+  Widget _contact(
+    IconData icon,
+    String text,
+    Color color,
+    String? fontFamily,
+  ) => Row(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      Icon(icon, size: 14, color: color),
+      const SizedBox(width: 6),
+      Expanded(
+        child: Text(
+          text,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(fontSize: 12, color: color, fontFamily: fontFamily),
+        ),
+      ),
+    ],
+  );
 
   @override
   Widget renderBack({
@@ -216,10 +233,7 @@ class ModernGradientRenderer implements CardRenderer {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            primary.withValues(alpha: 0.1),
-            AppTheme.greenWhite,
-          ],
+          colors: [primary.withValues(alpha: 0.1), AppTheme.greenWhite],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -250,26 +264,26 @@ class ModernGradientRenderer implements CardRenderer {
                             logoPath,
                             fit: BoxFit.contain,
                             errorBuilder: (context, error, stackTrace) => Icon(
-                                Icons.business,
-                                color: Colors.grey[400],
-                                size: 20,
-                              ),
+                              Icons.business,
+                              color: Colors.grey[400],
+                              size: 20,
+                            ),
                           )
                         : File(logoPath).existsSync()
-                            ? Image.file(
-                                File(logoPath),
-                                fit: BoxFit.contain,
-                                errorBuilder: (context, error, stackTrace) => Icon(
-                                    Icons.business,
-                                    color: Colors.grey[400],
-                                    size: 20,
-                                  ),
-                              )
-                            : Icon(
-                                Icons.business,
-                                color: Colors.grey[400],
-                                size: 20,
-                              ),
+                        ? Image.file(
+                            File(logoPath),
+                            fit: BoxFit.contain,
+                            errorBuilder: (context, error, stackTrace) => Icon(
+                              Icons.business,
+                              color: Colors.grey[400],
+                              size: 20,
+                            ),
+                          )
+                        : Icon(
+                            Icons.business,
+                            color: Colors.grey[400],
+                            size: 20,
+                          ),
                   ),
                 ),
               ],
@@ -287,11 +301,7 @@ class ModernGradientRenderer implements CardRenderer {
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Container(
-                      width: 30,
-                      height: 2,
-                      color: accent,
-                    ),
+                    Container(width: 30, height: 2, color: accent),
                   ],
                 ),
               ),
@@ -340,32 +350,34 @@ class ModernGradientRenderer implements CardRenderer {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    ...backServices.map((service) => Padding(
-                          padding: const EdgeInsets.only(bottom: 4),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 4,
-                                height: 4,
-                                decoration: BoxDecoration(
-                                  color: accent,
-                                  shape: BoxShape.circle,
+                    ...backServices.map(
+                      (service) => Padding(
+                        padding: const EdgeInsets.only(bottom: 4),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 4,
+                              height: 4,
+                              decoration: BoxDecoration(
+                                color: accent,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                service,
+                                style: TextStyle(
+                                  color: secondary,
+                                  fontSize: 12,
+                                  fontFamily: fontFamily,
                                 ),
                               ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  service,
-                                  style: TextStyle(
-                                    color: secondary,
-                                    fontSize: 12,
-                                    fontFamily: fontFamily,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                     const SizedBox(height: 16),
                   ],
 
@@ -400,7 +412,8 @@ class ModernGradientRenderer implements CardRenderer {
                     const SizedBox(height: 16),
                   ],
 
-                  if (backSocialLinks != null && backSocialLinks.isNotEmpty) ...[
+                  if (backSocialLinks != null &&
+                      backSocialLinks.isNotEmpty) ...[
                     Text(
                       'Réseaux',
                       style: TextStyle(
@@ -451,4 +464,3 @@ class ModernGradientRenderer implements CardRenderer {
     return Color(int.parse('FF$clean', radix: 16));
   }
 }
-

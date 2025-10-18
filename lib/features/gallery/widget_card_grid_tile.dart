@@ -28,7 +28,8 @@ class CardGridTile extends StatefulWidget {
   State<CardGridTile> createState() => _CardGridTileState();
 }
 
-class _CardGridTileState extends State<CardGridTile> with SingleTickerProviderStateMixin {
+class _CardGridTileState extends State<CardGridTile>
+    with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
   bool _isBackVisible = false;
@@ -62,14 +63,15 @@ class _CardGridTileState extends State<CardGridTile> with SingleTickerProviderSt
   }
 
   bool _hasBackContent(BusinessCard card) {
-    final hasContent = (card.backNotes?.isNotEmpty == true) ||
-           (card.backServices?.isNotEmpty == true) ||
-           (card.backOpeningHours?.isNotEmpty == true) ||
-           (card.backSocialLinks?.isNotEmpty == true);
+    final hasContent =
+        (card.backNotes?.isNotEmpty == true) ||
+        (card.backServices?.isNotEmpty == true) ||
+        (card.backOpeningHours?.isNotEmpty == true) ||
+        (card.backSocialLinks?.isNotEmpty == true);
 
     // Debug: afficher dans la console si une carte a du contenu verso
     if (hasContent) {
-      print('Carte avec verso: ${card.fullName}');
+      debugPrint('Carte avec verso: ${card.fullName}');
     }
 
     return hasContent;
@@ -125,15 +127,19 @@ class _CardGridTileState extends State<CardGridTile> with SingleTickerProviderSt
                 ),
                 const SizedBox(width: 4),
                 GestureDetector(
-                  onTap: hasBackContent ? _toggleCard : () {
-                    // Message temporaire pour indiquer qu'il faut ajouter du contenu verso
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Ajoutez du contenu verso dans l\'éditeur pour voir le verso!'),
-                        duration: Duration(seconds: 2),
-                      ),
-                    );
-                  },
+                  onTap: hasBackContent
+                      ? _toggleCard
+                      : () {
+                          // Message temporaire pour indiquer qu'il faut ajouter du contenu verso
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Ajoutez du contenu verso dans l\'éditeur pour voir le verso!',
+                              ),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        },
                   child: Text(
                     _isBackVisible ? 'Voir recto' : 'Voir verso',
                     style: TextStyle(
@@ -263,10 +269,7 @@ class _CardGridTileState extends State<CardGridTile> with SingleTickerProviderSt
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: primary.withValues(alpha: 0.25),
-            width: 1,
-          ),
+          border: Border.all(color: primary.withValues(alpha: 0.25), width: 1),
         ),
         child: Center(
           child: Column(

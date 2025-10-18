@@ -169,7 +169,6 @@ class AuthService {
       // Nettoyer les préférences locales si nécessaire
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove('temp_user_data');
-
     } finally {
       _isLoading = false;
     }
@@ -184,10 +183,7 @@ class AuthService {
   }
 
   /// Mise à jour du profil utilisateur
-  Future<void> updateProfile({
-    String? displayName,
-    String? photoURL,
-  }) async {
+  Future<void> updateProfile({String? displayName, String? photoURL}) async {
     final user = _auth.currentUser;
     if (user != null) {
       await user.updateDisplayName(displayName);

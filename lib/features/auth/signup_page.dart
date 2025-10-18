@@ -1,4 +1,5 @@
 library;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -45,13 +46,10 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
       curve: Curves.easeOutBack,
     );
 
-    _formAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.3),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _formController,
-      curve: Curves.easeOutCubic,
-    ));
+    _formAnimation =
+        Tween<Offset>(begin: const Offset(0, 0.3), end: Offset.zero).animate(
+          CurvedAnimation(parent: _formController, curve: Curves.easeOutCubic),
+        );
 
     _logoController.forward();
     _formController.forward();
@@ -72,7 +70,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF0A0806) : AppTheme.backgroundColor,
+      backgroundColor: isDark
+          ? const Color(0xFF0A0806)
+          : AppTheme.backgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
@@ -84,60 +84,67 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
               AnimatedBuilder(
                 animation: _logoAnimation,
                 builder: (context, child) => Transform.scale(
-                    scale: _logoAnimation.value,
-                    child: Column(
-                      children: [
-                        // Logo moderne
-                        Container(
-                          width: 100,
-                          height: 100,
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [
-                                AppTheme.secondaryColor,
-                                AppTheme.primaryColor,
-                              ],
-                            ),
-                            borderRadius: BorderRadius.circular(24),
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppTheme.secondaryColor.withValues(alpha: 0.3),
-                                blurRadius: 20,
-                                offset: const Offset(0, 8),
-                              ),
+                  scale: _logoAnimation.value,
+                  child: Column(
+                    children: [
+                      // Logo moderne
+                      Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              AppTheme.secondaryColor,
+                              AppTheme.primaryColor,
                             ],
                           ),
-                          child: const Icon(
-                            Icons.person_add_outlined,
-                            size: 48,
-                            color: Colors.white,
-                          ),
+                          borderRadius: BorderRadius.circular(24),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppTheme.secondaryColor.withValues(
+                                alpha: 0.3,
+                              ),
+                              blurRadius: 20,
+                              offset: const Offset(0, 8),
+                            ),
+                          ],
                         ),
-
-                        const SizedBox(height: 24),
-
-                        // Titre
-                        Text(
-                          'Créer un compte',
-                          style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: isDark ? Colors.white : AppTheme.accentColor,
-                          ),
+                        child: const Icon(
+                          Icons.person_add_outlined,
+                          size: 48,
+                          color: Colors.white,
                         ),
+                      ),
 
-                        const SizedBox(height: 8),
+                      const SizedBox(height: 24),
 
-                        Text(
-                          'Rejoignez-nous dès aujourd\'hui',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF6B5E56),
-                          ),
+                      // Titre
+                      Text(
+                        'Créer un compte',
+                        style: Theme.of(context).textTheme.displayMedium
+                            ?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: isDark
+                                  ? Colors.white
+                                  : AppTheme.accentColor,
+                            ),
+                      ),
+
+                      const SizedBox(height: 8),
+
+                      Text(
+                        'Rejoignez-nous dès aujourd\'hui',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: isDark
+                              ? const Color(0xFF94A3B8)
+                              : const Color(0xFF6B5E56),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
+                ),
               ),
 
               const SizedBox(height: 48),
@@ -153,7 +160,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
                       Container(
                         padding: const EdgeInsets.all(24),
                         decoration: BoxDecoration(
-                          color: isDark ? const Color(0xFF1E1A17) : Colors.white,
+                          color: isDark
+                              ? const Color(0xFF1E1A17)
+                              : Colors.white,
                           borderRadius: BorderRadius.circular(20),
                           boxShadow: [
                             BoxShadow(
@@ -174,7 +183,8 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
                                 labelText: 'Email',
                                 hintText: 'Entrez votre email',
                                 prefixIcon: Icon(Icons.email_outlined),
-                                floatingLabelBehavior: FloatingLabelBehavior.auto,
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.auto,
                               ),
                             ),
 
@@ -185,7 +195,8 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
                               controller: _pwdCtrl,
                               obscureText: _obscure1,
                               validator: _validatePassword,
-                              onChanged: (_) => _formKey.currentState?.validate(),
+                              onChanged: (_) =>
+                                  _formKey.currentState?.validate(),
                               decoration: InputDecoration(
                                 labelText: 'Mot de passe',
                                 hintText: 'Min 6 caractères',
@@ -193,12 +204,14 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
                                 suffixIcon: IconButton(
                                   icon: Icon(
                                     _obscure1
-                                      ? Icons.visibility_off_outlined
-                                      : Icons.visibility_outlined,
+                                        ? Icons.visibility_off_outlined
+                                        : Icons.visibility_outlined,
                                   ),
-                                  onPressed: () => setState(() => _obscure1 = !_obscure1),
+                                  onPressed: () =>
+                                      setState(() => _obscure1 = !_obscure1),
                                 ),
-                                floatingLabelBehavior: FloatingLabelBehavior.auto,
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.auto,
                               ),
                             ),
 
@@ -216,12 +229,14 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
                                 suffixIcon: IconButton(
                                   icon: Icon(
                                     _obscure2
-                                      ? Icons.visibility_off_outlined
-                                      : Icons.visibility_outlined,
+                                        ? Icons.visibility_off_outlined
+                                        : Icons.visibility_outlined,
                                   ),
-                                  onPressed: () => setState(() => _obscure2 = !_obscure2),
+                                  onPressed: () =>
+                                      setState(() => _obscure2 = !_obscure2),
                                 ),
-                                floatingLabelBehavior: FloatingLabelBehavior.auto,
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.auto,
                               ),
                             ),
 
@@ -247,7 +262,10 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
                                         width: 20,
                                         child: CircularProgressIndicator(
                                           strokeWidth: 2,
-                                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                                Colors.white,
+                                              ),
                                         ),
                                       )
                                     : const Text(
@@ -271,7 +289,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
                           Expanded(
                             child: Container(
                               height: 1,
-                              color: isDark ? const Color(0xFF3A332E) : const Color(0xFFE7D9CF),
+                              color: isDark
+                                  ? const Color(0xFF3A332E)
+                                  : const Color(0xFFE7D9CF),
                             ),
                           ),
                           Padding(
@@ -279,7 +299,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
                             child: Text(
                               'Ou',
                               style: TextStyle(
-                                color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF6B5E56),
+                                color: isDark
+                                    ? const Color(0xFF94A3B8)
+                                    : const Color(0xFF6B5E56),
                                 fontSize: 14,
                               ),
                             ),
@@ -287,7 +309,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
                           Expanded(
                             child: Container(
                               height: 1,
-                              color: isDark ? const Color(0xFF3A332E) : const Color(0xFFE7D9CF),
+                              color: isDark
+                                  ? const Color(0xFF3A332E)
+                                  : const Color(0xFFE7D9CF),
                             ),
                           ),
                         ],
@@ -322,13 +346,17 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
                           label: Text(
                             'S\'inscrire avec Google',
                             style: TextStyle(
-                              color: isDark ? const Color(0xFFEAB676) : AppTheme.primaryColor,
+                              color: isDark
+                                  ? const Color(0xFFEAB676)
+                                  : AppTheme.primaryColor,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                           style: OutlinedButton.styleFrom(
                             side: BorderSide(
-                              color: isDark ? const Color(0xFF3A332E) : const Color(0xFFE7D9CF),
+                              color: isDark
+                                  ? const Color(0xFF3A332E)
+                                  : const Color(0xFFE7D9CF),
                             ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(14),
@@ -346,7 +374,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
                           Text(
                             'Déjà un compte ? ',
                             style: TextStyle(
-                              color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF6B5E56),
+                              color: isDark
+                                  ? const Color(0xFF94A3B8)
+                                  : const Color(0xFF6B5E56),
                               fontSize: 14,
                             ),
                           ),
@@ -411,7 +441,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
     if (!_formKey.currentState!.validate()) return;
     setState(() => _loading = true);
     try {
-      await ref.read(authRepositoryProvider).signUpWithEmail(_emailCtrl.text.trim(), _pwdCtrl.text.trim());
+      await ref
+          .read(authRepositoryProvider)
+          .signUpWithEmail(_emailCtrl.text.trim(), _pwdCtrl.text.trim());
       if (mounted) context.go('/gallery');
     } catch (e) {
       _showError(e);
@@ -436,4 +468,3 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
     AuthErrorHandler.showErrorSnackBar(context, e);
   }
 }
-

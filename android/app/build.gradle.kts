@@ -33,11 +33,34 @@ android {
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        create("release") {
+            // Configuration de signature pour la production
+            // Les valeurs doivent être fournies via des variables d'environnement ou gradle.properties
+            storeFile = file(System.getenv("MYCARD_KEYSTORE_PATH") ?: "keystore.jks")
+            storePassword = System.getenv("MYCARD_KEYSTORE_PASSWORD") ?: ""
+            keyAlias = System.getenv("MYCARD_KEY_ALIAS") ?: "upload"
+            keyPassword = System.getenv("MYCARD_KEY_PASSWORD") ?: ""
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            // Activer la minification et l'obfuscation avec R8
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            
+            // Utiliser la configuration de signature de production si disponible
+            // Sinon, utiliser debug pour le développement local
+            signingConfig = if (System.getenv("MYCARD_KEYSTORE_PATH") != null) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
+            }
         }
     }
 }

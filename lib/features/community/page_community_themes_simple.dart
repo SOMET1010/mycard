@@ -1,5 +1,6 @@
 /// Page des thèmes communautaires simplifiée
 library;
+
 import 'package:flutter/material.dart';
 import 'package:mycard/core/services/community_theme_service_simple.dart';
 import 'package:mycard/data/models/event_theme_customization.dart';
@@ -46,10 +47,14 @@ class _CommunityThemesPageState extends State<CommunityThemesPage> {
   void _filterThemes() {
     setState(() {
       _filteredThemes = _themes.where((theme) {
-        final matchesSearch = theme.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-            theme.description.toLowerCase().contains(_searchQuery.toLowerCase());
+        final matchesSearch =
+            theme.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+            theme.description.toLowerCase().contains(
+              _searchQuery.toLowerCase(),
+            );
 
-        final matchesCategory = _selectedCategory == 'Tous' ||
+        final matchesCategory =
+            _selectedCategory == 'Tous' ||
             theme.tags.contains(_selectedCategory.toLowerCase());
 
         return matchesSearch && matchesCategory;
@@ -59,48 +64,55 @@ class _CommunityThemesPageState extends State<CommunityThemesPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(
-        title: const Text('Thèmes Communautaires'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.upload),
-            onPressed: _showUploadDialog,
-            tooltip: 'Partager un thème',
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          _buildSearchBar(),
-          _buildCategoryFilter(),
-          Expanded(
-            child: _isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : _buildThemesGrid(),
-          ),
-        ],
-      ),
-    );
+    appBar: AppBar(
+      title: const Text('Thèmes Communautaires'),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.upload),
+          onPressed: _showUploadDialog,
+          tooltip: 'Partager un thème',
+        ),
+      ],
+    ),
+    body: Column(
+      children: [
+        _buildSearchBar(),
+        _buildCategoryFilter(),
+        Expanded(
+          child: _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : _buildThemesGrid(),
+        ),
+      ],
+    ),
+  );
 
   Widget _buildSearchBar() => Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: TextField(
-        decoration: const InputDecoration(
-          hintText: 'Rechercher des thèmes...',
-          prefixIcon: Icon(Icons.search),
-          border: OutlineInputBorder(),
-        ),
-        onChanged: (value) {
-          setState(() {
-            _searchQuery = value;
-          });
-          _filterThemes();
-        },
+    padding: const EdgeInsets.all(16.0),
+    child: TextField(
+      decoration: const InputDecoration(
+        hintText: 'Rechercher des thèmes...',
+        prefixIcon: Icon(Icons.search),
+        border: OutlineInputBorder(),
       ),
-    );
+      onChanged: (value) {
+        setState(() {
+          _searchQuery = value;
+        });
+        _filterThemes();
+      },
+    ),
+  );
 
   Widget _buildCategoryFilter() {
-    final categories = ['Tous', 'professionnel', 'créatif', 'moderne', 'coloré', 'minimaliste'];
+    final categories = [
+      'Tous',
+      'professionnel',
+      'créatif',
+      'moderne',
+      'coloré',
+      'minimaliste',
+    ];
 
     return Container(
       height: 60,
@@ -166,141 +178,138 @@ class _CommunityThemesPageState extends State<CommunityThemesPage> {
   }
 
   Widget _buildThemeCard(CommunityTheme theme) => Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: InkWell(
-        onTap: () => _showThemeDetails(theme),
-        borderRadius: BorderRadius.circular(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: 3,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      theme.theme.primaryColor,
-                      theme.theme.secondaryColor,
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(12),
-                  ),
-                ),
-                child: Stack(
-                  children: [
-                    Positioned(
-                      top: 8,
-                      right: 8,
-                      child: _buildFavoriteButton(theme),
-                    ),
-                    Positioned(
-                      bottom: 8,
-                      left: 8,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.5),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          theme.name,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
+    elevation: 4,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+    child: InkWell(
+      onTap: () => _showThemeDetails(theme),
+      borderRadius: BorderRadius.circular(12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 3,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    theme.theme.primaryColor,
+                    theme.theme.secondaryColor,
                   ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(12),
                 ),
               ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      theme.name,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: 8,
+                    right: 8,
+                    child: _buildFavoriteButton(theme),
+                  ),
+                  Positioned(
+                    bottom: 8,
+                    left: 8,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      theme.description,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey[600],
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const Spacer(),
-                    Row(
-                      children: [
-                        const Icon(Icons.star, size: 14, color: Colors.amber),
-                        const SizedBox(width: 4),
-                        Text(
-                          theme.rating.toStringAsFixed(1),
-                          style: const TextStyle(fontSize: 12),
+                      child: Text(
+                        theme.name,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
                         ),
-                        const SizedBox(width: 8),
-                        const Icon(Icons.download, size: 14, color: Colors.grey),
-                        const SizedBox(width: 4),
-                        Text(
-                          '${theme.downloads}',
-                          style: const TextStyle(fontSize: 12),
-                        ),
-                      ],
+                      ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
-      ),
-    );
-
-  Widget _buildFavoriteButton(CommunityTheme theme) => FutureBuilder<bool>(
-      future: CommunityThemeService.isFavorite(theme.id),
-      builder: (context, snapshot) {
-        final isFavorite = snapshot.data ?? false;
-
-        return GestureDetector(
-          onTap: () async {
-            await CommunityThemeService.toggleFavorite(theme.id);
-            setState(() {});
-          },
-          child: Container(
-            padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.5),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              isFavorite ? Icons.favorite : Icons.favorite_border,
-              size: 16,
-              color: isFavorite ? Colors.red : Colors.white,
             ),
           ),
-        );
-      },
-    );
+          Expanded(
+            flex: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    theme.name,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    theme.description,
+                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const Spacer(),
+                  Row(
+                    children: [
+                      const Icon(Icons.star, size: 14, color: Colors.amber),
+                      const SizedBox(width: 4),
+                      Text(
+                        theme.rating.toStringAsFixed(1),
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                      const SizedBox(width: 8),
+                      const Icon(Icons.download, size: 14, color: Colors.grey),
+                      const SizedBox(width: 4),
+                      Text(
+                        '${theme.downloads}',
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+
+  Widget _buildFavoriteButton(CommunityTheme theme) => FutureBuilder<bool>(
+    future: CommunityThemeService.isFavorite(theme.id),
+    builder: (context, snapshot) {
+      final isFavorite = snapshot.data ?? false;
+
+      return GestureDetector(
+        onTap: () async {
+          await CommunityThemeService.toggleFavorite(theme.id);
+          setState(() {});
+        },
+        child: Container(
+          padding: const EdgeInsets.all(4),
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.5),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            isFavorite ? Icons.favorite : Icons.favorite_border,
+            size: 16,
+            color: isFavorite ? Colors.red : Colors.white,
+          ),
+        ),
+      );
+    },
+  );
 
   void _showThemeDetails(CommunityTheme theme) {
     showModalBottomSheet(
@@ -359,20 +368,21 @@ class _CommunityThemesPageState extends State<CommunityThemesPage> {
                 ],
               ),
               const SizedBox(height: 16),
-              Text(
-                theme.description,
-                style: const TextStyle(fontSize: 16),
-              ),
+              Text(theme.description, style: const TextStyle(fontSize: 16)),
               const SizedBox(height: 16),
               _buildColorPalette(theme.theme),
               const SizedBox(height: 16),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
-                children: theme.tags.map((tag) => Chip(
-                    label: Text(tag),
-                    backgroundColor: Colors.grey[200],
-                  )).toList(),
+                children: theme.tags
+                    .map(
+                      (tag) => Chip(
+                        label: Text(tag),
+                        backgroundColor: Colors.grey[200],
+                      ),
+                    )
+                    .toList(),
               ),
               const SizedBox(height: 24),
               Row(
@@ -383,7 +393,9 @@ class _CommunityThemesPageState extends State<CommunityThemesPage> {
                         Navigator.pop(context);
                         // TODO: Appliquer le thème
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Thème "${theme.name}" appliqué')),
+                          SnackBar(
+                            content: Text('Thème "${theme.name}" appliqué'),
+                          ),
                         );
                       },
                       icon: const Icon(Icons.download),
@@ -400,52 +412,52 @@ class _CommunityThemesPageState extends State<CommunityThemesPage> {
   }
 
   Widget _buildColorPalette(EventThemeCustomization theme) => Container(
-      height: 80,
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.shade300),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Container(
-              margin: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: theme.primaryColor,
-                borderRadius: BorderRadius.circular(8),
-              ),
+    height: 80,
+    decoration: BoxDecoration(
+      border: Border.all(color: Colors.grey.shade300),
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: Row(
+      children: [
+        Expanded(
+          child: Container(
+            margin: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              color: theme.primaryColor,
+              borderRadius: BorderRadius.circular(8),
             ),
           ),
-          Expanded(
-            child: Container(
-              margin: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: theme.secondaryColor,
-                borderRadius: BorderRadius.circular(8),
-              ),
+        ),
+        Expanded(
+          child: Container(
+            margin: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              color: theme.secondaryColor,
+              borderRadius: BorderRadius.circular(8),
             ),
           ),
-          Expanded(
-            child: Container(
-              margin: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: theme.backgroundColor,
-                borderRadius: BorderRadius.circular(8),
-              ),
+        ),
+        Expanded(
+          child: Container(
+            margin: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              color: theme.backgroundColor,
+              borderRadius: BorderRadius.circular(8),
             ),
           ),
-          Expanded(
-            child: Container(
-              margin: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: theme.textColor,
-                borderRadius: BorderRadius.circular(8),
-              ),
+        ),
+        Expanded(
+          child: Container(
+            margin: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              color: theme.textColor,
+              borderRadius: BorderRadius.circular(8),
             ),
           ),
-        ],
-      ),
-    );
+        ),
+      ],
+    ),
+  );
 
   void _showUploadDialog() {
     showDialog(

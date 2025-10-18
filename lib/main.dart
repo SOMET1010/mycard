@@ -46,29 +46,26 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => ThemeManager(
-      initialThemeMode: ThemeMode.system,
-      child: MaterialApp.router(
-        title: 'MyCard',
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        themeMode: ThemeMode.system,
+    initialThemeMode: ThemeMode.system,
+    child: MaterialApp.router(
+      title: 'MyCard',
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.system,
 
-        // Localization
-        supportedLocales: const [
-          Locale('en', 'US'),
-          Locale('fr', 'FR'),
-        ],
-        localizationsDelegates: const [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
+      // Localization
+      supportedLocales: const [Locale('en', 'US'), Locale('fr', 'FR')],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
 
-        // Routing
-        routerConfig: ref.watch(routerProvider),
+      // Routing
+      routerConfig: ref.watch(routerProvider),
 
-        // Debug banner
-        debugShowCheckedModeBanner: false,
-      ),
-    );
+      // Debug banner
+      debugShowCheckedModeBanner: false,
+    ),
+  );
 }

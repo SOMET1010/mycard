@@ -1,22 +1,23 @@
 /// Service pour la génération de codes QR
 library;
+
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class QRService {
   /// Génère un widget QR code pour une vCard
   static Widget generateQRCode(String data, {double size = 200}) => QrImageView(
-      data: data,
-      version: QrVersions.auto,
-      size: size,
-      backgroundColor: Colors.white,
-      errorStateBuilder: (context, error) => Container(
-          width: size,
-          height: size,
-          color: Colors.grey[300],
-          child: const Icon(Icons.error, color: Colors.red),
-        ),
-    );
+    data: data,
+    version: QrVersions.auto,
+    size: size,
+    backgroundColor: Colors.white,
+    errorStateBuilder: (context, error) => Container(
+      width: size,
+      height: size,
+      color: Colors.grey[300],
+      child: const Icon(Icons.error, color: Colors.red),
+    ),
+  );
 
   /// Valide si une chaîne peut être encodée en QR code
   static bool canEncode(String data) {

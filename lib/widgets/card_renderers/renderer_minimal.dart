@@ -1,5 +1,6 @@
 /// Renderer de carte minimaliste
 library;
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mycard/app/theme.dart';
@@ -33,9 +34,7 @@ class MinimalRenderer implements CardRenderer {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      decoration: const BoxDecoration(
-        color: AppTheme.greenWhite,
-      ),
+      decoration: const BoxDecoration(color: AppTheme.greenWhite),
       child: Stack(
         children: [
           // Logo dans l'angle supérieur droit
@@ -57,26 +56,22 @@ class MinimalRenderer implements CardRenderer {
                           logoPath,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) => Icon(
-                              Icons.business,
-                              size: 24,
-                              color: Colors.grey[400],
-                            ),
+                            Icons.business,
+                            size: 24,
+                            color: Colors.grey[400],
+                          ),
                         )
                       : File(logoPath).existsSync()
-                          ? Image.file(
-                              File(logoPath),
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) => Icon(
-                                  Icons.business,
-                                  size: 24,
-                                  color: Colors.grey[400],
-                                ),
-                            )
-                          : Icon(
-                              Icons.business,
-                              size: 24,
-                              color: Colors.grey[400],
-                            ),
+                      ? Image.file(
+                          File(logoPath),
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) => Icon(
+                            Icons.business,
+                            size: 24,
+                            color: Colors.grey[400],
+                          ),
+                        )
+                      : Icon(Icons.business, size: 24, color: Colors.grey[400]),
                 ),
               ),
             ),
@@ -89,71 +84,89 @@ class MinimalRenderer implements CardRenderer {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                // Nom
-                Text(
-                  fullName,
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: primaryColor,
-                    fontFamily: fontFamily,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 4),
-
-                // Titre
-                if (title.isNotEmpty)
+                  // Nom
                   Text(
-                    title,
+                    fullName,
                     style: TextStyle(
-                      fontSize: 15,
-                      color: secondaryColor,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: primaryColor,
                       fontFamily: fontFamily,
                     ),
                     textAlign: TextAlign.center,
                   ),
-                const SizedBox(height: 8),
+                  const SizedBox(height: 4),
 
-                // Entreprise
-                if (company?.isNotEmpty == true) ...[
-                  Text(
-                    company!,
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
-                      color: accentColor,
-                      fontFamily: fontFamily,
+                  // Titre
+                  if (title.isNotEmpty)
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: secondaryColor,
+                        fontFamily: fontFamily,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
                   const SizedBox(height: 8),
-                ],
 
-                // Séparateur
-                Container(
-                  width: 50,
-                  height: 1.5,
-                  color: accentColor,
-                ),
-                const SizedBox(height: 8),
+                  // Entreprise
+                  if (company?.isNotEmpty == true) ...[
+                    Text(
+                      company!,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        color: accentColor,
+                        fontFamily: fontFamily,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 8),
+                  ],
 
-                // Contact
-                if (phone.isNotEmpty)
-                  _buildContactRow(Icons.phone, phone, secondaryColor, fontFamily),
-                if (email.isNotEmpty)
-                  _buildContactRow(Icons.email, email, secondaryColor, fontFamily),
-                if (website?.isNotEmpty == true)
-                  _buildContactRow(Icons.language, website!, secondaryColor, fontFamily),
+                  // Séparateur
+                  Container(width: 50, height: 1.5, color: accentColor),
+                  const SizedBox(height: 8),
 
-                const SizedBox(height: 8),
+                  // Contact
+                  if (phone.isNotEmpty)
+                    _buildContactRow(
+                      Icons.phone,
+                      phone,
+                      secondaryColor,
+                      fontFamily,
+                    ),
+                  if (email.isNotEmpty)
+                    _buildContactRow(
+                      Icons.email,
+                      email,
+                      secondaryColor,
+                      fontFamily,
+                    ),
+                  if (website?.isNotEmpty == true)
+                    _buildContactRow(
+                      Icons.language,
+                      website!,
+                      secondaryColor,
+                      fontFamily,
+                    ),
 
-                // Adresse
-                if (address?.isNotEmpty == true ||
-                    city?.isNotEmpty == true ||
-                    postalCode?.isNotEmpty == true) ...[
-                  _buildAddressSection(address, city, postalCode, country, secondaryColor, fontFamily),
-                ],
+                  const SizedBox(height: 8),
+
+                  // Adresse
+                  if (address?.isNotEmpty == true ||
+                      city?.isNotEmpty == true ||
+                      postalCode?.isNotEmpty == true) ...[
+                    _buildAddressSection(
+                      address,
+                      city,
+                      postalCode,
+                      country,
+                      secondaryColor,
+                      fontFamily,
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -163,31 +176,32 @@ class MinimalRenderer implements CardRenderer {
     );
   }
 
-  Widget _buildContactRow(IconData icon, String text, Color color, String? fontFamily) => Padding(
-      padding: const EdgeInsets.only(bottom: 4),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            icon,
-            size: 14,
-            color: color,
-          ),
-          const SizedBox(width: 6),
-          Expanded(
-            child: Text(
-              text,
-              style: TextStyle(
-                fontSize: 12,
-                color: color,
-                fontFamily: fontFamily,
-              ),
-              textAlign: TextAlign.center,
+  Widget _buildContactRow(
+    IconData icon,
+    String text,
+    Color color,
+    String? fontFamily,
+  ) => Padding(
+    padding: const EdgeInsets.only(bottom: 4),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(icon, size: 14, color: color),
+        const SizedBox(width: 6),
+        Expanded(
+          child: Text(
+            text,
+            style: TextStyle(
+              fontSize: 12,
+              color: color,
+              fontFamily: fontFamily,
             ),
+            textAlign: TextAlign.center,
           ),
-        ],
-      ),
-    );
+        ),
+      ],
+    ),
+  );
 
   Widget _buildAddressSection(
     String? address,
@@ -207,19 +221,11 @@ class MinimalRenderer implements CardRenderer {
 
     return Column(
       children: [
-        Icon(
-          Icons.location_on,
-          size: 14,
-          color: color,
-        ),
+        Icon(Icons.location_on, size: 14, color: color),
         const SizedBox(height: 2),
         Text(
           addressParts.join(', '),
-          style: TextStyle(
-            fontSize: 12,
-            color: color,
-            fontFamily: fontFamily,
-          ),
+          style: TextStyle(fontSize: 12, color: color, fontFamily: fontFamily),
           textAlign: TextAlign.center,
         ),
       ],
@@ -254,9 +260,7 @@ class MinimalRenderer implements CardRenderer {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      decoration: const BoxDecoration(
-        color: AppTheme.greenWhite,
-      ),
+      decoration: const BoxDecoration(color: AppTheme.greenWhite),
       child: Stack(
         children: [
           // Logo en haut à droite style minimaliste
@@ -278,26 +282,22 @@ class MinimalRenderer implements CardRenderer {
                           logoPath,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) => Icon(
-                              Icons.business,
-                              size: 18,
-                              color: Colors.grey[400],
-                            ),
+                            Icons.business,
+                            size: 18,
+                            color: Colors.grey[400],
+                          ),
                         )
                       : File(logoPath).existsSync()
-                          ? Image.file(
-                              File(logoPath),
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) => Icon(
-                                  Icons.business,
-                                  size: 18,
-                                  color: Colors.grey[400],
-                                ),
-                            )
-                          : Icon(
-                              Icons.business,
-                              size: 18,
-                              color: Colors.grey[400],
-                            ),
+                      ? Image.file(
+                          File(logoPath),
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) => Icon(
+                            Icons.business,
+                            size: 18,
+                            color: Colors.grey[400],
+                          ),
+                        )
+                      : Icon(Icons.business, size: 18, color: Colors.grey[400]),
                 ),
               ),
             ),
@@ -324,11 +324,7 @@ class MinimalRenderer implements CardRenderer {
                   ),
                   const SizedBox(height: 12),
                   Center(
-                    child: Container(
-                      width: 30,
-                      height: 1,
-                      color: accentColor,
-                    ),
+                    child: Container(width: 30, height: 1, color: accentColor),
                   ),
                   const SizedBox(height: 16),
                 ],
@@ -363,7 +359,8 @@ class MinimalRenderer implements CardRenderer {
                         ],
 
                         // Services
-                        if (backServices != null && backServices.isNotEmpty) ...[
+                        if (backServices != null &&
+                            backServices.isNotEmpty) ...[
                           Text(
                             'Services',
                             style: TextStyle(
@@ -374,32 +371,34 @@ class MinimalRenderer implements CardRenderer {
                             ),
                           ),
                           const SizedBox(height: 8),
-                          ...backServices.map((service) => Padding(
-                                padding: const EdgeInsets.only(bottom: 4),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: 3,
-                                      height: 3,
-                                      decoration: BoxDecoration(
-                                        color: accentColor,
-                                        shape: BoxShape.circle,
+                          ...backServices.map(
+                            (service) => Padding(
+                              padding: const EdgeInsets.only(bottom: 4),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 3,
+                                    height: 3,
+                                    decoration: BoxDecoration(
+                                      color: accentColor,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      service,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: secondaryColor,
+                                        fontFamily: fontFamily,
                                       ),
                                     ),
-                                    const SizedBox(width: 8),
-                                    Expanded(
-                                      child: Text(
-                                        service,
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: secondaryColor,
-                                          fontFamily: fontFamily,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                           const SizedBox(height: 16),
                         ],
 
@@ -439,7 +438,8 @@ class MinimalRenderer implements CardRenderer {
                         ],
 
                         // Réseaux sociaux
-                        if (backSocialLinks != null && backSocialLinks.isNotEmpty) ...[
+                        if (backSocialLinks != null &&
+                            backSocialLinks.isNotEmpty) ...[
                           Text(
                             'Réseaux',
                             style: TextStyle(
@@ -489,11 +489,17 @@ class MinimalRenderer implements CardRenderer {
     );
   }
 
-  Color _getColor(String colorType, CardTemplate template, Map<String, String> customColors) {
+  Color _getColor(
+    String colorType,
+    CardTemplate template,
+    Map<String, String> customColors,
+  ) {
     final customColor = customColors[colorType];
     if (customColor != null) {
       // Retirer le # s'il est présent au début
-      final cleanColor = customColor.startsWith('#') ? customColor.substring(1) : customColor;
+      final cleanColor = customColor.startsWith('#')
+          ? customColor.substring(1)
+          : customColor;
       return Color(int.parse('FF$cleanColor', radix: 16));
     }
 

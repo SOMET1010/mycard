@@ -1,5 +1,6 @@
 /// Service d'export multi-formats pour les thèmes
 library;
+
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -10,26 +11,25 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 enum ExportFormat {
-  json,            // JSON format
-  css,             // CSS variables
-  xml,             // XML format
-  yaml,            // YAML format
-  scss,            // SCSS variables
-  flutter,         // Flutter theme code
-  tailwind,        // Tailwind CSS config
-  materialDesign,  // Material Design tokens
-  ios,             // iOS Swift colors
-  android,         // Android XML colors
-  figma,           // Figma variables
-  sketch,          // Sketch palette
-  adobeXd,         // Adobe XD assets
-  svg,             // SVG pattern
-  png,             // PNG preview
-  pdf,             // PDF documentation
+  json, // JSON format
+  css, // CSS variables
+  xml, // XML format
+  yaml, // YAML format
+  scss, // SCSS variables
+  flutter, // Flutter theme code
+  tailwind, // Tailwind CSS config
+  materialDesign, // Material Design tokens
+  ios, // iOS Swift colors
+  android, // Android XML colors
+  figma, // Figma variables
+  sketch, // Sketch palette
+  adobeXd, // Adobe XD assets
+  svg, // SVG pattern
+  png, // PNG preview
+  pdf, // PDF documentation
 }
 
 class ExportSettings {
-
   const ExportSettings({
     required this.format,
     this.fileName,
@@ -49,7 +49,6 @@ class ExportSettings {
 }
 
 class ThemeExportResult {
-
   const ThemeExportResult({
     required this.success,
     this.filePath,
@@ -85,9 +84,7 @@ class ThemeExportService {
       'palette_${DateTime.now().millisecondsSinceEpoch}.json',
     );
 
-    final hexColors = palette
-        .map(_colorToHex)
-        .toList();
+    final hexColors = palette.map(_colorToHex).toList();
 
     final payload = {
       'type': 'palette',
@@ -160,9 +157,7 @@ class ThemeExportService {
       final theme = themes[i];
       final batchSettings = ExportSettings(
         format: settings.format,
-        fileName: settings.fileName != null
-            ? '${settings.fileName}_$i'
-            : null,
+        fileName: settings.fileName != null ? '${settings.fileName}_$i' : null,
         includePreview: settings.includePreview,
         includeDocumentation: settings.includeDocumentation,
         includeTokens: settings.includeTokens,
@@ -196,42 +191,43 @@ class ThemeExportService {
   }
 
   /// Valide un format d'export
-  static bool validateExportFormat(ExportFormat format) => ExportFormat.values.contains(format);
+  static bool validateExportFormat(ExportFormat format) =>
+      ExportFormat.values.contains(format);
 
   /// Récupère les métadonnées d'export
   static Map<String, dynamic> getExportMetadata(
     EventThemeCustomization theme,
     ExportSettings settings,
   ) => {
-      'theme': {
-        'id': theme.templateId,
-        'colors': {
-          'primary': theme.primaryColor.value,
-          'secondary': theme.secondaryColor.value,
-          'background': theme.backgroundColor.value,
-          'text': theme.textColor.value,
-        },
-        'typography': {
-          'fontFamily': theme.fontFamily,
-          'titleSize': theme.titleFontSize,
-          'bodySize': theme.bodyFontSize,
-        },
-        'layout': {
-          'borderRadius': theme.borderRadius,
-          'padding': theme.cardPadding,
-          'shadowOpacity': theme.shadowOpacity,
-        },
+    'theme': {
+      'id': theme.templateId,
+      'colors': {
+        'primary': theme.primaryColor.value,
+        'secondary': theme.secondaryColor.value,
+        'background': theme.backgroundColor.value,
+        'text': theme.textColor.value,
       },
-      'export': {
-        'format': settings.format.name,
-        'includePreview': settings.includePreview,
-        'includeDocumentation': settings.includeDocumentation,
-        'includeTokens': settings.includeTokens,
-        'customOptions': settings.customOptions,
+      'typography': {
+        'fontFamily': theme.fontFamily,
+        'titleSize': theme.titleFontSize,
+        'bodySize': theme.bodyFontSize,
       },
-      'timestamp': DateTime.now().toIso8601String(),
-      'version': '1.0.0',
-    };
+      'layout': {
+        'borderRadius': theme.borderRadius,
+        'padding': theme.cardPadding,
+        'shadowOpacity': theme.shadowOpacity,
+      },
+    },
+    'export': {
+      'format': settings.format.name,
+      'includePreview': settings.includePreview,
+      'includeDocumentation': settings.includeDocumentation,
+      'includeTokens': settings.includeTokens,
+      'customOptions': settings.customOptions,
+    },
+    'timestamp': DateTime.now().toIso8601String(),
+    'version': '1.0.0',
+  };
 
   // Méthodes d'export privées
 
@@ -278,8 +274,12 @@ class ThemeExportService {
     // CSS Variables
     buffer.writeln(':root {');
     buffer.writeln('  --primary-color: ${_colorToHex(theme.primaryColor)};');
-    buffer.writeln('  --secondary-color: ${_colorToHex(theme.secondaryColor)};');
-    buffer.writeln('  --background-color: ${_colorToHex(theme.backgroundColor)};');
+    buffer.writeln(
+      '  --secondary-color: ${_colorToHex(theme.secondaryColor)};',
+    );
+    buffer.writeln(
+      '  --background-color: ${_colorToHex(theme.backgroundColor)};',
+    );
     buffer.writeln('  --text-color: ${_colorToHex(theme.textColor)};');
 
     if (theme.accentColor != null) {
@@ -305,7 +305,9 @@ class ThemeExportService {
       buffer.writeln('  color: var(--text-color);');
       buffer.writeln('  border-radius: var(--border-radius);');
       buffer.writeln('  padding: var(--card-padding);');
-      buffer.writeln('  box-shadow: 0 4px 6px rgba(0, 0, 0, var(--shadow-opacity));');
+      buffer.writeln(
+        '  box-shadow: 0 4px 6px rgba(0, 0, 0, var(--shadow-opacity));',
+      );
       buffer.writeln('}\n');
 
       buffer.writeln('.theme-button-primary {');
@@ -350,7 +352,9 @@ class ThemeExportService {
     buffer.writeln('// Theme Variables');
     buffer.writeln('\$primary-color: ${_colorToHex(theme.primaryColor)};');
     buffer.writeln('\$secondary-color: ${_colorToHex(theme.secondaryColor)};');
-    buffer.writeln('\$background-color: ${_colorToHex(theme.backgroundColor)};');
+    buffer.writeln(
+      '\$background-color: ${_colorToHex(theme.backgroundColor)};',
+    );
     buffer.writeln('\$text-color: ${_colorToHex(theme.textColor)};');
     buffer.writeln('\$border-radius: ${theme.borderRadius}px;');
     buffer.writeln('\$card-padding: ${theme.cardPadding}px;');
@@ -370,7 +374,9 @@ class ThemeExportService {
       buffer.writeln('  color: \$text-color;');
       buffer.writeln('  border-radius: \$border-radius;');
       buffer.writeln('  padding: \$card-padding;');
-      buffer.writeln('  box-shadow: 0 4px 6px rgba(0, 0, 0, \$shadow-opacity);');
+      buffer.writeln(
+        '  box-shadow: 0 4px 6px rgba(0, 0, 0, \$shadow-opacity);',
+      );
       buffer.writeln('}\n');
 
       buffer.writeln('@mixin theme-button-primary {');
@@ -408,28 +414,46 @@ class ThemeExportService {
     buffer.writeln('  static const ThemeData lightTheme = ThemeData(');
     buffer.writeln('    useMaterial3: true,');
     buffer.writeln('    colorScheme: ColorScheme.fromSeed(');
-    buffer.writeln('      seedColor: ${_colorToFlutterColor(theme.primaryColor)},');
+    buffer.writeln(
+      '      seedColor: ${_colorToFlutterColor(theme.primaryColor)},',
+    );
     buffer.writeln('      brightness: Brightness.light,');
     buffer.writeln('    ),');
     buffer.writeln('    appBarTheme: AppBarTheme(');
-    buffer.writeln('      backgroundColor: ${_colorToFlutterColor(theme.primaryColor)},');
-    buffer.writeln('      foregroundColor: ${_colorToFlutterColor(theme.textColor)},');
+    buffer.writeln(
+      '      backgroundColor: ${_colorToFlutterColor(theme.primaryColor)},',
+    );
+    buffer.writeln(
+      '      foregroundColor: ${_colorToFlutterColor(theme.textColor)},',
+    );
     buffer.writeln('      elevation: 4,');
     buffer.writeln('    ),');
     buffer.writeln('    cardTheme: CardTheme(');
-    buffer.writeln('      color: ${_colorToFlutterColor(theme.backgroundColor)},');
+    buffer.writeln(
+      '      color: ${_colorToFlutterColor(theme.backgroundColor)},',
+    );
     buffer.writeln('      elevation: 4,');
     buffer.writeln('      shape: RoundedRectangleBorder(');
-    buffer.writeln('        borderRadius: BorderRadius.circular(${theme.borderRadius}),');
+    buffer.writeln(
+      '        borderRadius: BorderRadius.circular(${theme.borderRadius}),',
+    );
     buffer.writeln('      ),');
     buffer.writeln('    ),');
     buffer.writeln('    elevatedButtonTheme: ElevatedButtonThemeData(');
     buffer.writeln('      style: ElevatedButton.styleFrom(');
-    buffer.writeln('        backgroundColor: ${_colorToFlutterColor(theme.primaryColor)},');
-    buffer.writeln('        foregroundColor: ${_colorToFlutterColor(theme.textColor)},');
-    buffer.writeln('        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),');
+    buffer.writeln(
+      '        backgroundColor: ${_colorToFlutterColor(theme.primaryColor)},',
+    );
+    buffer.writeln(
+      '        foregroundColor: ${_colorToFlutterColor(theme.textColor)},',
+    );
+    buffer.writeln(
+      '        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),',
+    );
     buffer.writeln('        shape: RoundedRectangleBorder(');
-    buffer.writeln('          borderRadius: BorderRadius.circular(${theme.borderRadius}),');
+    buffer.writeln(
+      '          borderRadius: BorderRadius.circular(${theme.borderRadius}),',
+    );
     buffer.writeln('        ),');
     buffer.writeln('      ),');
     buffer.writeln('    ),');
@@ -455,10 +479,18 @@ class ThemeExportService {
     // Custom colors
     if (settings.includeTokens) {
       buffer.writeln('class ThemeColors {');
-      buffer.writeln('  static const Color primary = ${_colorToFlutterColor(theme.primaryColor)};');
-      buffer.writeln('  static const Color secondary = ${_colorToFlutterColor(theme.secondaryColor)};');
-      buffer.writeln('  static const Color background = ${_colorToFlutterColor(theme.backgroundColor)};');
-      buffer.writeln('  static const Color text = ${_colorToFlutterColor(theme.textColor)};');
+      buffer.writeln(
+        '  static const Color primary = ${_colorToFlutterColor(theme.primaryColor)};',
+      );
+      buffer.writeln(
+        '  static const Color secondary = ${_colorToFlutterColor(theme.secondaryColor)};',
+      );
+      buffer.writeln(
+        '  static const Color background = ${_colorToFlutterColor(theme.backgroundColor)};',
+      );
+      buffer.writeln(
+        '  static const Color text = ${_colorToFlutterColor(theme.textColor)};',
+      );
       buffer.writeln('}\n');
     }
 
@@ -491,8 +523,12 @@ class ThemeExportService {
     buffer.writeln('    extend: {');
     buffer.writeln('      colors: {');
     buffer.writeln('        primary: \'${_colorToHex(theme.primaryColor)}\',');
-    buffer.writeln('        secondary: \'${_colorToHex(theme.secondaryColor)}\',');
-    buffer.writeln('        background: \'${_colorToHex(theme.backgroundColor)}\',');
+    buffer.writeln(
+      '        secondary: \'${_colorToHex(theme.secondaryColor)}\',',
+    );
+    buffer.writeln(
+      '        background: \'${_colorToHex(theme.backgroundColor)}\',',
+    );
     buffer.writeln('        text: \'${_colorToHex(theme.textColor)}\',');
     buffer.writeln('      },');
     buffer.writeln('      borderRadius: {');
@@ -513,7 +549,9 @@ class ThemeExportService {
     }
 
     buffer.writeln('      boxShadow: {');
-    buffer.writeln('        \'theme\': \'0 4px 6px rgba(0, 0, 0, ${theme.shadowOpacity})\',');
+    buffer.writeln(
+      '        \'theme\': \'0 4px 6px rgba(0, 0, 0, ${theme.shadowOpacity})\',',
+    );
     buffer.writeln('      },');
     buffer.writeln('    },');
     buffer.writeln('  },');
@@ -543,30 +581,58 @@ class ThemeExportService {
 
     // Primary Colors
     buffer.writeln('    <!-- Primary Colors -->');
-    buffer.writeln('    <color name="primaryColor">${_colorToHex(theme.primaryColor)}</color>');
-    buffer.writeln('    <color name="primaryVariant">${_colorToHex(theme.primaryColor)}</color>');
-    buffer.writeln('    <color name="onPrimary">${_colorToHex(theme.textColor)}</color>\n');
+    buffer.writeln(
+      '    <color name="primaryColor">${_colorToHex(theme.primaryColor)}</color>',
+    );
+    buffer.writeln(
+      '    <color name="primaryVariant">${_colorToHex(theme.primaryColor)}</color>',
+    );
+    buffer.writeln(
+      '    <color name="onPrimary">${_colorToHex(theme.textColor)}</color>\n',
+    );
 
     // Secondary Colors
     buffer.writeln('    <!-- Secondary Colors -->');
-    buffer.writeln('    <color name="secondaryColor">${_colorToHex(theme.secondaryColor)}</color>');
-    buffer.writeln('    <color name="secondaryVariant">${_colorToHex(theme.secondaryColor)}</color>');
-    buffer.writeln('    <color name="onSecondary">${_colorToHex(theme.textColor)}</color>\n');
+    buffer.writeln(
+      '    <color name="secondaryColor">${_colorToHex(theme.secondaryColor)}</color>',
+    );
+    buffer.writeln(
+      '    <color name="secondaryVariant">${_colorToHex(theme.secondaryColor)}</color>',
+    );
+    buffer.writeln(
+      '    <color name="onSecondary">${_colorToHex(theme.textColor)}</color>\n',
+    );
 
     // Background Colors
     buffer.writeln('    <!-- Background Colors -->');
-    buffer.writeln('    <color name="backgroundColor">${_colorToHex(theme.backgroundColor)}</color>');
-    buffer.writeln('    <color name="surfaceColor">${_colorToHex(theme.backgroundColor)}</color>');
-    buffer.writeln('    <color name="onBackground">${_colorToHex(theme.textColor)}</color>');
-    buffer.writeln('    <color name="onSurface">${_colorToHex(theme.textColor)}</color>\n');
+    buffer.writeln(
+      '    <color name="backgroundColor">${_colorToHex(theme.backgroundColor)}</color>',
+    );
+    buffer.writeln(
+      '    <color name="surfaceColor">${_colorToHex(theme.backgroundColor)}</color>',
+    );
+    buffer.writeln(
+      '    <color name="onBackground">${_colorToHex(theme.textColor)}</color>',
+    );
+    buffer.writeln(
+      '    <color name="onSurface">${_colorToHex(theme.textColor)}</color>\n',
+    );
 
     // Dimensions
     if (settings.includeTokens) {
       buffer.writeln('    <!-- Dimensions -->');
-      buffer.writeln('    <dimen name="borderRadius">${theme.borderRadius}dp</dimen>');
-      buffer.writeln('    <dimen name="cardPadding">${theme.cardPadding}dp</dimen>');
-      buffer.writeln('    <dimen name="titleSize">${theme.titleFontSize}sp</dimen>');
-      buffer.writeln('    <dimen name="bodySize">${theme.bodyFontSize}sp</dimen>\n');
+      buffer.writeln(
+        '    <dimen name="borderRadius">${theme.borderRadius}dp</dimen>',
+      );
+      buffer.writeln(
+        '    <dimen name="cardPadding">${theme.cardPadding}dp</dimen>',
+      );
+      buffer.writeln(
+        '    <dimen name="titleSize">${theme.titleFontSize}sp</dimen>',
+      );
+      buffer.writeln(
+        '    <dimen name="bodySize">${theme.bodyFontSize}sp</dimen>\n',
+      );
     }
 
     buffer.writeln('</resources>');
@@ -594,54 +660,102 @@ class ThemeExportService {
     buffer.writeln('extension UIColor {');
     buffer.writeln('    // Theme Colors\n');
     buffer.writeln('    @nonobjc class var primary: UIColor {');
-    buffer.writeln('        return UIColor(red: ${theme.primaryColor.red / 255.0}, ');
-    buffer.writeln('                           green: ${theme.primaryColor.green / 255.0}, ');
-    buffer.writeln('                            blue: ${theme.primaryColor.blue / 255.0}, ');
-    buffer.writeln('                           alpha: ${theme.primaryColor.alpha / 255.0})');
+    buffer.writeln(
+      '        return UIColor(red: ${theme.primaryColor.red / 255.0}, ',
+    );
+    buffer.writeln(
+      '                           green: ${theme.primaryColor.green / 255.0}, ',
+    );
+    buffer.writeln(
+      '                            blue: ${theme.primaryColor.blue / 255.0}, ',
+    );
+    buffer.writeln(
+      '                           alpha: ${theme.primaryColor.alpha / 255.0})',
+    );
     buffer.writeln('    }\n');
 
     buffer.writeln('    @nonobjc class var secondary: UIColor {');
-    buffer.writeln('        return UIColor(red: ${theme.secondaryColor.red / 255.0}, ');
-    buffer.writeln('                           green: ${theme.secondaryColor.green / 255.0}, ');
-    buffer.writeln('                            blue: ${theme.secondaryColor.blue / 255.0}, ');
-    buffer.writeln('                           alpha: ${theme.secondaryColor.alpha / 255.0})');
+    buffer.writeln(
+      '        return UIColor(red: ${theme.secondaryColor.red / 255.0}, ',
+    );
+    buffer.writeln(
+      '                           green: ${theme.secondaryColor.green / 255.0}, ',
+    );
+    buffer.writeln(
+      '                            blue: ${theme.secondaryColor.blue / 255.0}, ',
+    );
+    buffer.writeln(
+      '                           alpha: ${theme.secondaryColor.alpha / 255.0})',
+    );
     buffer.writeln('    }\n');
 
     buffer.writeln('    @nonobjc class var background: UIColor {');
-    buffer.writeln('        return UIColor(red: ${theme.backgroundColor.red / 255.0}, ');
-    buffer.writeln('                           green: ${theme.backgroundColor.green / 255.0}, ');
-    buffer.writeln('                            blue: ${theme.backgroundColor.blue / 255.0}, ');
-    buffer.writeln('                           alpha: ${theme.backgroundColor.alpha / 255.0})');
+    buffer.writeln(
+      '        return UIColor(red: ${theme.backgroundColor.red / 255.0}, ',
+    );
+    buffer.writeln(
+      '                           green: ${theme.backgroundColor.green / 255.0}, ',
+    );
+    buffer.writeln(
+      '                            blue: ${theme.backgroundColor.blue / 255.0}, ',
+    );
+    buffer.writeln(
+      '                           alpha: ${theme.backgroundColor.alpha / 255.0})',
+    );
     buffer.writeln('    }\n');
 
     buffer.writeln('    @nonobjc class var text: UIColor {');
-    buffer.writeln('        return UIColor(red: ${theme.textColor.red / 255.0}, ');
-    buffer.writeln('                           green: ${theme.textColor.green / 255.0}, ');
-    buffer.writeln('                            blue: ${theme.textColor.blue / 255.0}, ');
-    buffer.writeln('                           alpha: ${theme.textColor.alpha / 255.0})');
+    buffer.writeln(
+      '        return UIColor(red: ${theme.textColor.red / 255.0}, ',
+    );
+    buffer.writeln(
+      '                           green: ${theme.textColor.green / 255.0}, ',
+    );
+    buffer.writeln(
+      '                            blue: ${theme.textColor.blue / 255.0}, ',
+    );
+    buffer.writeln(
+      '                           alpha: ${theme.textColor.alpha / 255.0})',
+    );
     buffer.writeln('    }');
     buffer.writeln('}\n');
 
     // Theme Configuration
     if (settings.includeTokens) {
       buffer.writeln('struct ThemeConfiguration {');
-      buffer.writeln('    static let cornerRadius: CGFloat = ${theme.borderRadius}');
-      buffer.writeln('    static let cardPadding: CGFloat = ${theme.cardPadding}');
-      buffer.writeln('    static let titleFontSize: CGFloat = ${theme.titleFontSize}');
-      buffer.writeln('    static let bodyFontSize: CGFloat = ${theme.bodyFontSize}');
+      buffer.writeln(
+        '    static let cornerRadius: CGFloat = ${theme.borderRadius}',
+      );
+      buffer.writeln(
+        '    static let cardPadding: CGFloat = ${theme.cardPadding}',
+      );
+      buffer.writeln(
+        '    static let titleFontSize: CGFloat = ${theme.titleFontSize}',
+      );
+      buffer.writeln(
+        '    static let bodyFontSize: CGFloat = ${theme.bodyFontSize}',
+      );
 
       if (theme.fontFamily != null) {
-        buffer.writeln('    static let fontFamily: String = "${theme.fontFamily}"');
+        buffer.writeln(
+          '    static let fontFamily: String = "${theme.fontFamily}"',
+        );
       }
 
       buffer.writeln('}\n');
 
       buffer.writeln('extension UIView {');
       buffer.writeln('    func applyThemeStyle() {');
-      buffer.writeln('        layer.cornerRadius = ThemeConfiguration.cornerRadius');
+      buffer.writeln(
+        '        layer.cornerRadius = ThemeConfiguration.cornerRadius',
+      );
       buffer.writeln('        layer.shadowColor = UIColor.black.cgColor');
-      buffer.writeln('        layer.shadowOpacity = Float(${theme.shadowOpacity})');
-      buffer.writeln('        layer.shadowOffset = CGSize(width: 0, height: 4)');
+      buffer.writeln(
+        '        layer.shadowOpacity = Float(${theme.shadowOpacity})',
+      );
+      buffer.writeln(
+        '        layer.shadowOffset = CGSize(width: 0, height: 4)',
+      );
       buffer.writeln('        layer.shadowRadius = 8');
       buffer.writeln('    }');
       buffer.writeln('}');
@@ -668,7 +782,9 @@ class ThemeExportService {
     buffer.writeln('<theme>');
     buffer.writeln('  <metadata>');
     buffer.writeln('    <name>${settings.fileName ?? 'Custom Theme'}</name>');
-    buffer.writeln('    <created>${DateTime.now().toIso8601String()}</created>');
+    buffer.writeln(
+      '    <created>${DateTime.now().toIso8601String()}</created>',
+    );
     buffer.writeln('    <version>1.0</version>');
     buffer.writeln('  </metadata>');
     buffer.writeln('  <colors>');
@@ -893,130 +1009,144 @@ class ThemeExportService {
 
   // Utilitaires
 
-  static String _colorToHex(Color color) => '#${color.value.toRadixString(16).substring(2).toUpperCase()}';
+  static String _colorToHex(Color color) =>
+      '#${color.value.toRadixString(16).substring(2).toUpperCase()}';
 
-  static String _colorToFlutterColor(Color color) => 'Color(0xFF${color.value.toRadixString(16).substring(2).toUpperCase()})';
+  static String _colorToFlutterColor(Color color) =>
+      'Color(0xFF${color.value.toRadixString(16).substring(2).toUpperCase()})';
 
-  static Map<String, dynamic> _generateTokens(EventThemeCustomization theme) => {
-      'colors': {
-        'primary': _colorToHex(theme.primaryColor),
-        'secondary': _colorToHex(theme.secondaryColor),
-        'background': _colorToHex(theme.backgroundColor),
-        'text': _colorToHex(theme.textColor),
-      },
-      'spacing': {
-        'borderRadius': theme.borderRadius,
-        'cardPadding': theme.cardPadding,
-      },
-      'typography': {
-        'titleSize': theme.titleFontSize,
-        'bodySize': theme.bodyFontSize,
-        'fontFamily': theme.fontFamily,
-      },
-    };
+  static Map<String, dynamic> _generateTokens(EventThemeCustomization theme) =>
+      {
+        'colors': {
+          'primary': _colorToHex(theme.primaryColor),
+          'secondary': _colorToHex(theme.secondaryColor),
+          'background': _colorToHex(theme.backgroundColor),
+          'text': _colorToHex(theme.textColor),
+        },
+        'spacing': {
+          'borderRadius': theme.borderRadius,
+          'cardPadding': theme.cardPadding,
+        },
+        'typography': {
+          'titleSize': theme.titleFontSize,
+          'bodySize': theme.bodyFontSize,
+          'fontFamily': theme.fontFamily,
+        },
+      };
 
-  static Map<String, dynamic> _generateDocumentation(EventThemeCustomization theme) => {
-      'description': 'Thème personnalisé généré par MyCard',
-      'usage': 'Utilisez ces tokens pour maintenir la cohérence visuelle',
-      'guidelines': [
-        'Utiliser la couleur primaire pour les éléments principaux',
-        'La couleur secondaire complète la couleur primaire',
-        'Maintenir un contraste suffisant pour l\'accessibilité',
-      ],
-    };
+  static Map<String, dynamic> _generateDocumentation(
+    EventThemeCustomization theme,
+  ) => {
+    'description': 'Thème personnalisé généré par MyCard',
+    'usage': 'Utilisez ces tokens pour maintenir la cohérence visuelle',
+    'guidelines': [
+      'Utiliser la couleur primaire pour les éléments principaux',
+      'La couleur secondaire complète la couleur primaire',
+      'Maintenir un contraste suffisant pour l\'accessibilité',
+    ],
+  };
 
   static List<String> _generateCodeExamples(EventThemeCustomization theme) => [
-      'button: background-color: var(--primary-color);',
-      'card: border-radius: var(--border-radius);',
-      'text: color: var(--text-color);',
-    ];
+    'button: background-color: var(--primary-color);',
+    'card: border-radius: var(--border-radius);',
+    'text: color: var(--text-color);',
+  ];
 
-  static Map<String, dynamic> _generateMaterialDesignTokens(EventThemeCustomization theme) => {
-      'color': {
-        'primary': _colorToHex(theme.primaryColor),
-        'secondary': _colorToHex(theme.secondaryColor),
-        'background': _colorToHex(theme.backgroundColor),
-        'surface': _colorToHex(theme.backgroundColor),
-        'onPrimary': _colorToHex(theme.textColor),
-        'onSecondary': _colorToHex(theme.textColor),
-        'onBackground': _colorToHex(theme.textColor),
-        'onSurface': _colorToHex(theme.textColor),
+  static Map<String, dynamic> _generateMaterialDesignTokens(
+    EventThemeCustomization theme,
+  ) => {
+    'color': {
+      'primary': _colorToHex(theme.primaryColor),
+      'secondary': _colorToHex(theme.secondaryColor),
+      'background': _colorToHex(theme.backgroundColor),
+      'surface': _colorToHex(theme.backgroundColor),
+      'onPrimary': _colorToHex(theme.textColor),
+      'onSecondary': _colorToHex(theme.textColor),
+      'onBackground': _colorToHex(theme.textColor),
+      'onSurface': _colorToHex(theme.textColor),
+    },
+    'shape': {
+      'borderRadius': {
+        'small': theme.borderRadius * 0.5,
+        'medium': theme.borderRadius,
+        'large': theme.borderRadius * 1.5,
       },
-      'shape': {
-        'borderRadius': {
-          'small': theme.borderRadius * 0.5,
-          'medium': theme.borderRadius,
-          'large': theme.borderRadius * 1.5,
-        },
-      },
-    };
+    },
+  };
 
-  static Map<String, dynamic> _generateFigmaVariables(EventThemeCustomization theme) => {
-      'variables': {
-        'primary': _colorToHex(theme.primaryColor),
-        'secondary': _colorToHex(theme.secondaryColor),
-        'background': _colorToHex(theme.backgroundColor),
-        'text': _colorToHex(theme.textColor),
-      },
-      'collections': [
-        {
-          'name': 'Colors',
-          'modes': [
-            {
-              'name': 'Light',
-              'variables': ['primary', 'secondary', 'background', 'text'],
-            },
-          ],
-        },
-      ],
-    };
-
-  static Map<String, dynamic> _generateSketchPalette(EventThemeCustomization theme) => {
-      'colors': [
-        {'name': 'Primary', 'color': _colorToHex(theme.primaryColor)},
-        {'name': 'Secondary', 'color': _colorToHex(theme.secondaryColor)},
-        {'name': 'Background', 'color': _colorToHex(theme.backgroundColor)},
-        {'name': 'Text', 'color': _colorToHex(theme.textColor)},
-      ],
-      'swatches': [
-        {
-          'name': 'Theme Colors',
-          'colors': [
-            _colorToHex(theme.primaryColor),
-            _colorToHex(theme.secondaryColor),
-            _colorToHex(theme.backgroundColor),
-            _colorToHex(theme.textColor),
-          ],
-        },
-      ],
-    };
-
-  static Map<String, dynamic> _generateAdobeXdAssets(EventThemeCustomization theme) => {
-      'assets': [
-        {
-          'name': 'Primary Color',
-          'type': 'color',
-          'value': _colorToHex(theme.primaryColor),
-        },
-        {
-          'name': 'Secondary Color',
-          'type': 'color',
-          'value': _colorToHex(theme.secondaryColor),
-        },
-      ],
-      'components': [
-        {
-          'name': 'Theme Card',
-          'properties': {
-            'fill': _colorToHex(theme.backgroundColor),
-            'stroke': _colorToHex(theme.primaryColor),
-            'cornerRadius': theme.borderRadius,
+  static Map<String, dynamic> _generateFigmaVariables(
+    EventThemeCustomization theme,
+  ) => {
+    'variables': {
+      'primary': _colorToHex(theme.primaryColor),
+      'secondary': _colorToHex(theme.secondaryColor),
+      'background': _colorToHex(theme.backgroundColor),
+      'text': _colorToHex(theme.textColor),
+    },
+    'collections': [
+      {
+        'name': 'Colors',
+        'modes': [
+          {
+            'name': 'Light',
+            'variables': ['primary', 'secondary', 'background', 'text'],
           },
-        },
-      ],
-    };
+        ],
+      },
+    ],
+  };
 
-  static String _generateSvgPattern(EventThemeCustomization theme) => '''<?xml version="1.0" encoding="UTF-8"?>
+  static Map<String, dynamic> _generateSketchPalette(
+    EventThemeCustomization theme,
+  ) => {
+    'colors': [
+      {'name': 'Primary', 'color': _colorToHex(theme.primaryColor)},
+      {'name': 'Secondary', 'color': _colorToHex(theme.secondaryColor)},
+      {'name': 'Background', 'color': _colorToHex(theme.backgroundColor)},
+      {'name': 'Text', 'color': _colorToHex(theme.textColor)},
+    ],
+    'swatches': [
+      {
+        'name': 'Theme Colors',
+        'colors': [
+          _colorToHex(theme.primaryColor),
+          _colorToHex(theme.secondaryColor),
+          _colorToHex(theme.backgroundColor),
+          _colorToHex(theme.textColor),
+        ],
+      },
+    ],
+  };
+
+  static Map<String, dynamic> _generateAdobeXdAssets(
+    EventThemeCustomization theme,
+  ) => {
+    'assets': [
+      {
+        'name': 'Primary Color',
+        'type': 'color',
+        'value': _colorToHex(theme.primaryColor),
+      },
+      {
+        'name': 'Secondary Color',
+        'type': 'color',
+        'value': _colorToHex(theme.secondaryColor),
+      },
+    ],
+    'components': [
+      {
+        'name': 'Theme Card',
+        'properties': {
+          'fill': _colorToHex(theme.backgroundColor),
+          'stroke': _colorToHex(theme.primaryColor),
+          'cornerRadius': theme.borderRadius,
+        },
+      },
+    ],
+  };
+
+  static String _generateSvgPattern(EventThemeCustomization theme) =>
+      '''<?xml version="1.0" encoding="UTF-8"?>
 <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <pattern id="themePattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
@@ -1037,16 +1167,17 @@ class ThemeExportService {
 
   static List<int> _generatePdfDocumentation(EventThemeCustomization theme) {
     // Simuler la génération PDF (en réalité, utiliserait un package PDF)
-    final content = 'Theme Documentation\n\nColors:\nPrimary: ${_colorToHex(theme.primaryColor)}\n'
-                   'Secondary: ${_colorToHex(theme.secondaryColor)}\n'
-                   'Background: ${_colorToHex(theme.backgroundColor)}\n'
-                   'Text: ${_colorToHex(theme.textColor)}\n\n'
-                   'Typography:\nTitle Size: ${theme.titleFontSize}px\n'
-                   'Body Size: ${theme.bodyFontSize}px\n'
-                   'Font: ${theme.fontFamily ?? 'Default'}\n\n'
-                   'Layout:\nBorder Radius: ${theme.borderRadius}px\n'
-                   'Card Padding: ${theme.cardPadding}px\n'
-                   'Shadow Opacity: ${theme.shadowOpacity}';
+    final content =
+        'Theme Documentation\n\nColors:\nPrimary: ${_colorToHex(theme.primaryColor)}\n'
+        'Secondary: ${_colorToHex(theme.secondaryColor)}\n'
+        'Background: ${_colorToHex(theme.backgroundColor)}\n'
+        'Text: ${_colorToHex(theme.textColor)}\n\n'
+        'Typography:\nTitle Size: ${theme.titleFontSize}px\n'
+        'Body Size: ${theme.bodyFontSize}px\n'
+        'Font: ${theme.fontFamily ?? 'Default'}\n\n'
+        'Layout:\nBorder Radius: ${theme.borderRadius}px\n'
+        'Card Padding: ${theme.cardPadding}px\n'
+        'Shadow Opacity: ${theme.shadowOpacity}';
 
     return utf8.encode(content);
   }
@@ -1055,10 +1186,11 @@ class ThemeExportService {
   static List<ExportFormat> getSupportedFormats() => ExportFormat.values;
 
   /// Valide les données avant export
-  static bool validateThemeData(EventThemeCustomization theme) => theme.primaryColor != null &&
-           theme.secondaryColor != null &&
-           theme.backgroundColor != null &&
-           theme.textColor != null;
+  static bool validateThemeData(EventThemeCustomization theme) =>
+      theme.primaryColor != null &&
+      theme.secondaryColor != null &&
+      theme.backgroundColor != null &&
+      theme.textColor != null;
 
   /// Obtient des suggestions de format basées sur le contexte
   static List<ExportFormat> getRecommendedFormats(String? platform) {
@@ -1069,7 +1201,12 @@ class ThemeExportService {
       case 'web':
       case 'html':
       case 'css':
-        return [ExportFormat.css, ExportFormat.scss, ExportFormat.tailwind, ExportFormat.json];
+        return [
+          ExportFormat.css,
+          ExportFormat.scss,
+          ExportFormat.tailwind,
+          ExportFormat.json,
+        ];
       case 'android':
         return [ExportFormat.android, ExportFormat.xml, ExportFormat.json];
       case 'ios':

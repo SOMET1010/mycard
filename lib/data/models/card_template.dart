@@ -1,9 +1,9 @@
 /// Modèle de données pour un template de carte
 library;
+
 import 'package:flutter/material.dart';
 
 class CardTemplate {
-
   const CardTemplate({
     required this.id,
     required this.name,
@@ -19,17 +19,18 @@ class CardTemplate {
 
   /// Crée un template à partir d'un Map JSON
   factory CardTemplate.fromJson(Map<String, dynamic> json) => CardTemplate(
-      id: json['id'] ?? '',
-      name: json['name'] ?? '',
-      description: json['description'] ?? '',
-      colors: Map<String, String>.from(json['colors'] ?? {}),
-      rendererKey: json['rendererKey'] ?? 'minimal',
-      layout: json['layout'] ?? 'centered',
-      previewPath: json['previewPath'] ?? '',
-      isPremium: json['isPremium'] ?? false,
-      eventId: json['eventId'],
-      tags: (json['tags'] as List?)?.map((e) => e.toString()).toList() ?? const [],
-    );
+    id: json['id'] ?? '',
+    name: json['name'] ?? '',
+    description: json['description'] ?? '',
+    colors: Map<String, String>.from(json['colors'] ?? {}),
+    rendererKey: json['rendererKey'] ?? 'minimal',
+    layout: json['layout'] ?? 'centered',
+    previewPath: json['previewPath'] ?? '',
+    isPremium: json['isPremium'] ?? false,
+    eventId: json['eventId'],
+    tags:
+        (json['tags'] as List?)?.map((e) => e.toString()).toList() ?? const [],
+  );
   final String id;
   final String name;
   final String description;
@@ -43,19 +44,25 @@ class CardTemplate {
 
   /// Couleur principale
   Color get primaryColor {
-    debugPrint('Getting primary color for $name: \\${colors['primary'] ?? '#000000'}');
+    debugPrint(
+      'Getting primary color for $name: \\${colors['primary'] ?? '#000000'}',
+    );
     return _hexToColor(colors['primary'] ?? '#000000');
   }
 
   /// Couleur secondaire
   Color get secondaryColor {
-    debugPrint('Getting secondary color for $name: \\${colors['secondary'] ?? '#666666'}');
+    debugPrint(
+      'Getting secondary color for $name: \\${colors['secondary'] ?? '#666666'}',
+    );
     return _hexToColor(colors['secondary'] ?? '#666666');
   }
 
   /// Couleur d'accent
   Color get accentColor {
-    debugPrint('Getting accent color for $name: \\${colors['accent'] ?? '#2563eb'}');
+    debugPrint(
+      'Getting accent color for $name: \\${colors['accent'] ?? '#2563eb'}',
+    );
     return _hexToColor(colors['accent'] ?? '#2563eb');
   }
 
@@ -284,17 +291,17 @@ class CardTemplate {
 
   /// Convertit en Map pour JSON
   Map<String, dynamic> toJson() => {
-      'id': id,
-      'name': name,
-      'description': description,
-      'colors': colors,
-      'rendererKey': rendererKey,
-      'layout': layout,
-      'previewPath': previewPath,
-      'isPremium': isPremium,
-      'eventId': eventId,
-      'tags': tags,
-    };
+    'id': id,
+    'name': name,
+    'description': description,
+    'colors': colors,
+    'rendererKey': rendererKey,
+    'layout': layout,
+    'previewPath': previewPath,
+    'isPremium': isPremium,
+    'eventId': eventId,
+    'tags': tags,
+  };
 
   @override
   bool operator ==(Object other) {

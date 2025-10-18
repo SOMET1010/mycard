@@ -1,5 +1,6 @@
 /// Utilitaires pour la manipulation des couleurs
 library;
+
 import 'package:flutter/material.dart';
 
 class ColorUtils {
@@ -10,7 +11,8 @@ class ColorUtils {
   }
 
   /// Convertit une Color en chaîne hexadécimale
-  static String colorToHex(Color color) => '#${color.value.toRadixString(16).substring(2).toUpperCase()}';
+  static String colorToHex(Color color) =>
+      '#${color.value.toRadixString(16).substring(2).toUpperCase()}';
 
   /// Génère une palette de couleurs à partir d'une couleur de base
   static List<Color> generateColorPalette(Color baseColor, {int count = 5}) {
@@ -23,10 +25,12 @@ class ColorUtils {
   }
 
   /// Crée une couleur avec une opacité donnée
-  static Color withOpacity(Color color, double opacity) => color.withOpacity(opacity);
+  static Color withOpacity(Color color, double opacity) =>
+      color.withOpacity(opacity);
 
   /// Mélange deux couleurs
-  static Color blendColors(Color color1, Color color2, {double ratio = 0.5}) => Color.lerp(color1, color2, ratio)!;
+  static Color blendColors(Color color1, Color color2, {double ratio = 0.5}) =>
+      Color.lerp(color1, color2, ratio)!;
 
   /// Détermine si une couleur est claire ou foncée
   static bool isLightColor(Color color) {
@@ -35,7 +39,8 @@ class ColorUtils {
   }
 
   /// Retourne du blanc ou du noir en fonction de la couleur de fond
-  static Color getContrastColor(Color backgroundColor) => isLightColor(backgroundColor) ? Colors.black : Colors.white;
+  static Color getContrastColor(Color backgroundColor) =>
+      isLightColor(backgroundColor) ? Colors.black : Colors.white;
 
   /// Crée un MaterialColor à partir d'une couleur de base
   static MaterialColor createMaterialColor(Color color) {

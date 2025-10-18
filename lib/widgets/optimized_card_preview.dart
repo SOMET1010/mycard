@@ -1,5 +1,6 @@
 /// Widget d'aperçu de carte optimisé pour les performances
 library;
+
 import 'package:flutter/material.dart';
 import 'package:mycard/data/models/card_template.dart';
 import 'package:mycard/data/models/event_overlay.dart';
@@ -17,7 +18,6 @@ import 'package:mycard/widgets/card_renderers/renderer_tech_startup.dart';
 import 'package:mycard/widgets/card_renderers/renderer_weprint_professional.dart';
 
 class OptimizedCardPreview extends StatefulWidget {
-
   const OptimizedCardPreview({
     super.key,
     required this.firstName,
@@ -69,7 +69,8 @@ class _OptimizedCardPreviewState extends State<OptimizedCardPreview> {
   @override
   void initState() {
     super.initState();
-    _effectiveTemplate = widget.template ?? CardTemplate.predefinedTemplates.first;
+    _effectiveTemplate =
+        widget.template ?? CardTemplate.predefinedTemplates.first;
     _renderer = _getRenderer(_effectiveTemplate.rendererKey);
   }
 
@@ -77,7 +78,8 @@ class _OptimizedCardPreviewState extends State<OptimizedCardPreview> {
   void didUpdateWidget(OptimizedCardPreview oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.template != widget.template) {
-      _effectiveTemplate = widget.template ?? CardTemplate.predefinedTemplates.first;
+      _effectiveTemplate =
+          widget.template ?? CardTemplate.predefinedTemplates.first;
       _renderer = _getRenderer(_effectiveTemplate.rendererKey);
     }
   }
@@ -114,86 +116,83 @@ class _OptimizedCardPreviewState extends State<OptimizedCardPreview> {
 
   @override
   Widget build(BuildContext context) => RepaintBoundary(
-      child: SizedBox(
-        width: widget.previewWidth ?? 350,
-        height: widget.previewHeight ?? 200,
-        child: _buildOptimizedCardContent(),
-      ),
-    );
+    child: SizedBox(
+      width: widget.previewWidth ?? 350,
+      height: widget.previewHeight ?? 200,
+      child: _buildOptimizedCardContent(),
+    ),
+  );
 
   Widget _buildOptimizedCardContent() => ClipRRect(
-      borderRadius: BorderRadius.circular(8),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Stack(
-          children: [
-            // Carte de base avec optimisation
-            _buildOptimizedCard(),
-            // Overlay événementiel
-            if (widget.eventOverlay != null) _buildEventOverlay(widget.eventOverlay!),
-          ],
-        ),
+    borderRadius: BorderRadius.circular(8),
+    child: DecoratedBox(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
-    );
+      child: Stack(
+        children: [
+          // Carte de base avec optimisation
+          _buildOptimizedCard(),
+          // Overlay événementiel
+          if (widget.eventOverlay != null)
+            _buildEventOverlay(widget.eventOverlay!),
+        ],
+      ),
+    ),
+  );
 
   Widget _buildOptimizedCard() => _renderer.render(
-      fullName: '${widget.firstName} ${widget.lastName}'.trim(),
-      title: widget.title,
-      phone: widget.phone,
-      email: widget.email,
-      company: widget.company,
-      website: widget.website,
-      address: widget.address,
-      city: widget.city,
-      postalCode: widget.postalCode,
-      country: widget.country,
-      template: _effectiveTemplate,
-      customColors: widget.customColors,
-      fontFamily: widget.fontFamily,
-      logoPath: widget.logoPath,
-      eventOverlay: widget.eventOverlay,
-    );
+    fullName: '${widget.firstName} ${widget.lastName}'.trim(),
+    title: widget.title,
+    phone: widget.phone,
+    email: widget.email,
+    company: widget.company,
+    website: widget.website,
+    address: widget.address,
+    city: widget.city,
+    postalCode: widget.postalCode,
+    country: widget.country,
+    template: _effectiveTemplate,
+    customColors: widget.customColors,
+    fontFamily: widget.fontFamily,
+    logoPath: widget.logoPath,
+    eventOverlay: widget.eventOverlay,
+  );
 
   Widget _buildEventOverlay(EventOverlay event) => Positioned(
-      top: 8,
-      right: 8,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        decoration: BoxDecoration(
-          color: event.color,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              _getEventIcon(event.icon),
-              color: Colors.white,
-              size: 12,
-            ),
-            const SizedBox(width: 4),
-            Text(
-              event.label,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
+    top: 8,
+    right: 8,
+    child: Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: event.color,
+        borderRadius: BorderRadius.circular(12),
       ),
-    );
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(_getEventIcon(event.icon), color: Colors.white, size: 12),
+          const SizedBox(width: 4),
+          Text(
+            event.label,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 
   IconData _getEventIcon(String iconName) {
     switch (iconName) {

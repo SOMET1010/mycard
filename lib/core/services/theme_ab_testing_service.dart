@@ -1,5 +1,6 @@
 /// Service de tests A/B pour les thèmes
 library;
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
@@ -9,33 +10,32 @@ import 'package:mycard/data/models/event_overlay.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum TestStatus {
-  draft,            // Brouillon
-  active,           // Actif
-  paused,           // En pause
-  completed,        // Terminé
-  cancelled,        // Annulé
+  draft, // Brouillon
+  active, // Actif
+  paused, // En pause
+  completed, // Terminé
+  cancelled, // Annulé
 }
 
 enum TestType {
   themeComparison, // Comparaison de thèmes
-  colorVariation,   // Variation de couleurs
-  layoutTest,       // Test de mise en page
-  fontTest,         // Test de police
-  animationTest,    // Test d'animation
-  featureTest,      // Test de fonctionnalité
-  conversionTest,   // Test de conversion
+  colorVariation, // Variation de couleurs
+  layoutTest, // Test de mise en page
+  fontTest, // Test de police
+  animationTest, // Test d'animation
+  featureTest, // Test de fonctionnalité
+  conversionTest, // Test de conversion
 }
 
 enum AllocationMethod {
-  random,           // Aléatoire
-  weighted,         // Pondéré
-  sequential,       // Séquentiel
-  userSegment,      // Segment utilisateur
-  custom,           // Personnalisé
+  random, // Aléatoire
+  weighted, // Pondéré
+  sequential, // Séquentiel
+  userSegment, // Segment utilisateur
+  custom, // Personnalisé
 }
 
 class ABTestVariant {
-
   const ABTestVariant({
     required this.id,
     required this.name,
@@ -47,14 +47,14 @@ class ABTestVariant {
   });
 
   factory ABTestVariant.fromJson(Map<String, dynamic> json) => ABTestVariant(
-      id: json['id'],
-      name: json['name'],
-      description: json['description'],
-      theme: EventThemeCustomization.fromJson(json['theme']),
-      weight: json['weight'] ?? 1,
-      isActive: json['isActive'] ?? true,
-      metadata: Map<String, dynamic>.from(json['metadata'] ?? {}),
-    );
+    id: json['id'],
+    name: json['name'],
+    description: json['description'],
+    theme: EventThemeCustomization.fromJson(json['theme']),
+    weight: json['weight'] ?? 1,
+    isActive: json['isActive'] ?? true,
+    metadata: Map<String, dynamic>.from(json['metadata'] ?? {}),
+  );
   final String id;
   final String name;
   final String description;
@@ -64,18 +64,17 @@ class ABTestVariant {
   final Map<String, dynamic> metadata;
 
   Map<String, dynamic> toJson() => {
-      'id': id,
-      'name': name,
-      'description': description,
-      'theme': theme.toJson(),
-      'weight': weight,
-      'isActive': isActive,
-      'metadata': metadata,
-    };
+    'id': id,
+    'name': name,
+    'description': description,
+    'theme': theme.toJson(),
+    'weight': weight,
+    'isActive': isActive,
+    'metadata': metadata,
+  };
 }
 
 class ABTest {
-
   const ABTest({
     required this.id,
     required this.name,
@@ -97,41 +96,39 @@ class ABTest {
   });
 
   factory ABTest.fromJson(Map<String, dynamic> json) => ABTest(
-      id: json['id'],
-      name: json['name'],
-      description: json['description'],
-      type: TestType.values.firstWhere(
-        (e) => e.name == json['type'],
-        orElse: () => TestType.themeComparison,
-      ),
-      variants: (json['variants'] as List)
-          .map((v) => ABTestVariant.fromJson(v))
-          .toList(),
-      allocationMethod: AllocationMethod.values.firstWhere(
-        (e) => e.name == json['allocationMethod'],
-        orElse: () => AllocationMethod.random,
-      ),
-      status: TestStatus.values.firstWhere(
-        (e) => e.name == json['status'],
-        orElse: () => TestStatus.draft,
-      ),
-      createdAt: DateTime.parse(json['createdAt']),
-      startedAt: json['startedAt'] != null
-          ? DateTime.parse(json['startedAt'])
-          : null,
-      endedAt: json['endedAt'] != null
-          ? DateTime.parse(json['endedAt'])
-          : null,
-      targetSampleSize: json['targetSampleSize'] ?? 1000,
-      currentSampleSize: json['currentSampleSize'] ?? 0,
-      confidenceLevel: (json['confidenceLevel'] ?? 0.95).toDouble(),
-      minTestDuration: Duration(
-        milliseconds: json['minTestDuration'] ?? 604800000, // 7 jours
-      ),
-      settings: Map<String, dynamic>.from(json['settings'] ?? {}),
-      targetMetrics: List<String>.from(json['targetMetrics'] ?? []),
-      hypothesis: Map<String, dynamic>.from(json['hypothesis'] ?? {}),
-    );
+    id: json['id'],
+    name: json['name'],
+    description: json['description'],
+    type: TestType.values.firstWhere(
+      (e) => e.name == json['type'],
+      orElse: () => TestType.themeComparison,
+    ),
+    variants: (json['variants'] as List)
+        .map((v) => ABTestVariant.fromJson(v))
+        .toList(),
+    allocationMethod: AllocationMethod.values.firstWhere(
+      (e) => e.name == json['allocationMethod'],
+      orElse: () => AllocationMethod.random,
+    ),
+    status: TestStatus.values.firstWhere(
+      (e) => e.name == json['status'],
+      orElse: () => TestStatus.draft,
+    ),
+    createdAt: DateTime.parse(json['createdAt']),
+    startedAt: json['startedAt'] != null
+        ? DateTime.parse(json['startedAt'])
+        : null,
+    endedAt: json['endedAt'] != null ? DateTime.parse(json['endedAt']) : null,
+    targetSampleSize: json['targetSampleSize'] ?? 1000,
+    currentSampleSize: json['currentSampleSize'] ?? 0,
+    confidenceLevel: (json['confidenceLevel'] ?? 0.95).toDouble(),
+    minTestDuration: Duration(
+      milliseconds: json['minTestDuration'] ?? 604800000, // 7 jours
+    ),
+    settings: Map<String, dynamic>.from(json['settings'] ?? {}),
+    targetMetrics: List<String>.from(json['targetMetrics'] ?? []),
+    hypothesis: Map<String, dynamic>.from(json['hypothesis'] ?? {}),
+  );
   final String id;
   final String name;
   final String description;
@@ -151,24 +148,24 @@ class ABTest {
   final Map<String, dynamic> hypothesis;
 
   Map<String, dynamic> toJson() => {
-      'id': id,
-      'name': name,
-      'description': description,
-      'type': type.name,
-      'variants': variants.map((v) => v.toJson()).toList(),
-      'allocationMethod': allocationMethod.name,
-      'status': status.name,
-      'createdAt': createdAt.toIso8601String(),
-      'startedAt': startedAt?.toIso8601String(),
-      'endedAt': endedAt?.toIso8601String(),
-      'targetSampleSize': targetSampleSize,
-      'currentSampleSize': currentSampleSize,
-      'confidenceLevel': confidenceLevel,
-      'minTestDuration': minTestDuration.inMilliseconds,
-      'settings': settings,
-      'targetMetrics': targetMetrics,
-      'hypothesis': hypothesis,
-    };
+    'id': id,
+    'name': name,
+    'description': description,
+    'type': type.name,
+    'variants': variants.map((v) => v.toJson()).toList(),
+    'allocationMethod': allocationMethod.name,
+    'status': status.name,
+    'createdAt': createdAt.toIso8601String(),
+    'startedAt': startedAt?.toIso8601String(),
+    'endedAt': endedAt?.toIso8601String(),
+    'targetSampleSize': targetSampleSize,
+    'currentSampleSize': currentSampleSize,
+    'confidenceLevel': confidenceLevel,
+    'minTestDuration': minTestDuration.inMilliseconds,
+    'settings': settings,
+    'targetMetrics': targetMetrics,
+    'hypothesis': hypothesis,
+  };
 
   ABTest copyWith({
     String? id,
@@ -189,28 +186,27 @@ class ABTest {
     List<String>? targetMetrics,
     Map<String, dynamic>? hypothesis,
   }) => ABTest(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      description: description ?? this.description,
-      type: type ?? this.type,
-      variants: variants ?? this.variants,
-      allocationMethod: allocationMethod ?? this.allocationMethod,
-      status: status ?? this.status,
-      createdAt: createdAt ?? this.createdAt,
-      startedAt: startedAt ?? this.startedAt,
-      endedAt: endedAt ?? this.endedAt,
-      targetSampleSize: targetSampleSize ?? this.targetSampleSize,
-      currentSampleSize: currentSampleSize ?? this.currentSampleSize,
-      confidenceLevel: confidenceLevel ?? this.confidenceLevel,
-      minTestDuration: minTestDuration ?? this.minTestDuration,
-      settings: settings ?? this.settings,
-      targetMetrics: targetMetrics ?? this.targetMetrics,
-      hypothesis: hypothesis ?? this.hypothesis,
-    );
+    id: id ?? this.id,
+    name: name ?? this.name,
+    description: description ?? this.description,
+    type: type ?? this.type,
+    variants: variants ?? this.variants,
+    allocationMethod: allocationMethod ?? this.allocationMethod,
+    status: status ?? this.status,
+    createdAt: createdAt ?? this.createdAt,
+    startedAt: startedAt ?? this.startedAt,
+    endedAt: endedAt ?? this.endedAt,
+    targetSampleSize: targetSampleSize ?? this.targetSampleSize,
+    currentSampleSize: currentSampleSize ?? this.currentSampleSize,
+    confidenceLevel: confidenceLevel ?? this.confidenceLevel,
+    minTestDuration: minTestDuration ?? this.minTestDuration,
+    settings: settings ?? this.settings,
+    targetMetrics: targetMetrics ?? this.targetMetrics,
+    hypothesis: hypothesis ?? this.hypothesis,
+  );
 }
 
 class ABTestResult {
-
   const ABTestResult({
     required this.testId,
     required this.winnerVariantId,
@@ -230,7 +226,6 @@ class ABTestResult {
 }
 
 class ABTestSession {
-
   const ABTestSession({
     required this.id,
     required this.userId,
@@ -245,21 +240,21 @@ class ABTestSession {
   });
 
   factory ABTestSession.fromJson(Map<String, dynamic> json) => ABTestSession(
-      id: json['id'],
-      userId: json['userId'],
-      testId: json['testId'],
-      variantId: json['variantId'],
-      assignedAt: DateTime.parse(json['assignedAt']),
-      startedAt: json['startedAt'] != null
-          ? DateTime.parse(json['startedAt'])
-          : null,
-      completedAt: json['completedAt'] != null
-          ? DateTime.parse(json['completedAt'])
-          : null,
-      interactions: Map<String, dynamic>.from(json['interactions'] ?? {}),
-      metrics: Map<String, dynamic>.from(json['metrics'] ?? {}),
-      isConverted: json['isConverted'] ?? false,
-    );
+    id: json['id'],
+    userId: json['userId'],
+    testId: json['testId'],
+    variantId: json['variantId'],
+    assignedAt: DateTime.parse(json['assignedAt']),
+    startedAt: json['startedAt'] != null
+        ? DateTime.parse(json['startedAt'])
+        : null,
+    completedAt: json['completedAt'] != null
+        ? DateTime.parse(json['completedAt'])
+        : null,
+    interactions: Map<String, dynamic>.from(json['interactions'] ?? {}),
+    metrics: Map<String, dynamic>.from(json['metrics'] ?? {}),
+    isConverted: json['isConverted'] ?? false,
+  );
   final String id;
   final String userId;
   final String testId;
@@ -272,17 +267,17 @@ class ABTestSession {
   final bool isConverted;
 
   Map<String, dynamic> toJson() => {
-      'id': id,
-      'userId': userId,
-      'testId': testId,
-      'variantId': variantId,
-      'assignedAt': assignedAt.toIso8601String(),
-      'startedAt': startedAt?.toIso8601String(),
-      'completedAt': completedAt?.toIso8601String(),
-      'interactions': interactions,
-      'metrics': metrics,
-      'isConverted': isConverted,
-    };
+    'id': id,
+    'userId': userId,
+    'testId': testId,
+    'variantId': variantId,
+    'assignedAt': assignedAt.toIso8601String(),
+    'startedAt': startedAt?.toIso8601String(),
+    'completedAt': completedAt?.toIso8601String(),
+    'interactions': interactions,
+    'metrics': metrics,
+    'isConverted': isConverted,
+  };
 
   ABTestSession copyWith({
     String? id,
@@ -296,17 +291,17 @@ class ABTestSession {
     Map<String, dynamic>? metrics,
     bool? isConverted,
   }) => ABTestSession(
-      id: id ?? this.id,
-      userId: userId ?? this.userId,
-      testId: testId ?? this.testId,
-      variantId: variantId ?? this.variantId,
-      assignedAt: assignedAt ?? this.assignedAt,
-      startedAt: startedAt ?? this.startedAt,
-      completedAt: completedAt ?? this.completedAt,
-      interactions: interactions ?? this.interactions,
-      metrics: metrics ?? this.metrics,
-      isConverted: isConverted ?? this.isConverted,
-    );
+    id: id ?? this.id,
+    userId: userId ?? this.userId,
+    testId: testId ?? this.testId,
+    variantId: variantId ?? this.variantId,
+    assignedAt: assignedAt ?? this.assignedAt,
+    startedAt: startedAt ?? this.startedAt,
+    completedAt: completedAt ?? this.completedAt,
+    interactions: interactions ?? this.interactions,
+    metrics: metrics ?? this.metrics,
+    isConverted: isConverted ?? this.isConverted,
+  );
 }
 
 class ThemeABTestingService {
@@ -510,11 +505,11 @@ class ThemeABTestingService {
       isConverted: true,
       completedAt: DateTime.now(),
       metrics: Map<String, dynamic>.from(session.metrics)
-        ..['conversionType'] = conversionType ?? 'default',
-        ..['conversionData'] = data,
-        ..['conversionTime'] = DateTime.now().difference(
-          session.startedAt ?? session.assignedAt,
-        ).inMilliseconds,
+        ..['conversionType'] = conversionType ?? 'default'
+        ..['conversionData'] = data
+        ..['conversionTime'] = DateTime.now()
+            .difference(session.startedAt ?? session.assignedAt)
+            .inMilliseconds,
     );
 
     _sessions[sessionIndex] = updatedSession;
@@ -543,7 +538,9 @@ class ThemeABTestingService {
       variantStats[variant.id] = {
         'totalSessions': totalSessions,
         'conversions': conversions,
-        'conversionRate': totalSessions > 0 ? (conversions / totalSessions) * 100 : 0.0,
+        'conversionRate': totalSessions > 0
+            ? (conversions / totalSessions) * 100
+            : 0.0,
         'interactions': _countInteractions(variantSessions),
         'averageSessionDuration': _calculateAverageDuration(variantSessions),
       };
@@ -563,7 +560,9 @@ class ThemeABTestingService {
         'totalSessions': testSessions.length,
         'totalConversions': testSessions.where((s) => s.isConverted).length,
         'overallConversionRate': testSessions.isNotEmpty
-            ? (testSessions.where((s) => s.isConverted).length / testSessions.length) * 100
+            ? (testSessions.where((s) => s.isConverted).length /
+                      testSessions.length) *
+                  100
             : 0.0,
       },
     };
@@ -579,11 +578,15 @@ class ThemeABTestingService {
 
     // Recommandations basées sur les performances
     if (overall['totalSessions'] < 100) {
-      recommendations.add('Augmenter le trafic pour obtenir des résultats statistiquement significatifs');
+      recommendations.add(
+        'Augmenter le trafic pour obtenir des résultats statistiquement significatifs',
+      );
     }
 
     if (overall['overallConversionRate'] < 5.0) {
-      recommendations.add('Le taux de conversion est faible - envisagez de tester des variantes radicalement différentes');
+      recommendations.add(
+        'Le taux de conversion est faible - envisagez de tester des variantes radicalement différentes',
+      );
     }
 
     // Analyser les variantes
@@ -601,7 +604,9 @@ class ThemeABTestingService {
     }
 
     if (bestConversionRate > 15.0) {
-      recommendations.add('La variante $bestVariant performe très bien - envisagez de la déployer');
+      recommendations.add(
+        'La variante $bestVariant performe très bien - envisagez de la déployer',
+      );
     }
 
     // Recommandations basées sur la durée des tests
@@ -609,11 +614,15 @@ class ThemeABTestingService {
     if (test != null && test.startedAt != null) {
       final testDuration = DateTime.now().difference(test.startedAt!);
       if (testDuration > test.minTestDuration * 2) {
-        recommendations.add('Le test dure depuis longtemps - envisagez de l\'analyser et le terminer');
+        recommendations.add(
+          'Le test dure depuis longtemps - envisagez de l\'analyser et le terminer',
+        );
       }
     }
 
-    recommendations.add('Considérez l\'ajout de métriques qualitatives pour mieux comprendre le comportement utilisateur');
+    recommendations.add(
+      'Considérez l\'ajout de métriques qualitatives pour mieux comprendre le comportement utilisateur',
+    );
 
     return recommendations;
   }
@@ -624,13 +633,19 @@ class ThemeABTestingService {
     required List<EventThemeCustomization> themes,
     List<String> targetMetrics = const [],
   }) async {
-    final variants = themes.asMap().entries.map((entry) => ABTestVariant(
-        id: _generateVariantId(),
-        name: 'Thème ${entry.key + 1}',
-        description: 'Variante de test pour le thème ${entry.key + 1}',
-        theme: entry.value,
-        weight: 1,
-      )).toList();
+    final variants = themes
+        .asMap()
+        .entries
+        .map(
+          (entry) => ABTestVariant(
+            id: _generateVariantId(),
+            name: 'Thème ${entry.key + 1}',
+            description: 'Variante de test pour le thème ${entry.key + 1}',
+            theme: entry.value,
+            weight: 1,
+          ),
+        )
+        .toList();
 
     return createTest(
       name: name,
@@ -641,8 +656,10 @@ class ThemeABTestingService {
           ? ['conversion_rate', 'user_satisfaction', 'time_to_conversion']
           : targetMetrics,
       hypothesis: {
-        'null_hypothesis': 'Il n\'y a pas de différence significative entre les thèmes',
-        'alternative_hypothesis': 'Un thème performe significativement mieux que les autres',
+        'null_hypothesis':
+            'Il n\'y a pas de différence significative entre les thèmes',
+        'alternative_hypothesis':
+            'Un thème performe significativement mieux que les autres',
       },
     );
   }
@@ -655,9 +672,7 @@ class ThemeABTestingService {
     List<String> targetMetrics = const [],
   }) async {
     final variants = colorVariations.asMap().entries.map((entry) {
-      final variantTheme = baseTheme.copyWith(
-        primaryColor: entry.value,
-      );
+      final variantTheme = baseTheme.copyWith(primaryColor: entry.value);
 
       return ABTestVariant(
         id: _generateVariantId(),
@@ -678,7 +693,8 @@ class ThemeABTestingService {
           : targetMetrics,
       hypothesis: {
         'null_hypothesis': 'La couleur n\'affecte pas les performances',
-        'alternative_hypothesis': 'Certaines couleurs améliorent les performances',
+        'alternative_hypothesis':
+            'Certaines couleurs améliorent les performances',
       },
     );
   }
@@ -687,10 +703,12 @@ class ThemeABTestingService {
   static List<ABTest> getAllTests() => List.unmodifiable(_tests);
 
   /// Récupère les tests actifs
-  static List<ABTest> getActiveTests() => _tests.where((t) => t.status == TestStatus.active).toList();
+  static List<ABTest> getActiveTests() =>
+      _tests.where((t) => t.status == TestStatus.active).toList();
 
   /// Récupère les tests terminés
-  static List<ABTest> getCompletedTests() => _tests.where((t) => t.status == TestStatus.completed).toList();
+  static List<ABTest> getCompletedTests() =>
+      _tests.where((t) => t.status == TestStatus.completed).toList();
 
   /// Exporte les résultats d'un test
   static Map<String, dynamic> exportTestResults(String testId) {
@@ -712,11 +730,14 @@ class ThemeABTestingService {
 
   // Méthodes privées
 
-  static String _generateTestId() => 'test_${DateTime.now().millisecondsSinceEpoch}_${Random().nextInt(10000)}';
+  static String _generateTestId() =>
+      'test_${DateTime.now().millisecondsSinceEpoch}_${Random().nextInt(10000)}';
 
-  static String _generateVariantId() => 'variant_${DateTime.now().millisecondsSinceEpoch}_${Random().nextInt(1000)}';
+  static String _generateVariantId() =>
+      'variant_${DateTime.now().millisecondsSinceEpoch}_${Random().nextInt(1000)}';
 
-  static String _generateSessionId() => 'session_${DateTime.now().millisecondsSinceEpoch}_${Random().nextInt(100000)}';
+  static String _generateSessionId() =>
+      'session_${DateTime.now().millisecondsSinceEpoch}_${Random().nextInt(100000)}';
 
   static String _selectVariant(ABTest test, Map<String, dynamic> userSegment) {
     final activeVariants = test.variants.where((v) => v.isActive).toList();
@@ -757,16 +778,25 @@ class ThemeABTestingService {
     return variants.first.id;
   }
 
-  static String _selectSequentialVariant(String testId, List<ABTestVariant> variants) {
+  static String _selectSequentialVariant(
+    String testId,
+    List<ABTestVariant> variants,
+  ) {
     final assignmentCount = _userAssignments.values
-        .where((variantId) => _sessions
-            .any((s) => s.testId == testId && s.variantId == variantId))
+        .where(
+          (variantId) => _sessions.any(
+            (s) => s.testId == testId && s.variantId == variantId,
+          ),
+        )
         .length;
 
     return variants[assignmentCount % variants.length].id;
   }
 
-  static String _selectSegmentedVariant(List<ABTestVariant> variants, Map<String, dynamic> segment) {
+  static String _selectSegmentedVariant(
+    List<ABTestVariant> variants,
+    Map<String, dynamic> segment,
+  ) {
     // Logique de sélection basée sur les segments utilisateur
     // Implémentation simplifiée
     return variants.first.id;
@@ -792,7 +822,11 @@ class ThemeABTestingService {
           .where((s) => s.variantId == variant.id)
           .toList();
 
-      final score = _calculateVariantScore(variant, variantSessions, test.targetMetrics);
+      final score = _calculateVariantScore(
+        variant,
+        variantSessions,
+        test.targetMetrics,
+      );
       variantScores[variant.id] = score;
     }
 
@@ -834,7 +868,8 @@ class ThemeABTestingService {
 
     // Score basé sur l'engagement
     final avgDuration = _calculateAverageDuration(sessions);
-    score += (avgDuration.inMinutes / 10) * 20; // Plus de temps = plus d'engagement
+    score +=
+        (avgDuration.inMinutes / 10) * 20; // Plus de temps = plus d'engagement
 
     // Score basé sur les interactions
     final interactionCount = _countInteractions(sessions);
@@ -853,7 +888,9 @@ class ThemeABTestingService {
     return {
       'totalParticipants': totalSessions,
       'totalConversions': totalConversions,
-      'overallConversionRate': totalSessions > 0 ? (totalConversions / totalSessions) * 100 : 0.0,
+      'overallConversionRate': totalSessions > 0
+          ? (totalConversions / totalSessions) * 100
+          : 0.0,
       'averageSessionDuration': _calculateAverageDuration(sessions).inMinutes,
       'testDuration': test.startedAt != null
           ? DateTime.now().difference(test.startedAt!).inDays
@@ -868,7 +905,8 @@ class ThemeABTestingService {
   ) {
     // Calcul simplifié de l'intervalle de confiance
     final winnerScore = scores.values.reduce((a, b) => a > b ? a : b);
-    final confidenceInterval = 1.96 / sqrt(sampleSize); // Approximation pour 95% de confiance
+    final confidenceInterval =
+        1.96 / sqrt(sampleSize); // Approximation pour 95% de confiance
 
     return {
       'confidenceLevel': 0.95,
@@ -882,9 +920,11 @@ class ThemeABTestingService {
     if (sessions.isEmpty) return Duration.zero;
 
     final durations = sessions
-        .map((s) => s.completedAt != null && s.startedAt != null
-            ? s.completedAt!.difference(s.startedAt!)
-            : Duration.zero)
+        .map(
+          (s) => s.completedAt != null && s.startedAt != null
+              ? s.completedAt!.difference(s.startedAt!)
+              : Duration.zero,
+        )
         .where((d) => d.inMilliseconds > 0)
         .toList();
 
@@ -894,7 +934,8 @@ class ThemeABTestingService {
     return Duration(milliseconds: totalMs ~/ durations.length);
   }
 
-  static int _countInteractions(List<ABTestSession> sessions) => sessions.fold(0, (sum, s) => sum + s.interactions.length);
+  static int _countInteractions(List<ABTestSession> sessions) =>
+      sessions.fold(0, (sum, s) => sum + s.interactions.length);
 
   static Map<String, int> _calculateVariantDistribution(
     List<ABTestSession> sessions,
@@ -983,13 +1024,17 @@ class ThemeABTestingService {
       if (sessionsJson != null) {
         final sessionsList = json.decode(sessionsJson) as List;
         _sessions.clear();
-        _sessions.addAll(sessionsList.map((json) => ABTestSession.fromJson(json)));
+        _sessions.addAll(
+          sessionsList.map((json) => ABTestSession.fromJson(json)),
+        );
       }
 
       final assignmentsJson = prefs.getString(_assignmentsKey);
       if (assignmentsJson != null) {
         _userAssignments.clear();
-        _userAssignments.addAll(Map<String, String>.from(json.decode(assignmentsJson)));
+        _userAssignments.addAll(
+          Map<String, String>.from(json.decode(assignmentsJson)),
+        );
       }
     } catch (e) {
       // Gérer l'erreur de chargement
@@ -999,7 +1044,10 @@ class ThemeABTestingService {
   static Future<void> _saveTests() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString(_testsKey, json.encode(_tests.map((t) => t.toJson()).toList()));
+      await prefs.setString(
+        _testsKey,
+        json.encode(_tests.map((t) => t.toJson()).toList()),
+      );
     } catch (e) {
       // Gérer l'erreur de sauvegarde
     }
@@ -1008,7 +1056,10 @@ class ThemeABTestingService {
   static Future<void> _saveSessions() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString(_sessionsKey, json.encode(_sessions.map((s) => s.toJson()).toList()));
+      await prefs.setString(
+        _sessionsKey,
+        json.encode(_sessions.map((s) => s.toJson()).toList()),
+      );
       await prefs.setString(_assignmentsKey, json.encode(_userAssignments));
     } catch (e) {
       // Gérer l'erreur de sauvegarde

@@ -1,28 +1,29 @@
 /// Service de suggestions intelligentes de thèmes avec IA
 library;
+
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mycard/data/models/event_overlay.dart';
 import 'package:mycard/features/events/page_event_theme_preview.dart';
 
 enum ThemePersonality {
-  professional,     // Professionnel et sérieux
-  creative,         // Créatif et coloré
-  minimal,          // Minimaliste et épuré
-  elegant,          // Élégant et sophistiqué
-  modern,           // Moderne et tech
-  traditional,      // Traditionnel et classique
-  playful,          // Ludique et amusant
-  luxurious,        // Luxueux et premium
+  professional, // Professionnel et sérieux
+  creative, // Créatif et coloré
+  minimal, // Minimaliste et épuré
+  elegant, // Élégant et sophistiqué
+  modern, // Moderne et tech
+  traditional, // Traditionnel et classique
+  playful, // Ludique et amusant
+  luxurious, // Luxueux et premium
 }
 
 enum ColorHarmony {
-  complementary,    // Couleurs complémentaires
-  analogous,        // Couleurs analogues
-  triadic,          // Triadique
+  complementary, // Couleurs complémentaires
+  analogous, // Couleurs analogues
+  triadic, // Triadique
   splitComplementary, // Split-complémentaire
-  tetradic,         // Tétradique
-  monochromatic,    // Monochromatique
+  tetradic, // Tétradique
+  monochromatic, // Monochromatique
 }
 
 class ThemeSuggestionService {
@@ -81,9 +82,13 @@ class ThemeSuggestionService {
         break;
 
       case ColorHarmony.monochromatic:
-        colors.add(_hslToRgb(hsl['h']!, hsl['s']!, (hsl['l']! - 0.2).clamp(0.0, 1.0)));
+        colors.add(
+          _hslToRgb(hsl['h']!, hsl['s']!, (hsl['l']! - 0.2).clamp(0.0, 1.0)),
+        );
         colors.add(baseColor);
-        colors.add(_hslToRgb(hsl['h']!, hsl['s']!, (hsl['l']! + 0.2).clamp(0.0, 1.0)));
+        colors.add(
+          _hslToRgb(hsl['h']!, hsl['s']!, (hsl['l']! + 0.2).clamp(0.0, 1.0)),
+        );
         break;
     }
 
@@ -100,7 +105,12 @@ class ThemeSuggestionService {
       case ThemePersonality.minimal:
         return ['Roboto Mono', 'Source Code Pro', 'Fira Code', 'IBM Plex Mono'];
       case ThemePersonality.elegant:
-        return ['Playfair Display', 'Bodoni Moda', 'Cormorant Garamond', 'Merriweather'];
+        return [
+          'Playfair Display',
+          'Bodoni Moda',
+          'Cormorant Garamond',
+          'Merriweather',
+        ];
       case ThemePersonality.modern:
         return ['Poppins', 'Montserrat', 'Nunito', 'Quicksand'];
       case ThemePersonality.traditional:
@@ -108,7 +118,12 @@ class ThemeSuggestionService {
       case ThemePersonality.playful:
         return ['Comic Neue', 'Fredoka One', 'Bubblegum Sans', 'Luckiest Guy'];
       case ThemePersonality.luxurious:
-        return ['Cormorant', 'Playfair Display', 'Libre Baskerville', 'Crimson Text'];
+        return [
+          'Cormorant',
+          'Playfair Display',
+          'Libre Baskerville',
+          'Crimson Text',
+        ];
     }
   }
 
@@ -140,19 +155,23 @@ class ThemeSuggestionService {
     Color secondaryColor;
     String backgroundPattern;
 
-    if (month >= 3 && month <= 5) { // Printemps
+    if (month >= 3 && month <= 5) {
+      // Printemps
       primaryColor = const Color(0xFF8BC34A); // Vert printemps
       secondaryColor = const Color(0xFFFFC107); // Jaune pâle
       backgroundPattern = 'floral';
-    } else if (month >= 6 && month <= 8) { // Été
+    } else if (month >= 6 && month <= 8) {
+      // Été
       primaryColor = const Color(0xFF2196F3); // Bleu ciel
       secondaryColor = const Color(0xFFFFEB3B); // Jaune ensoleillé
       backgroundPattern = 'sun-rays';
-    } else if (month >= 9 && month <= 11) { // Automne
+    } else if (month >= 9 && month <= 11) {
+      // Automne
       primaryColor = const Color(0xFFFF9800); // Orange automne
       secondaryColor = const Color(0xFF795548); // Brun
       backgroundPattern = 'falling-leaves';
-    } else { // Hiver
+    } else {
+      // Hiver
       primaryColor = const Color(0xFF9C27B0); // Violet/bleu hiver
       secondaryColor = const Color(0xFFE1F5FE); // Blanc glacé
       backgroundPattern = 'snowflakes';
@@ -203,7 +222,9 @@ class ThemeSuggestionService {
 
     // Vérifier le contraste
     if (!_hasGoodContrast(theme.primaryColor, theme.backgroundColor)) {
-      suggestions.add('Améliorer le contraste entre la couleur principale et le fond');
+      suggestions.add(
+        'Améliorer le contraste entre la couleur principale et le fond',
+      );
     }
 
     // Vérifier l'harmonie des couleurs
@@ -213,7 +234,9 @@ class ThemeSuggestionService {
 
     // Vérifier la lisibilité
     if (theme.bodyFontSize < 12) {
-      suggestions.add('Augmenter la taille du texte pour une meilleure lisibilité');
+      suggestions.add(
+        'Augmenter la taille du texte pour une meilleure lisibilité',
+      );
     }
 
     // Vérifier les espacements
@@ -248,28 +271,38 @@ class ThemeSuggestionService {
     ThemePersonality personality,
   ) {
     final themes = <EventThemeCustomization>[];
-    final harmonies = [ColorHarmony.complementary, ColorHarmony.analogous, ColorHarmony.triadic];
+    final harmonies = [
+      ColorHarmony.complementary,
+      ColorHarmony.analogous,
+      ColorHarmony.triadic,
+    ];
 
     for (final harmony in harmonies) {
       final palette = generateColorPalette(event.color, harmony);
       final fonts = getFontSuggestions(personality);
       final patterns = getPatternSuggestions(personality);
 
-      themes.add(EventThemeCustomization(
-        templateId: _getTemplateForPersonality(personality),
-        primaryColor: palette[0],
-        secondaryColor: palette.length > 1 ? palette[1] : palette[0],
-        accentColor: palette.length > 2 ? palette[2] : palette[0],
-        backgroundColor: _getBackgroundForPersonality(personality),
-        textColor: _getTextColorForBackground(_getBackgroundForPersonality(personality)),
-        fontFamily: fonts[_random.nextInt(fonts.length)],
-        titleFontSize: _getTitleSizeForPersonality(personality),
-        bodyFontSize: _getBodySizeForPersonality(personality),
-        showBackgroundPattern: _random.nextBool() && patterns.isNotEmpty,
-        backgroundPattern: patterns.isNotEmpty ? patterns[_random.nextInt(patterns.length)] : 'none',
-        borderRadius: _getBorderRadiusForPersonality(personality),
-        shadowOpacity: _getShadowOpacityForPersonality(personality),
-      ));
+      themes.add(
+        EventThemeCustomization(
+          templateId: _getTemplateForPersonality(personality),
+          primaryColor: palette[0],
+          secondaryColor: palette.length > 1 ? palette[1] : palette[0],
+          accentColor: palette.length > 2 ? palette[2] : palette[0],
+          backgroundColor: _getBackgroundForPersonality(personality),
+          textColor: _getTextColorForBackground(
+            _getBackgroundForPersonality(personality),
+          ),
+          fontFamily: fonts[_random.nextInt(fonts.length)],
+          titleFontSize: _getTitleSizeForPersonality(personality),
+          bodyFontSize: _getBodySizeForPersonality(personality),
+          showBackgroundPattern: _random.nextBool() && patterns.isNotEmpty,
+          backgroundPattern: patterns.isNotEmpty
+              ? patterns[_random.nextInt(patterns.length)]
+              : 'none',
+          borderRadius: _getBorderRadiusForPersonality(personality),
+          shadowOpacity: _getShadowOpacityForPersonality(personality),
+        ),
+      );
     }
 
     return themes;
@@ -365,81 +398,88 @@ class ThemeSuggestionService {
   }
 
   // Méthodes de création de thèmes basés sur l'humeur
-  static EventThemeCustomization _createJoyfulTheme() => const EventThemeCustomization(
-      primaryColor: Color(0xFFFFD600),
-      secondaryColor: Color(0xFFFF6B6B),
-      accentColor: Color(0xFF4ECDC4),
-      backgroundColor: Color(0xFFFFF8E1),
-      showBackgroundPattern: true,
-      backgroundPattern: 'confetti',
-      borderRadius: 20.0,
-      shadowOpacity: 0.25,
-    );
+  static EventThemeCustomization _createJoyfulTheme() =>
+      const EventThemeCustomization(
+        primaryColor: Color(0xFFFFD600),
+        secondaryColor: Color(0xFFFF6B6B),
+        accentColor: Color(0xFF4ECDC4),
+        backgroundColor: Color(0xFFFFF8E1),
+        showBackgroundPattern: true,
+        backgroundPattern: 'confetti',
+        borderRadius: 20.0,
+        shadowOpacity: 0.25,
+      );
 
-  static EventThemeCustomization _createCalmTheme() => const EventThemeCustomization(
-      primaryColor: Color(0xFF81C784),
-      secondaryColor: Color(0xFF64B5F6),
-      accentColor: Color(0xFF9575CD),
-      backgroundColor: Color(0xFFF1F8E9),
-      showBackgroundPattern: true,
-      backgroundPattern: 'waves',
-      borderRadius: 16.0,
-      shadowOpacity: 0.1,
-    );
+  static EventThemeCustomization _createCalmTheme() =>
+      const EventThemeCustomization(
+        primaryColor: Color(0xFF81C784),
+        secondaryColor: Color(0xFF64B5F6),
+        accentColor: Color(0xFF9575CD),
+        backgroundColor: Color(0xFFF1F8E9),
+        showBackgroundPattern: true,
+        backgroundPattern: 'waves',
+        borderRadius: 16.0,
+        shadowOpacity: 0.1,
+      );
 
-  static EventThemeCustomization _createEnergeticTheme() => const EventThemeCustomization(
-      primaryColor: Color(0xFFFF5722),
-      secondaryColor: Color(0xFFFFC107),
-      accentColor: Color(0xFFE91E63),
-      backgroundColor: Colors.white,
-      showBackgroundPattern: true,
-      backgroundPattern: 'dynamic-lines',
-      borderRadius: 12.0,
-      shadowOpacity: 0.3,
-    );
+  static EventThemeCustomization _createEnergeticTheme() =>
+      const EventThemeCustomization(
+        primaryColor: Color(0xFFFF5722),
+        secondaryColor: Color(0xFFFFC107),
+        accentColor: Color(0xFFE91E63),
+        backgroundColor: Colors.white,
+        showBackgroundPattern: true,
+        backgroundPattern: 'dynamic-lines',
+        borderRadius: 12.0,
+        shadowOpacity: 0.3,
+      );
 
-  static EventThemeCustomization _createProfessionalTheme() => const EventThemeCustomization(
-      primaryColor: Color(0xFF37474F),
-      secondaryColor: Color(0xFF607D8B),
-      accentColor: Color(0xFF1976D2),
-      backgroundColor: Color(0xFFF5F5F5),
-      showBackgroundPattern: false,
-      borderRadius: 8.0,
-      shadowOpacity: 0.15,
-    );
+  static EventThemeCustomization _createProfessionalTheme() =>
+      const EventThemeCustomization(
+        primaryColor: Color(0xFF37474F),
+        secondaryColor: Color(0xFF607D8B),
+        accentColor: Color(0xFF1976D2),
+        backgroundColor: Color(0xFFF5F5F5),
+        showBackgroundPattern: false,
+        borderRadius: 8.0,
+        shadowOpacity: 0.15,
+      );
 
-  static EventThemeCustomization _createRomanticTheme() => const EventThemeCustomization(
-      primaryColor: Color(0xFFE91E63),
-      secondaryColor: Color(0xFFF48FB1),
-      accentColor: Color(0xFFCE93D8),
-      backgroundColor: Color(0xFFFCE4EC),
-      showBackgroundPattern: true,
-      backgroundPattern: 'hearts',
-      borderRadius: 18.0,
-      shadowOpacity: 0.2,
-    );
+  static EventThemeCustomization _createRomanticTheme() =>
+      const EventThemeCustomization(
+        primaryColor: Color(0xFFE91E63),
+        secondaryColor: Color(0xFFF48FB1),
+        accentColor: Color(0xFFCE93D8),
+        backgroundColor: Color(0xFFFCE4EC),
+        showBackgroundPattern: true,
+        backgroundPattern: 'hearts',
+        borderRadius: 18.0,
+        shadowOpacity: 0.2,
+      );
 
-  static EventThemeCustomization _createMysteriousTheme() => const EventThemeCustomization(
-      primaryColor: Color(0xFF4A148C),
-      secondaryColor: Color(0xFF1A237E),
-      accentColor: Color(0xFFB71C1C),
-      backgroundColor: Color(0xFF263238),
-      textColor: Color(0xFFECEFF1),
-      showBackgroundPattern: true,
-      backgroundPattern: 'stars',
-      borderRadius: 6.0,
-      shadowOpacity: 0.4,
-    );
+  static EventThemeCustomization _createMysteriousTheme() =>
+      const EventThemeCustomization(
+        primaryColor: Color(0xFF4A148C),
+        secondaryColor: Color(0xFF1A237E),
+        accentColor: Color(0xFFB71C1C),
+        backgroundColor: Color(0xFF263238),
+        textColor: Color(0xFFECEFF1),
+        showBackgroundPattern: true,
+        backgroundPattern: 'stars',
+        borderRadius: 6.0,
+        shadowOpacity: 0.4,
+      );
 
-  static EventThemeCustomization _createBalancedTheme() => const EventThemeCustomization(
-      primaryColor: Color(0xFF2196F3),
-      secondaryColor: Color(0xFF4CAF50),
-      accentColor: Color(0xFFFF9800),
-      backgroundColor: Colors.white,
-      showBackgroundPattern: false,
-      borderRadius: 12.0,
-      shadowOpacity: 0.2,
-    );
+  static EventThemeCustomization _createBalancedTheme() =>
+      const EventThemeCustomization(
+        primaryColor: Color(0xFF2196F3),
+        secondaryColor: Color(0xFF4CAF50),
+        accentColor: Color(0xFFFF9800),
+        backgroundColor: Colors.white,
+        showBackgroundPattern: false,
+        borderRadius: 12.0,
+        shadowOpacity: 0.2,
+      );
 
   // Utilitaires pour les couleurs
   static Map<String, double> _rgbToHsl(Color color) {
@@ -481,20 +521,25 @@ class ThemeSuggestionService {
       dynamic hue2rgb(p, q, t) {
         if (t < 0) t += 1;
         if (t > 1) t -= 1;
-        if (t < 1/6) return p + (q - p) * 6 * t;
-        if (t < 1/2) return q;
-        if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+        if (t < 1 / 6) return p + (q - p) * 6 * t;
+        if (t < 1 / 2) return q;
+        if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
         return p;
       }
 
       final q = l < 0.5 ? l * (1 + s) : l + s - l * s;
       final p = 2 * l - q;
-      r = hue2rgb(p, q, h + 1/3);
+      r = hue2rgb(p, q, h + 1 / 3);
       g = hue2rgb(p, q, h);
-      b = hue2rgb(p, q, h - 1/3);
+      b = hue2rgb(p, q, h - 1 / 3);
     }
 
-    return Color.fromARGB(255, (r * 255).round(), (g * 255).round(), (b * 255).round());
+    return Color.fromARGB(
+      255,
+      (r * 255).round(),
+      (g * 255).round(),
+      (b * 255).round(),
+    );
   }
 
   static bool _hasGoodContrast(Color color1, Color color2) {
@@ -509,7 +554,8 @@ class ThemeSuggestionService {
     final hsl2 = _rgbToHsl(color2);
 
     final hueDiff = (hsl1['h']! - hsl2['h']!).abs();
-    return hueDiff <= 60 || hueDiff >= 300 || // Analogues
-           (hueDiff >= 120 && hueDiff <= 240); // Triadique/complémentaire
+    return hueDiff <= 60 ||
+        hueDiff >= 300 || // Analogues
+        (hueDiff >= 120 && hueDiff <= 240); // Triadique/complémentaire
   }
 }

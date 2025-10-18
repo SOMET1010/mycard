@@ -13,14 +13,14 @@ class CardPreset {
   });
 
   factory CardPreset.fromJson(Map<String, dynamic> json) => CardPreset(
-        id: json['id'] as String,
-        name: json['name'] as String,
-        templateId: json['templateId'] as String,
-        eventOverlayId: json['eventOverlayId'] as String?,
-        customColors: Map<String, String>.from(json['customColors'] ?? {}),
-        fontFamily: json['fontFamily'] as String?,
-        sizeKey: json['sizeKey'] as String?,
-      );
+    id: json['id'] as String,
+    name: json['name'] as String,
+    templateId: json['templateId'] as String,
+    eventOverlayId: json['eventOverlayId'] as String?,
+    customColors: Map<String, String>.from(json['customColors'] ?? {}),
+    fontFamily: json['fontFamily'] as String?,
+    sizeKey: json['sizeKey'] as String?,
+  );
 
   final String id;
   final String name;
@@ -31,13 +31,12 @@ class CardPreset {
   final String? sizeKey;
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'templateId': templateId,
-        'eventOverlayId': eventOverlayId,
-        'customColors': customColors,
-        'fontFamily': fontFamily,
-        'sizeKey': sizeKey,
-      };
+    'id': id,
+    'name': name,
+    'templateId': templateId,
+    'eventOverlayId': eventOverlayId,
+    'customColors': customColors,
+    'fontFamily': fontFamily,
+    'sizeKey': sizeKey,
+  };
 }
-

@@ -1,5 +1,6 @@
 /// Repository pour la gestion des cartes de visite
 library;
+
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -97,18 +98,22 @@ class CardsRepository {
   /// Récupère les cartes triées par date de création
   List<BusinessCard> getCardsSortedByDate({bool descending = true}) {
     final cards = getAllCards();
-    cards.sort((a, b) => descending
-        ? b.createdAt.compareTo(a.createdAt)
-        : a.createdAt.compareTo(b.createdAt));
+    cards.sort(
+      (a, b) => descending
+          ? b.createdAt.compareTo(a.createdAt)
+          : a.createdAt.compareTo(b.createdAt),
+    );
     return cards;
   }
 
   /// Récupère les cartes triées par nom
   List<BusinessCard> getCardsSortedByName({bool ascending = true}) {
     final cards = getAllCards();
-    cards.sort((a, b) => ascending
-        ? a.fullName.toLowerCase().compareTo(b.fullName.toLowerCase())
-        : b.fullName.toLowerCase().compareTo(a.fullName.toLowerCase()));
+    cards.sort(
+      (a, b) => ascending
+          ? a.fullName.toLowerCase().compareTo(b.fullName.toLowerCase())
+          : b.fullName.toLowerCase().compareTo(a.fullName.toLowerCase()),
+    );
     return cards;
   }
 
@@ -117,16 +122,23 @@ class CardsRepository {
     if (query.isEmpty) return getAllCards();
 
     final lowerQuery = query.toLowerCase();
-    return getAllCards().where((card) => card.fullName.toLowerCase().contains(lowerQuery) ||
-             (card.company?.toLowerCase().contains(lowerQuery) ?? false) ||
-             card.email.toLowerCase().contains(lowerQuery)).toList();
+    return getAllCards()
+        .where(
+          (card) =>
+              card.fullName.toLowerCase().contains(lowerQuery) ||
+              (card.company?.toLowerCase().contains(lowerQuery) ?? false) ||
+              card.email.toLowerCase().contains(lowerQuery),
+        )
+        .toList();
   }
 
   /// Filtre les cartes par template
-  List<BusinessCard> getCardsByTemplate(String templateId) => getAllCards().where((card) => card.templateId == templateId).toList();
+  List<BusinessCard> getCardsByTemplate(String templateId) =>
+      getAllCards().where((card) => card.templateId == templateId).toList();
 
   /// Filtre les cartes par événement
-  List<BusinessCard> getCardsByEvent(String eventId) => getAllCards().where((card) => card.eventOverlayId == eventId).toList();
+  List<BusinessCard> getCardsByEvent(String eventId) =>
+      getAllCards().where((card) => card.eventOverlayId == eventId).toList();
 
   /// Compte le nombre total de cartes
   int get cardsCount => _cardsBox.length;
@@ -143,7 +155,10 @@ class CardsRepository {
   String exportAllToJson() {
     final cards = getAllCards();
     final jsonList = cards.map((card) => card.toJson()).toList();
-    return jsonEncode({'cards': jsonList, 'exportedAt': DateTime.now().toIso8601String()});
+    return jsonEncode({
+      'cards': jsonList,
+      'exportedAt': DateTime.now().toIso8601String(),
+    });
   }
 
   /// Importe des cartes depuis un JSON
@@ -192,7 +207,7 @@ class CardsRepository {
 
       return [];
     } catch (e) {
-      print('Erreur lors de l\'import: $e');
+      debugPrint('Erreur lors de l\'import: $e');
       return [];
     }
   }

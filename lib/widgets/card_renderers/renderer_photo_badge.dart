@@ -1,5 +1,6 @@
 /// Renderer: avatar/photo à gauche, infos à droite
 library;
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mycard/data/models/card_template.dart';
@@ -60,30 +61,33 @@ class PhotoBadgeRenderer implements CardRenderer {
                             ),
                           )
                         : File(logoPath).existsSync()
-                            ? Image.file(
-                                File(logoPath),
-                                width: 48,
-                                height: 48,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) => Text(
-                                  _initials(fullName),
-                                  style: TextStyle(
-                                    color: accent,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              )
-                            : Text(
-                                _initials(fullName),
-                                style: TextStyle(
-                                  color: accent,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                        ? Image.file(
+                            File(logoPath),
+                            width: 48,
+                            height: 48,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) => Text(
+                              _initials(fullName),
+                              style: TextStyle(
+                                color: accent,
+                                fontWeight: FontWeight.bold,
                               ),
+                            ),
+                          )
+                        : Text(
+                            _initials(fullName),
+                            style: TextStyle(
+                              color: accent,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                   )
                 : Text(
                     _initials(fullName),
-                    style: TextStyle(color: accent, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      color: accent,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
           ),
           const SizedBox(width: 12),
@@ -96,14 +100,23 @@ class PhotoBadgeRenderer implements CardRenderer {
                   fullName.isEmpty ? 'Votre Nom' : fullName,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: accent, fontFamily: fontFamily),
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                    color: accent,
+                    fontFamily: fontFamily,
+                  ),
                 ),
                 if (title.isNotEmpty)
                   Text(
                     title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 13, color: primary, fontFamily: fontFamily),
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: primary,
+                      fontFamily: fontFamily,
+                    ),
                   ),
                 const SizedBox(height: 6),
                 _contact(Icons.phone, phone, primary, fontFamily),
@@ -139,7 +152,11 @@ class PhotoBadgeRenderer implements CardRenderer {
               text,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 12, color: color, fontFamily: fontFamily),
+              style: TextStyle(
+                fontSize: 12,
+                color: color,
+                fontFamily: fontFamily,
+              ),
             ),
           ),
         ],
@@ -196,4 +213,3 @@ class PhotoBadgeRenderer implements CardRenderer {
     );
   }
 }
-

@@ -1,5 +1,6 @@
 /// Renderer de carte corporate
 library;
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mycard/app/theme.dart';
@@ -36,12 +37,7 @@ class CorporateRenderer implements CardRenderer {
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: AppTheme.greenWhite,
-        border: Border(
-          left: BorderSide(
-            color: primaryColor,
-            width: 4,
-          ),
-        ),
+        border: Border(left: BorderSide(color: primaryColor, width: 4)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,13 +65,13 @@ class CorporateRenderer implements CardRenderer {
                       File(logoPath),
                       fit: BoxFit.contain,
                       errorBuilder: (context, error, stackTrace) => ColoredBox(
-                          color: Colors.grey.withValues(alpha: 0.1),
-                          child: const Icon(
-                            Icons.business,
-                            color: Colors.grey,
-                            size: 24,
-                          ),
+                        color: Colors.grey.withValues(alpha: 0.1),
+                        child: const Icon(
+                          Icons.business,
+                          color: Colors.grey,
+                          size: 24,
                         ),
+                      ),
                     ),
                   ),
                 ),
@@ -124,7 +120,9 @@ class CorporateRenderer implements CardRenderer {
           ),
 
           // Séparateur
-          if (phone.isNotEmpty || email.isNotEmpty || website?.isNotEmpty == true)
+          if (phone.isNotEmpty ||
+              email.isNotEmpty ||
+              website?.isNotEmpty == true)
             Container(
               width: double.infinity,
               height: 1,
@@ -133,7 +131,9 @@ class CorporateRenderer implements CardRenderer {
             ),
 
           // Informations de contact
-          if (phone.isNotEmpty || email.isNotEmpty || website?.isNotEmpty == true)
+          if (phone.isNotEmpty ||
+              email.isNotEmpty ||
+              website?.isNotEmpty == true)
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -186,38 +186,33 @@ class CorporateRenderer implements CardRenderer {
     String text,
     Color color,
     String? fontFamily,
-  ) =>
-      Padding(
-        padding: const EdgeInsets.only(bottom: 6),
-        child: Row(
-          children: [
-            Container(
-              width: 20,
-              height: 20,
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Icon(
-                icon,
-                size: 12,
-                color: color,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                text,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: color,
-                  fontFamily: fontFamily,
-                ),
-              ),
-            ),
-          ],
+  ) => Padding(
+    padding: const EdgeInsets.only(bottom: 6),
+    child: Row(
+      children: [
+        Container(
+          width: 20,
+          height: 20,
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: Icon(icon, size: 12, color: color),
         ),
-      );
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            text,
+            style: TextStyle(
+              fontSize: 12,
+              color: color,
+              fontFamily: fontFamily,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 
   Widget _buildAddressSection(
     String? address,
@@ -250,17 +245,19 @@ class CorporateRenderer implements CardRenderer {
             ),
           ),
           const SizedBox(height: 4),
-          ...addressParts.map((part) => Padding(
-                padding: const EdgeInsets.only(bottom: 2),
-                child: Text(
-                  part,
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: color,
-                    fontFamily: fontFamily,
-                  ),
+          ...addressParts.map(
+            (part) => Padding(
+              padding: const EdgeInsets.only(bottom: 2),
+              child: Text(
+                part,
+                style: TextStyle(
+                  fontSize: 11,
+                  color: color,
+                  fontFamily: fontFamily,
                 ),
-              )),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -297,12 +294,7 @@ class CorporateRenderer implements CardRenderer {
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: AppTheme.greenWhite,
-        border: Border(
-          left: BorderSide(
-            color: primaryColor,
-            width: 4,
-          ),
-        ),
+        border: Border(left: BorderSide(color: primaryColor, width: 4)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -353,11 +345,7 @@ class CorporateRenderer implements CardRenderer {
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Container(
-                      width: 40,
-                      height: 2,
-                      color: accentColor,
-                    ),
+                    Container(width: 40, height: 2, color: accentColor),
                   ],
                 ),
               ),
@@ -410,35 +398,37 @@ class CorporateRenderer implements CardRenderer {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    ...backServices.map((service) => Padding(
-                          padding: const EdgeInsets.only(bottom: 6),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: 6,
-                                height: 2,
-                                margin: const EdgeInsets.only(top: 6),
-                                decoration: BoxDecoration(
-                                  color: accentColor,
-                                  borderRadius: BorderRadius.circular(1),
+                    ...backServices.map(
+                      (service) => Padding(
+                        padding: const EdgeInsets.only(bottom: 6),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 6,
+                              height: 2,
+                              margin: const EdgeInsets.only(top: 6),
+                              decoration: BoxDecoration(
+                                color: accentColor,
+                                borderRadius: BorderRadius.circular(1),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                service,
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  color: secondaryColor,
+                                  fontFamily: fontFamily,
+                                  height: 1.4,
                                 ),
                               ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Text(
-                                  service,
-                                  style: TextStyle(
-                                    fontSize: 11,
-                                    color: secondaryColor,
-                                    fontFamily: fontFamily,
-                                    height: 1.4,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                     const SizedBox(height: 16),
                   ],
 
@@ -461,10 +451,7 @@ class CorporateRenderer implements CardRenderer {
                       decoration: BoxDecoration(
                         color: primaryColor.withValues(alpha: 0.05),
                         border: Border(
-                          left: BorderSide(
-                            color: primaryColor,
-                            width: 2,
-                          ),
+                          left: BorderSide(color: primaryColor, width: 2),
                         ),
                       ),
                       child: Text(
@@ -481,7 +468,8 @@ class CorporateRenderer implements CardRenderer {
                   ],
 
                   // Réseaux sociaux
-                  if (backSocialLinks != null && backSocialLinks.isNotEmpty) ...[
+                  if (backSocialLinks != null &&
+                      backSocialLinks.isNotEmpty) ...[
                     Text(
                       'RÉSEAUX SOCIAUX',
                       style: TextStyle(
@@ -559,7 +547,11 @@ class CorporateRenderer implements CardRenderer {
     );
   }
 
-  Color _getColor(String colorType, CardTemplate template, Map<String, String> customColors) {
+  Color _getColor(
+    String colorType,
+    CardTemplate template,
+    Map<String, String> customColors,
+  ) {
     final customColor = customColors[colorType];
     if (customColor != null) {
       final cleanColor = customColor.startsWith('#')

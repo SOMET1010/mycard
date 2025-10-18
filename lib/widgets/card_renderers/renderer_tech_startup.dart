@@ -1,5 +1,6 @@
 /// Renderer pour carte Tech Startup
 library;
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mycard/data/models/card_template.dart';
@@ -78,14 +79,15 @@ class TechStartupRenderer implements CardRenderer {
                       child: Image.file(
                         File(logoPath),
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => ColoredBox(
-                            color: Colors.white.withValues(alpha: 0.1),
-                            child: const Icon(
-                              Icons.code,
-                              color: Colors.white,
-                              size: 30,
+                        errorBuilder: (context, error, stackTrace) =>
+                            ColoredBox(
+                              color: Colors.white.withValues(alpha: 0.1),
+                              child: const Icon(
+                                Icons.code,
+                                color: Colors.white,
+                                size: 30,
+                              ),
                             ),
-                          ),
                       ),
                     ),
                   ),
@@ -117,7 +119,10 @@ class TechStartupRenderer implements CardRenderer {
                       if (company?.isNotEmpty == true) ...[
                         const SizedBox(height: 4),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             color: accentColor,
                             borderRadius: BorderRadius.circular(12),
@@ -152,17 +157,39 @@ class TechStartupRenderer implements CardRenderer {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (phone.isNotEmpty)
-                    _buildModernContact(Icons.phone, phone, primaryColor, fontFamily),
+                    _buildModernContact(
+                      Icons.phone,
+                      phone,
+                      primaryColor,
+                      fontFamily,
+                    ),
                   if (email.isNotEmpty)
-                    _buildModernContact(Icons.email, email, secondaryColor, fontFamily),
+                    _buildModernContact(
+                      Icons.email,
+                      email,
+                      secondaryColor,
+                      fontFamily,
+                    ),
                   if (website?.isNotEmpty == true)
-                    _buildModernContact(Icons.language, website!, accentColor, fontFamily),
+                    _buildModernContact(
+                      Icons.language,
+                      website!,
+                      accentColor,
+                      fontFamily,
+                    ),
 
                   if ((address?.isNotEmpty == true) ||
                       (city?.isNotEmpty == true) ||
                       (postalCode?.isNotEmpty == true)) ...[
                     const SizedBox(height: 8),
-                    _buildAddressSection(address, city, postalCode, country, secondaryColor, fontFamily),
+                    _buildAddressSection(
+                      address,
+                      city,
+                      postalCode,
+                      country,
+                      secondaryColor,
+                      fontFamily,
+                    ),
                   ],
                 ],
               ),
@@ -174,7 +201,10 @@ class TechStartupRenderer implements CardRenderer {
               Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
                     decoration: BoxDecoration(
                       color: accentColor.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(8),
@@ -191,7 +221,10 @@ class TechStartupRenderer implements CardRenderer {
                   ),
                   const SizedBox(width: 6),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
                     decoration: BoxDecoration(
                       color: secondaryColor.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(8),
@@ -220,38 +253,33 @@ class TechStartupRenderer implements CardRenderer {
     String text,
     Color color,
     String? fontFamily,
-  ) =>
-      Padding(
-        padding: const EdgeInsets.only(bottom: 8),
-        child: Row(
-          children: [
-            Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Icon(
-                icon,
-                size: 16,
-                color: color,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                text,
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Colors.grey.shade700,
-                  fontFamily: fontFamily,
-                ),
-              ),
-            ),
-          ],
+  ) => Padding(
+    padding: const EdgeInsets.only(bottom: 8),
+    child: Row(
+      children: [
+        Container(
+          width: 32,
+          height: 32,
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(icon, size: 16, color: color),
         ),
-      );
+        const SizedBox(width: 12),
+        Expanded(
+          child: Text(
+            text,
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.grey.shade700,
+              fontFamily: fontFamily,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 
   Widget _buildAddressSection(
     String? address,
@@ -278,11 +306,7 @@ class TechStartupRenderer implements CardRenderer {
             color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Icon(
-            Icons.location_on,
-            size: 16,
-            color: color,
-          ),
+          child: Icon(Icons.location_on, size: 16, color: color),
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -299,7 +323,11 @@ class TechStartupRenderer implements CardRenderer {
     );
   }
 
-  Color _getColor(String colorType, CardTemplate template, Map<String, String> customColors) {
+  Color _getColor(
+    String colorType,
+    CardTemplate template,
+    Map<String, String> customColors,
+  ) {
     final customColor = customColors[colorType];
     if (customColor != null) {
       final cleanColor = customColor.startsWith('#')

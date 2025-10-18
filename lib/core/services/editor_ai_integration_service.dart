@@ -1,22 +1,29 @@
 /// Service d'intégration entre le générateur IA et l'éditeur
 library;
+
 import 'package:flutter/material.dart';
 import 'package:mycard/core/services/ai_color_generator_service.dart';
 import 'package:mycard/data/models/business_card.dart';
 
 class EditorAIIntegrationService {
-  static Map<String, String> _convertPaletteToCustomColors(AIColorPalette palette) => {
-      'primary': _colorToHex(palette.primaryColor),
-      'secondary': _colorToHex(palette.secondaryColor),
-      'accent': _colorToHex(palette.accentColor),
-      'background': _colorToHex(palette.backgroundColor),
-      'text': _colorToHex(palette.textColor),
-    };
+  static Map<String, String> _convertPaletteToCustomColors(
+    AIColorPalette palette,
+  ) => {
+    'primary': _colorToHex(palette.primaryColor),
+    'secondary': _colorToHex(palette.secondaryColor),
+    'accent': _colorToHex(palette.accentColor),
+    'background': _colorToHex(palette.backgroundColor),
+    'text': _colorToHex(palette.textColor),
+  };
 
-  static String _colorToHex(Color color) => '#${color.toARGB32().toRadixString(16).padLeft(8, '0').substring(2).toUpperCase()}';
+  static String _colorToHex(Color color) =>
+      '#${color.toARGB32().toRadixString(16).padLeft(8, '0').substring(2).toUpperCase()}';
 
   /// Applique une palette IA à une carte de visite
-  static BusinessCard applyPaletteToCard(BusinessCard card, AIColorPalette palette) {
+  static BusinessCard applyPaletteToCard(
+    BusinessCard card,
+    AIColorPalette palette,
+  ) {
     final customColors = _convertPaletteToCustomColors(palette);
 
     return card.copyWith(
@@ -33,7 +40,9 @@ class EditorAIIntegrationService {
     if (card.customColors.isNotEmpty) {
       final primaryHex = card.customColors['primary'];
       if (primaryHex != null && primaryHex.startsWith('#')) {
-        baseColor = Color(int.parse(primaryHex.substring(1), radix: 16) + 0xFF000000);
+        baseColor = Color(
+          int.parse(primaryHex.substring(1), radix: 16) + 0xFF000000,
+        );
       }
     }
 
@@ -49,29 +58,40 @@ class EditorAIIntegrationService {
     final recommendations = <String>[];
 
     if (card.customColors.isEmpty) {
-      recommendations.add('Ajoutez des couleurs personnalisées pour rendre votre carte plus unique');
+      recommendations.add(
+        'Ajoutez des couleurs personnalisées pour rendre votre carte plus unique',
+      );
       return recommendations;
     }
 
     // Vérifier le contraste
-    if (card.customColors.containsKey('text') && card.customColors.containsKey('background')) {
+    if (card.customColors.containsKey('text') &&
+        card.customColors.containsKey('background')) {
       final textHex = card.customColors['text']!;
       final bgHex = card.customColors['background']!;
 
       if (textHex.startsWith('#') && bgHex.startsWith('#')) {
-        final textColor = Color(int.parse(textHex.substring(1), radix: 16) + 0xFF000000);
-        final bgColor = Color(int.parse(bgHex.substring(1), radix: 16) + 0xFF000000);
+        final textColor = Color(
+          int.parse(textHex.substring(1), radix: 16) + 0xFF000000,
+        );
+        final bgColor = Color(
+          int.parse(bgHex.substring(1), radix: 16) + 0xFF000000,
+        );
 
         final contrast = _calculateContrastRatio(textColor, bgColor);
         if (contrast < 4.5) {
-          recommendations.add('Améliorez le contraste entre le texte et le fond pour une meilleure lisibilité');
+          recommendations.add(
+            'Améliorez le contraste entre le texte et le fond pour une meilleure lisibilité',
+          );
         }
       }
     }
 
     // Vérifier l'harmonie des couleurs
     if (card.customColors.length >= 2) {
-      recommendations.add('Utilisez le générateur IA pour créer des palettes harmonieuses');
+      recommendations.add(
+        'Utilisez le générateur IA pour créer des palettes harmonieuses',
+      );
     }
 
     return recommendations;
@@ -88,10 +108,12 @@ class EditorAIIntegrationService {
   }
 
   /// Crée une variante de palette optimisée pour l'accessibilité
-  static AIColorPalette createAccessibleVariant(AIColorPalette originalPalette) => AIColorGeneratorService.generatePalette(
-      method: ColorGenerationMethod.accessibility,
-      baseColor: originalPalette.primaryColor,
-    );
+  static AIColorPalette createAccessibleVariant(
+    AIColorPalette originalPalette,
+  ) => AIColorGeneratorService.generatePalette(
+    method: ColorGenerationMethod.accessibility,
+    baseColor: originalPalette.primaryColor,
+  );
 
   /// Analyse une carte et suggère la meilleure méthode de génération
   static ColorGenerationMethod suggestBestMethod(BusinessCard card) {

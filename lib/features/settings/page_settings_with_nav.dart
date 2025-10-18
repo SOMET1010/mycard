@@ -1,5 +1,6 @@
 /// Page des paramètres avec barre de navigation
 library;
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,133 +12,128 @@ class SettingsPageWithNav extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => Scaffold(
-      appBar: AppBar(
-        title: const Text('Paramètres'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/gallery'),
-        ),
+    appBar: AppBar(
+      title: const Text('Paramètres'),
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back),
+        onPressed: () => context.go('/gallery'),
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16.0),
-        children: [
-          _ProfileHeader(ref: ref),
-          const SizedBox(height: 12),
-          _buildSection(
-            title: 'Personnalisation',
-            children: [
-              ListTile(
-                leading: const Icon(Icons.person),
-                title: const Text('Profil'),
-                subtitle: const Text('Informations personnelles'),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () {
-                  // TODO: Implémenter la page de profil
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.palette),
-                title: const Text('Thème'),
-                subtitle: const Text('Personnaliser l\'apparence'),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () {
-                  _showThemeDialog(context);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.language),
-                title: const Text('Langue'),
-                subtitle: const Text('Français'),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () {
-                  _showLanguageDialog(context);
-                },
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          _buildSection(
-            title: 'Application',
-            children: [
-              ListTile(
-                leading: const Icon(Icons.info),
-                title: const Text('À propos'),
-                subtitle: const Text('Version et informations'),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () {
-                  _showAboutDialog(context);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.help),
-                title: const Text('Aide'),
-                subtitle: const Text('Centre d\'aide'),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () {
-                  // TODO: Implémenter le centre d'aide
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.privacy_tip),
-                title: const Text('Confidentialité'),
-                subtitle: const Text('Politique de confidentialité'),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () {
-                  _showPrivacyDialog(context);
-                },
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          _buildSection(
-            title: 'Compte',
-            children: [
-              ListTile(
-                leading: const Icon(Icons.logout, color: Colors.red),
-                title: const Text('Se déconnecter'),
-                onTap: () async {
-                  await ref.read(authRepositoryProvider).signOut();
-                  if (context.mounted) context.go('/login');
-                },
-              ),
-            ],
-          ),
-          const SizedBox(height: 32),
-          Center(
-            child: Text(
-              'MyCard v1.0.0',
-              style: TextStyle(
-                color: Colors.grey[600],
-                fontSize: 12,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-
-  Widget _buildSection({required String title, required List<Widget> children}) => Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    ),
+    body: ListView(
+      padding: const EdgeInsets.all(16.0),
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Text(
-            title,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.blue,
+        _ProfileHeader(ref: ref),
+        const SizedBox(height: 12),
+        _buildSection(
+          title: 'Personnalisation',
+          children: [
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text('Profil'),
+              subtitle: const Text('Informations personnelles'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                // TODO: Implémenter la page de profil
+              },
             ),
-          ),
+            ListTile(
+              leading: const Icon(Icons.palette),
+              title: const Text('Thème'),
+              subtitle: const Text('Personnaliser l\'apparence'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                _showThemeDialog(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.language),
+              title: const Text('Langue'),
+              subtitle: const Text('Français'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                _showLanguageDialog(context);
+              },
+            ),
+          ],
         ),
-        Card(
-          elevation: 2,
-          child: Column(
-            children: children,
+        const SizedBox(height: 16),
+        _buildSection(
+          title: 'Application',
+          children: [
+            ListTile(
+              leading: const Icon(Icons.info),
+              title: const Text('À propos'),
+              subtitle: const Text('Version et informations'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                _showAboutDialog(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.help),
+              title: const Text('Aide'),
+              subtitle: const Text('Centre d\'aide'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                // TODO: Implémenter le centre d'aide
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.privacy_tip),
+              title: const Text('Confidentialité'),
+              subtitle: const Text('Politique de confidentialité'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                _showPrivacyDialog(context);
+              },
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        _buildSection(
+          title: 'Compte',
+          children: [
+            ListTile(
+              leading: const Icon(Icons.logout, color: Colors.red),
+              title: const Text('Se déconnecter'),
+              onTap: () async {
+                await ref.read(authRepositoryProvider).signOut();
+                if (context.mounted) context.go('/login');
+              },
+            ),
+          ],
+        ),
+        const SizedBox(height: 32),
+        Center(
+          child: Text(
+            'MyCard v1.0.0',
+            style: TextStyle(color: Colors.grey[600], fontSize: 12),
           ),
         ),
       ],
-    );
+    ),
+  );
+
+  Widget _buildSection({
+    required String title,
+    required List<Widget> children,
+  }) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Text(
+          title,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.blue,
+          ),
+        ),
+      ),
+      Card(elevation: 2, child: Column(children: children)),
+    ],
+  );
 
   void _showThemeDialog(BuildContext context) {
     showDialog(
@@ -194,7 +190,9 @@ class SettingsPageWithNav extends ConsumerWidget {
       applicationVersion: '1.0.0',
       applicationIcon: const Icon(Icons.credit_card),
       children: [
-        const Text('Application de création de cartes de visite professionnelles'),
+        const Text(
+          'Application de création de cartes de visite professionnelles',
+        ),
         const SizedBox(height: 16),
         const Text('Fonctionnalités principales :'),
         const Text('• Création de cartes personnalisées'),

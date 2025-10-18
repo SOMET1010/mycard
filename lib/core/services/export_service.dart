@@ -1,5 +1,6 @@
 /// Service pour l'export des cartes de visite
 library;
+
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -52,9 +53,7 @@ class ExportService {
       pdf.addPage(
         pw.Page(
           pageFormat: PdfPageFormat.a4,
-          build: (pw.Context context) => pw.Center(
-            child: pw.Image(pdfImage),
-          ),
+          build: (pw.Context context) => pw.Center(child: pw.Image(pdfImage)),
         ),
       );
 
@@ -86,7 +85,8 @@ class ExportService {
 
       // Convert PNG to JPG using image package
       final decodedImage = img.decodeImage(image);
-      if (decodedImage == null) throw Exception('Impossible de décoder l\'image');
+      if (decodedImage == null)
+        throw Exception('Impossible de décoder l\'image');
 
       final jpgImage = img.encodeJpg(decodedImage, quality: quality);
 
@@ -164,9 +164,7 @@ class ExportService {
     pdf.addPage(
       pw.Page(
         pageFormat: PdfPageFormat.a4,
-        build: (pw.Context context) => pw.Center(
-          child: pw.Image(pdfImage),
-        ),
+        build: (pw.Context context) => pw.Center(child: pw.Image(pdfImage)),
       ),
     );
 

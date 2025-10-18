@@ -1,5 +1,6 @@
 /// Adapters Hive pour la sérialisation des modèles
 library;
+
 import 'package:hive/hive.dart';
 import 'package:mycard/data/models/business_card.dart';
 

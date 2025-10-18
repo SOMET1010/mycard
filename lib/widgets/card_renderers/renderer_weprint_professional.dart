@@ -1,5 +1,6 @@
 /// Renderer pour carte WePrint Professional
 library;
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mycard/data/models/card_template.dart';
@@ -82,11 +83,14 @@ class WePrintProfessionalRenderer implements CardRenderer {
                                 child: Image.file(
                                   File(logoPath),
                                   fit: BoxFit.contain,
-                                  errorBuilder: (context, error, stackTrace) => Icon(
-                                      Icons.business,
-                                      color: Colors.white.withValues(alpha: 0.7),
-                                      size: 40,
-                                    ),
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      Icon(
+                                        Icons.business,
+                                        color: Colors.white.withValues(
+                                          alpha: 0.7,
+                                        ),
+                                        size: 40,
+                                      ),
                                 ),
                               ),
                             )
@@ -156,10 +160,7 @@ class WePrintProfessionalRenderer implements CardRenderer {
           ),
 
           // Ligne de séparation
-          Container(
-            height: 2,
-            color: accentColor.withValues(alpha: 0.3),
-          ),
+          Container(height: 2, color: accentColor.withValues(alpha: 0.3)),
 
           // Section 2: Contact
           Expanded(
@@ -173,21 +174,33 @@ class WePrintProfessionalRenderer implements CardRenderer {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   if (phone.isNotEmpty)
-                    _buildContactItem(Icons.phone, phone, primaryColor, fontFamily),
+                    _buildContactItem(
+                      Icons.phone,
+                      phone,
+                      primaryColor,
+                      fontFamily,
+                    ),
                   if (email.isNotEmpty)
-                    _buildContactItem(Icons.email, email, primaryColor, fontFamily),
+                    _buildContactItem(
+                      Icons.email,
+                      email,
+                      primaryColor,
+                      fontFamily,
+                    ),
                   if (website?.isNotEmpty == true)
-                    _buildContactItem(Icons.language, website!, primaryColor, fontFamily),
+                    _buildContactItem(
+                      Icons.language,
+                      website!,
+                      primaryColor,
+                      fontFamily,
+                    ),
                 ],
               ),
             ),
           ),
 
           // Ligne de séparation
-          Container(
-            height: 2,
-            color: accentColor.withValues(alpha: 0.3),
-          ),
+          Container(height: 2, color: accentColor.withValues(alpha: 0.3)),
 
           // Section 3: Adresse
           Expanded(
@@ -196,7 +209,14 @@ class WePrintProfessionalRenderer implements CardRenderer {
               width: double.infinity,
               padding: const EdgeInsets.all(16),
               color: Colors.white,
-              child: _buildAddressSection(address, city, postalCode, country, secondaryColor, fontFamily),
+              child: _buildAddressSection(
+                address,
+                city,
+                postalCode,
+                country,
+                secondaryColor,
+                fontFamily,
+              ),
             ),
           ),
         ],
@@ -209,38 +229,33 @@ class WePrintProfessionalRenderer implements CardRenderer {
     String text,
     Color color,
     String? fontFamily,
-  ) =>
-      Padding(
-        padding: const EdgeInsets.only(bottom: 6),
-        child: Row(
-          children: [
-            Container(
-              width: 24,
-              height: 24,
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Icon(
-                icon,
-                size: 14,
-                color: color,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                text,
-                style: TextStyle(
-                  fontSize: 13,
-                  color: color,
-                  fontFamily: fontFamily,
-                ),
-              ),
-            ),
-          ],
+  ) => Padding(
+    padding: const EdgeInsets.only(bottom: 6),
+    child: Row(
+      children: [
+        Container(
+          width: 24,
+          height: 24,
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: Icon(icon, size: 14, color: color),
         ),
-      );
+        const SizedBox(width: 12),
+        Expanded(
+          child: Text(
+            text,
+            style: TextStyle(
+              fontSize: 13,
+              color: color,
+              fontFamily: fontFamily,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 
   Widget _buildAddressSection(
     String? address,
@@ -267,11 +282,7 @@ class WePrintProfessionalRenderer implements CardRenderer {
             color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(4),
           ),
-          child: Icon(
-            Icons.location_on,
-            size: 14,
-            color: color,
-          ),
+          child: Icon(Icons.location_on, size: 14, color: color),
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -288,7 +299,11 @@ class WePrintProfessionalRenderer implements CardRenderer {
     );
   }
 
-  Color _getColor(String colorType, CardTemplate template, Map<String, String> customColors) {
+  Color _getColor(
+    String colorType,
+    CardTemplate template,
+    Map<String, String> customColors,
+  ) {
     final customColor = customColors[colorType];
     if (customColor != null) {
       final cleanColor = customColor.startsWith('#')

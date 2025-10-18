@@ -1,4 +1,5 @@
 library;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -13,7 +14,8 @@ class LoginPage extends ConsumerStatefulWidget {
   ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends ConsumerState<LoginPage> with TickerProviderStateMixin {
+class _LoginPageState extends ConsumerState<LoginPage>
+    with TickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   final _emailCtrl = TextEditingController();
   final _pwdCtrl = TextEditingController();
@@ -47,13 +49,10 @@ class _LoginPageState extends ConsumerState<LoginPage> with TickerProviderStateM
       curve: Curves.easeOutBack,
     );
 
-    _formAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.3),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _formController,
-      curve: Curves.easeOutCubic,
-    ));
+    _formAnimation =
+        Tween<Offset>(begin: const Offset(0, 0.3), end: Offset.zero).animate(
+          CurvedAnimation(parent: _formController, curve: Curves.easeOutCubic),
+        );
   }
 
   Future<void> _checkAuthState() async {
@@ -99,7 +98,9 @@ class _LoginPageState extends ConsumerState<LoginPage> with TickerProviderStateM
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF0A0806) : AppTheme.backgroundColor,
+      backgroundColor: isDark
+          ? const Color(0xFF0A0806)
+          : AppTheme.backgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
@@ -111,60 +112,65 @@ class _LoginPageState extends ConsumerState<LoginPage> with TickerProviderStateM
               AnimatedBuilder(
                 animation: _logoAnimation,
                 builder: (context, child) => Transform.scale(
-                    scale: _logoAnimation.value,
-                    child: Column(
-                      children: [
-                        // Logo moderne
-                        Container(
-                          width: 100,
-                          height: 100,
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [
-                                AppTheme.primaryColor,
-                                AppTheme.secondaryColor,
-                              ],
-                            ),
-                            borderRadius: BorderRadius.circular(24),
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppTheme.primaryColor.withOpacity(0.3),
-                                blurRadius: 20,
-                                offset: const Offset(0, 8),
-                              ),
+                  scale: _logoAnimation.value,
+                  child: Column(
+                    children: [
+                      // Logo moderne
+                      Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              AppTheme.primaryColor,
+                              AppTheme.secondaryColor,
                             ],
                           ),
-                          child: const Icon(
-                            Icons.contact_page_outlined,
-                            size: 48,
-                            color: Colors.white,
-                          ),
+                          borderRadius: BorderRadius.circular(24),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppTheme.primaryColor.withOpacity(0.3),
+                              blurRadius: 20,
+                              offset: const Offset(0, 8),
+                            ),
+                          ],
                         ),
-
-                        const SizedBox(height: 24),
-
-                        // Titre
-                        Text(
-                          'Bienvenue',
-                          style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: isDark ? Colors.white : AppTheme.accentColor,
-                          ),
+                        child: const Icon(
+                          Icons.contact_page_outlined,
+                          size: 48,
+                          color: Colors.white,
                         ),
+                      ),
 
-                        const SizedBox(height: 8),
+                      const SizedBox(height: 24),
 
-                        Text(
-                          'Connectez-vous à votre espace',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF6B5E56),
-                          ),
+                      // Titre
+                      Text(
+                        'Bienvenue',
+                        style: Theme.of(context).textTheme.displayMedium
+                            ?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: isDark
+                                  ? Colors.white
+                                  : AppTheme.accentColor,
+                            ),
+                      ),
+
+                      const SizedBox(height: 8),
+
+                      Text(
+                        'Connectez-vous à votre espace',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: isDark
+                              ? const Color(0xFF94A3B8)
+                              : const Color(0xFF6B5E56),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
+                ),
               ),
 
               const SizedBox(height: 48),
@@ -180,7 +186,9 @@ class _LoginPageState extends ConsumerState<LoginPage> with TickerProviderStateM
                       Container(
                         padding: const EdgeInsets.all(24),
                         decoration: BoxDecoration(
-                          color: isDark ? const Color(0xFF1E1A17) : Colors.white,
+                          color: isDark
+                              ? const Color(0xFF1E1A17)
+                              : Colors.white,
                           borderRadius: BorderRadius.circular(20),
                           boxShadow: [
                             BoxShadow(
@@ -196,12 +204,15 @@ class _LoginPageState extends ConsumerState<LoginPage> with TickerProviderStateM
                             TextFormField(
                               controller: _emailCtrl,
                               keyboardType: TextInputType.emailAddress,
-                              validator: (v) => (v == null || !v.contains('@')) ? 'Email invalide' : null,
+                              validator: (v) => (v == null || !v.contains('@'))
+                                  ? 'Email invalide'
+                                  : null,
                               decoration: const InputDecoration(
                                 labelText: 'Email',
                                 hintText: 'Entrez votre email',
                                 prefixIcon: Icon(Icons.email_outlined),
-                                floatingLabelBehavior: FloatingLabelBehavior.auto,
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.auto,
                               ),
                             ),
 
@@ -211,18 +222,24 @@ class _LoginPageState extends ConsumerState<LoginPage> with TickerProviderStateM
                             TextFormField(
                               controller: _pwdCtrl,
                               obscureText: _obscure,
-                              validator: (v) => (v == null || v.length < 6) ? 'Min 6 caractères' : null,
+                              validator: (v) => (v == null || v.length < 6)
+                                  ? 'Min 6 caractères'
+                                  : null,
                               decoration: InputDecoration(
                                 labelText: 'Mot de passe',
                                 hintText: 'Entrez votre mot de passe',
                                 prefixIcon: const Icon(Icons.lock_outline),
                                 suffixIcon: IconButton(
                                   icon: Icon(
-                                    _obscure ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                                    _obscure
+                                        ? Icons.visibility_off_outlined
+                                        : Icons.visibility_outlined,
                                   ),
-                                  onPressed: () => setState(() => _obscure = !_obscure),
+                                  onPressed: () =>
+                                      setState(() => _obscure = !_obscure),
                                 ),
-                                floatingLabelBehavior: FloatingLabelBehavior.auto,
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.auto,
                               ),
                             ),
 
@@ -265,7 +282,10 @@ class _LoginPageState extends ConsumerState<LoginPage> with TickerProviderStateM
                                         width: 20,
                                         child: CircularProgressIndicator(
                                           strokeWidth: 2,
-                                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                                Colors.white,
+                                              ),
                                         ),
                                       )
                                     : const Text(
@@ -289,7 +309,9 @@ class _LoginPageState extends ConsumerState<LoginPage> with TickerProviderStateM
                           Expanded(
                             child: Container(
                               height: 1,
-                              color: isDark ? const Color(0xFF3A332E) : const Color(0xFFE7D9CF),
+                              color: isDark
+                                  ? const Color(0xFF3A332E)
+                                  : const Color(0xFFE7D9CF),
                             ),
                           ),
                           Padding(
@@ -297,7 +319,9 @@ class _LoginPageState extends ConsumerState<LoginPage> with TickerProviderStateM
                             child: Text(
                               'Ou',
                               style: TextStyle(
-                                color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF6B5E56),
+                                color: isDark
+                                    ? const Color(0xFF94A3B8)
+                                    : const Color(0xFF6B5E56),
                                 fontSize: 14,
                               ),
                             ),
@@ -305,7 +329,9 @@ class _LoginPageState extends ConsumerState<LoginPage> with TickerProviderStateM
                           Expanded(
                             child: Container(
                               height: 1,
-                              color: isDark ? const Color(0xFF3A332E) : const Color(0xFFE7D9CF),
+                              color: isDark
+                                  ? const Color(0xFF3A332E)
+                                  : const Color(0xFFE7D9CF),
                             ),
                           ),
                         ],
@@ -340,13 +366,17 @@ class _LoginPageState extends ConsumerState<LoginPage> with TickerProviderStateM
                           label: Text(
                             'Continuer avec Google',
                             style: TextStyle(
-                              color: isDark ? const Color(0xFFEAB676) : AppTheme.primaryColor,
+                              color: isDark
+                                  ? const Color(0xFFEAB676)
+                                  : AppTheme.primaryColor,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                           style: OutlinedButton.styleFrom(
                             side: BorderSide(
-                              color: isDark ? const Color(0xFF3A332E) : const Color(0xFFE7D9CF),
+                              color: isDark
+                                  ? const Color(0xFF3A332E)
+                                  : const Color(0xFFE7D9CF),
                             ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(14),
@@ -364,7 +394,9 @@ class _LoginPageState extends ConsumerState<LoginPage> with TickerProviderStateM
                           Text(
                             'Pas encore de compte ? ',
                             style: TextStyle(
-                              color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF6B5E56),
+                              color: isDark
+                                  ? const Color(0xFF94A3B8)
+                                  : const Color(0xFF6B5E56),
                               fontSize: 14,
                             ),
                           ),
@@ -396,7 +428,9 @@ class _LoginPageState extends ConsumerState<LoginPage> with TickerProviderStateM
     if (!_formKey.currentState!.validate()) return;
     setState(() => _loading = true);
     try {
-      await ref.read(authRepositoryProvider).signInWithEmail(_emailCtrl.text.trim(), _pwdCtrl.text.trim());
+      await ref
+          .read(authRepositoryProvider)
+          .signInWithEmail(_emailCtrl.text.trim(), _pwdCtrl.text.trim());
       if (mounted) context.go('/gallery');
     } catch (e) {
       _showError(e);
@@ -421,4 +455,3 @@ class _LoginPageState extends ConsumerState<LoginPage> with TickerProviderStateM
     AuthErrorHandler.showErrorSnackBar(context, e);
   }
 }
-

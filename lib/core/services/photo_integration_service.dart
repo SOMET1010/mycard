@@ -15,7 +15,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /// Modèle pour les informations extraites d'une photo
 class PhotoColorExtraction {
-
   const PhotoColorExtraction({
     required this.dominantColors,
     required this.accentColors,
@@ -29,24 +28,23 @@ class PhotoColorExtraction {
     required this.metadata,
   });
 
-  factory PhotoColorExtraction.fromJson(Map<String, dynamic> json) => PhotoColorExtraction(
-      dominantColors: (json['dominantColors'] as List)
-          .map((c) => Color(c as int))
-          .toList(),
-      accentColors: (json['accentColors'] as List)
-          .map((c) => Color(c as int))
-          .toList(),
-      primaryColor: Color(json['primaryColor'] as int),
-      secondaryColor: Color(json['secondaryColor'] as int),
-      brightness: json['brightness'] as double,
-      contrast: json['contrast'] as double,
-      saturation: json['saturation'] as double,
-      mood: json['mood'] as String,
-      palette: (json['palette'] as List)
-          .map((c) => Color(c as int))
-          .toList(),
-      metadata: json['metadata'] as Map<String, dynamic>,
-    );
+  factory PhotoColorExtraction.fromJson(Map<String, dynamic> json) =>
+      PhotoColorExtraction(
+        dominantColors: (json['dominantColors'] as List)
+            .map((c) => Color(c as int))
+            .toList(),
+        accentColors: (json['accentColors'] as List)
+            .map((c) => Color(c as int))
+            .toList(),
+        primaryColor: Color(json['primaryColor'] as int),
+        secondaryColor: Color(json['secondaryColor'] as int),
+        brightness: json['brightness'] as double,
+        contrast: json['contrast'] as double,
+        saturation: json['saturation'] as double,
+        mood: json['mood'] as String,
+        palette: (json['palette'] as List).map((c) => Color(c as int)).toList(),
+        metadata: json['metadata'] as Map<String, dynamic>,
+      );
   final List<Color> dominantColors;
   final List<Color> accentColors;
   final Color primaryColor;
@@ -59,22 +57,21 @@ class PhotoColorExtraction {
   final Map<String, dynamic> metadata;
 
   Map<String, dynamic> toJson() => {
-      'dominantColors': dominantColors.map((c) => c.value).toList(),
-      'accentColors': accentColors.map((c) => c.value).toList(),
-      'primaryColor': primaryColor.value,
-      'secondaryColor': secondaryColor.value,
-      'brightness': brightness,
-      'contrast': contrast,
-      'saturation': saturation,
-      'mood': mood,
-      'palette': palette.map((c) => c.value).toList(),
-      'metadata': metadata,
-    };
+    'dominantColors': dominantColors.map((c) => c.value).toList(),
+    'accentColors': accentColors.map((c) => c.value).toList(),
+    'primaryColor': primaryColor.value,
+    'secondaryColor': secondaryColor.value,
+    'brightness': brightness,
+    'contrast': contrast,
+    'saturation': saturation,
+    'mood': mood,
+    'palette': palette.map((c) => c.value).toList(),
+    'metadata': metadata,
+  };
 }
 
 /// Modèle pour les filtres photo
 class PhotoFilter {
-
   const PhotoFilter({
     required this.id,
     required this.name,
@@ -84,12 +81,12 @@ class PhotoFilter {
   });
 
   factory PhotoFilter.fromJson(Map<String, dynamic> json) => PhotoFilter(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      description: json['description'] as String,
-      parameters: json['parameters'] as Map<String, dynamic>,
-      category: json['category'] as String,
-    );
+    id: json['id'] as String,
+    name: json['name'] as String,
+    description: json['description'] as String,
+    parameters: json['parameters'] as Map<String, dynamic>,
+    category: json['category'] as String,
+  );
   final String id;
   final String name;
   final String description;
@@ -97,17 +94,16 @@ class PhotoFilter {
   final String category;
 
   Map<String, dynamic> toJson() => {
-      'id': id,
-      'name': name,
-      'description': description,
-      'parameters': parameters,
-      'category': category,
-    };
+    'id': id,
+    'name': name,
+    'description': description,
+    'parameters': parameters,
+    'category': category,
+  };
 }
 
 /// Service d'intégration photo pour l'analyse et l'extraction de thèmes
 class PhotoIntegrationService {
-
   PhotoIntegrationService._();
   static PhotoIntegrationService? _instance;
   static PhotoIntegrationService get instance {
@@ -224,8 +220,12 @@ class PhotoIntegrationService {
       final extraction = PhotoColorExtraction(
         dominantColors: dominantColors,
         accentColors: accentColors,
-        primaryColor: dominantColors.isNotEmpty ? dominantColors.first : Colors.grey,
-        secondaryColor: dominantColors.length > 1 ? dominantColors[1] : Colors.grey,
+        primaryColor: dominantColors.isNotEmpty
+            ? dominantColors.first
+            : Colors.grey,
+        secondaryColor: dominantColors.length > 1
+            ? dominantColors[1]
+            : Colors.grey,
         brightness: brightness,
         contrast: contrast,
         saturation: saturation,
@@ -284,7 +284,9 @@ class PhotoIntegrationService {
           'brightness': extraction.brightness,
           'contrast': extraction.contrast,
           'saturation': extraction.saturation,
-          'dominantColors': extraction.dominantColors.map((c) => c.value).toList(),
+          'dominantColors': extraction.dominantColors
+              .map((c) => c.value)
+              .toList(),
         },
         'styles': {
           'cardStyle': _getCardStyleForMood(extraction.mood),
@@ -301,17 +303,16 @@ class PhotoIntegrationService {
   }
 
   /// Applique un filtre à une photo
-  Future<Uint8List> applyFilter(
-    String imagePath,
-    PhotoFilter filter,
-  ) async {
+  Future<Uint8List> applyFilter(String imagePath, PhotoFilter filter) async {
     try {
       final imageBytes = await File(imagePath).readAsBytes();
       final codec = await ui.instantiateImageCodec(imageBytes);
       final frameInfo = await codec.getNextFrame();
       final image = frameInfo.image;
 
-      final byteData = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
+      final byteData = await image.toByteData(
+        format: ui.ImageByteFormat.rawRgba,
+      );
       if (byteData == null) {
         throw Exception('Impossible de convertir l\'image en bytes');
       }
@@ -348,7 +349,8 @@ class PhotoIntegrationService {
   List<PhotoFilter> getAvailableFilters() => List.unmodifiable(_filters);
 
   /// Obtient les extractions récentes
-  List<PhotoColorExtraction> getRecentExtractions() => List.unmodifiable(_extractions.reversed.take(10).toList());
+  List<PhotoColorExtraction> getRecentExtractions() =>
+      List.unmodifiable(_extractions.reversed.take(10).toList());
 
   /// Supprime une extraction
   Future<void> removeExtraction(PhotoColorExtraction extraction) async {
@@ -357,9 +359,10 @@ class PhotoIntegrationService {
   }
 
   /// Recherche des extractions par humeur
-  List<PhotoColorExtraction> searchExtractionsByMood(String mood) => _extractions
-        .where((e) => e.mood.toLowerCase().contains(mood.toLowerCase()))
-        .toList();
+  List<PhotoColorExtraction> searchExtractionsByMood(String mood) =>
+      _extractions
+          .where((e) => e.mood.toLowerCase().contains(mood.toLowerCase()))
+          .toList();
 
   /// Calcule la luminosité moyenne
   double _calculateBrightness(Uint8List pixels) {
@@ -428,7 +431,11 @@ class PhotoIntegrationService {
   }
 
   /// Détermine l'humeur de l'image
-  String _determineMood(double brightness, double saturation, List<Color> colors) {
+  String _determineMood(
+    double brightness,
+    double saturation,
+    List<Color> colors,
+  ) {
     if (brightness > 0.7 && saturation > 0.6) {
       return 'vibrant';
     } else if (brightness > 0.6) {
@@ -453,9 +460,7 @@ class PhotoIntegrationService {
     // Ajouter des couleurs complémentaires si nécessaire
     while (palette.length < 8) {
       final baseColor = palette[palette.length % palette.length];
-      final complementary = Color(
-        0xFFFFFFFF - baseColor.value,
-      );
+      final complementary = Color(0xFFFFFFFF - baseColor.value);
       palette.add(complementary);
     }
 
@@ -603,7 +608,10 @@ class PhotoIntegrationService {
   }
 
   /// Applique un filtre noir et blanc
-  Uint8List _applyBlackWhiteFilter(Uint8List pixels, Map<String, dynamic> params) {
+  Uint8List _applyBlackWhiteFilter(
+    Uint8List pixels,
+    Map<String, dynamic> params,
+  ) {
     final contrast = params['contrast'] as double? ?? 1.0;
 
     for (var i = 0; i < pixels.length; i += 4) {
@@ -656,7 +664,10 @@ class PhotoIntegrationService {
   }
 
   /// Applique un filtre haut contraste
-  Uint8List _applyHighContrastFilter(Uint8List pixels, Map<String, dynamic> params) {
+  Uint8List _applyHighContrastFilter(
+    Uint8List pixels,
+    Map<String, dynamic> params,
+  ) {
     final factor = params['factor'] as double? ?? 2.0;
 
     for (var i = 0; i < pixels.length; i += 4) {
@@ -753,7 +764,8 @@ class PhotoIntegrationService {
 
       _extractions.clear();
       for (final extractionJson in extractionsJson) {
-        final extractionData = jsonDecode(extractionJson) as Map<String, dynamic>;
+        final extractionData =
+            jsonDecode(extractionJson) as Map<String, dynamic>;
         _extractions.add(PhotoColorExtraction.fromJson(extractionData));
       }
     } catch (e) {
@@ -765,9 +777,7 @@ class PhotoIntegrationService {
   Future<void> _saveFilters() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final filtersJson = _filters
-          .map((f) => jsonEncode(f.toJson()))
-          .toList();
+      final filtersJson = _filters.map((f) => jsonEncode(f.toJson())).toList();
       await prefs.setStringList('photo_filters', filtersJson);
     } catch (e) {
       debugPrint('Erreur sauvegarde filtres: $e');

@@ -1,5 +1,6 @@
 /// Renderer pour carte Agent Immobilier
 library;
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mycard/data/models/card_template.dart';
@@ -67,10 +68,7 @@ class RealEstateAgentRenderer implements CardRenderer {
                     height: 80,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Colors.white,
-                        width: 3,
-                      ),
+                      border: Border.all(color: Colors.white, width: 3),
                       color: Colors.white,
                     ),
                     child: logoPath != null && File(logoPath).existsSync()
@@ -79,18 +77,15 @@ class RealEstateAgentRenderer implements CardRenderer {
                             child: Image.file(
                               File(logoPath),
                               fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) => Icon(
-                                  Icons.home,
-                                  color: secondaryColor,
-                                  size: 40,
-                                ),
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Icon(
+                                    Icons.home,
+                                    color: secondaryColor,
+                                    size: 40,
+                                  ),
                             ),
                           )
-                        : Icon(
-                            Icons.home,
-                            color: secondaryColor,
-                            size: 40,
-                          ),
+                        : Icon(Icons.home, color: secondaryColor, size: 40),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
@@ -154,11 +149,7 @@ class RealEstateAgentRenderer implements CardRenderer {
             margin: const EdgeInsets.symmetric(horizontal: 20),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [
-                  Colors.transparent,
-                  accentColor,
-                  Colors.transparent,
-                ],
+                colors: [Colors.transparent, accentColor, Colors.transparent],
               ),
             ),
           ),
@@ -198,11 +189,26 @@ class RealEstateAgentRenderer implements CardRenderer {
                   ),
                   const SizedBox(height: 12),
                   if (phone.isNotEmpty)
-                    _buildRealEstateContact(Icons.phone, phone, primaryColor, fontFamily),
+                    _buildRealEstateContact(
+                      Icons.phone,
+                      phone,
+                      primaryColor,
+                      fontFamily,
+                    ),
                   if (email.isNotEmpty)
-                    _buildRealEstateContact(Icons.email, email, secondaryColor, fontFamily),
+                    _buildRealEstateContact(
+                      Icons.email,
+                      email,
+                      secondaryColor,
+                      fontFamily,
+                    ),
                   if (website?.isNotEmpty == true)
-                    _buildRealEstateContact(Icons.language, website!, accentColor, fontFamily),
+                    _buildRealEstateContact(
+                      Icons.language,
+                      website!,
+                      accentColor,
+                      fontFamily,
+                    ),
 
                   const SizedBox(height: 16),
 
@@ -211,11 +217,7 @@ class RealEstateAgentRenderer implements CardRenderer {
                       (postalCode?.isNotEmpty == true)) ...[
                     Row(
                       children: [
-                        Icon(
-                          Icons.location_on,
-                          color: primaryColor,
-                          size: 16,
-                        ),
+                        Icon(Icons.location_on, color: primaryColor, size: 16),
                         const SizedBox(width: 8),
                         Text(
                           'BUREAU',
@@ -229,7 +231,14 @@ class RealEstateAgentRenderer implements CardRenderer {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    _buildAddressSection(address, city, postalCode, country, secondaryColor, fontFamily),
+                    _buildAddressSection(
+                      address,
+                      city,
+                      postalCode,
+                      country,
+                      secondaryColor,
+                      fontFamily,
+                    ),
                   ],
 
                   const Spacer(),
@@ -257,39 +266,34 @@ class RealEstateAgentRenderer implements CardRenderer {
     String text,
     Color color,
     String? fontFamily,
-  ) =>
-      Padding(
-        padding: const EdgeInsets.only(bottom: 8),
-        child: Row(
-          children: [
-            Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Icon(
-                icon,
-                size: 18,
-                color: color,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                text,
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Colors.grey.shade700,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: fontFamily,
-                ),
-              ),
-            ),
-          ],
+  ) => Padding(
+    padding: const EdgeInsets.only(bottom: 8),
+    child: Row(
+      children: [
+        Container(
+          width: 32,
+          height: 32,
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(icon, size: 18, color: color),
         ),
-      );
+        const SizedBox(width: 12),
+        Expanded(
+          child: Text(
+            text,
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.grey.shade700,
+              fontWeight: FontWeight.w500,
+              fontFamily: fontFamily,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 
   Widget _buildAddressSection(
     String? address,
@@ -325,22 +329,26 @@ class RealEstateAgentRenderer implements CardRenderer {
   }
 
   Widget _buildRealEstateBadge(String text, Color color) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Text(
-          text,
-          style: const TextStyle(
-            fontSize: 10,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-      );
+    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+    decoration: BoxDecoration(
+      color: color,
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: Text(
+      text,
+      style: const TextStyle(
+        fontSize: 10,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+      ),
+    ),
+  );
 
-  Color _getColor(String colorType, CardTemplate template, Map<String, String> customColors) {
+  Color _getColor(
+    String colorType,
+    CardTemplate template,
+    Map<String, String> customColors,
+  ) {
     final customColor = customColors[colorType];
     if (customColor != null) {
       final cleanColor = customColor.startsWith('#')

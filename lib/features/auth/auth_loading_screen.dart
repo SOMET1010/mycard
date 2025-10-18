@@ -43,21 +43,16 @@ class _AuthLoadingScreenState extends ConsumerState<AuthLoadingScreen>
       curve: Curves.easeOutBack,
     );
 
-    _pulseAnimation = Tween<double>(
-      begin: 1.0,
-      end: 1.1,
-    ).animate(CurvedAnimation(
-      parent: _pulseController,
-      curve: Curves.easeInOut,
-    ));
+    _pulseAnimation = Tween<double>(begin: 1.0, end: 1.1).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
+    );
 
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _logoController,
-      curve: const Interval(0.3, 1.0, curve: Curves.easeOut),
-    ));
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _logoController,
+        curve: const Interval(0.3, 1.0, curve: Curves.easeOut),
+      ),
+    );
 
     _logoController.forward();
     _pulseController.repeat(reverse: true);
@@ -84,7 +79,9 @@ class _AuthLoadingScreenState extends ConsumerState<AuthLoadingScreen>
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF0A0806) : AppTheme.backgroundColor,
+      backgroundColor: isDark
+          ? const Color(0xFF0A0806)
+          : AppTheme.backgroundColor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -93,41 +90,41 @@ class _AuthLoadingScreenState extends ConsumerState<AuthLoadingScreen>
             AnimatedBuilder(
               animation: _logoAnimation,
               builder: (context, child) => Transform.scale(
-                  scale: _logoAnimation.value,
-                  child: AnimatedBuilder(
-                    animation: _pulseAnimation,
-                    builder: (context, child) => Transform.scale(
-                        scale: _pulseAnimation.value,
-                        child: Container(
-                          width: 120,
-                          height: 120,
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [
-                                AppTheme.primaryColor,
-                                AppTheme.secondaryColor,
-                              ],
-                            ),
-                            borderRadius: BorderRadius.circular(30),
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppTheme.primaryColor.withValues(alpha: 0.3),
-                                blurRadius: 30,
-                                offset: const Offset(0, 10),
-                              ),
-                            ],
-                          ),
-                          child: const Icon(
-                            Icons.contact_page_outlined,
-                            size: 60,
-                            color: Colors.white,
-                          ),
+                scale: _logoAnimation.value,
+                child: AnimatedBuilder(
+                  animation: _pulseAnimation,
+                  builder: (context, child) => Transform.scale(
+                    scale: _pulseAnimation.value,
+                    child: Container(
+                      width: 120,
+                      height: 120,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            AppTheme.primaryColor,
+                            AppTheme.secondaryColor,
+                          ],
                         ),
+                        borderRadius: BorderRadius.circular(30),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppTheme.primaryColor.withValues(alpha: 0.3),
+                            blurRadius: 30,
+                            offset: const Offset(0, 10),
+                          ),
+                        ],
                       ),
+                      child: const Icon(
+                        Icons.contact_page_outlined,
+                        size: 60,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
+              ),
             ),
 
             const SizedBox(height: 40),
@@ -136,26 +133,29 @@ class _AuthLoadingScreenState extends ConsumerState<AuthLoadingScreen>
             AnimatedBuilder(
               animation: _fadeAnimation,
               builder: (context, child) => FadeTransition(
-                  opacity: _fadeAnimation,
-                  child: Column(
-                    children: [
-                      Text(
-                        'MyCard',
-                        style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: isDark ? Colors.white : AppTheme.accentColor,
-                        ),
+                opacity: _fadeAnimation,
+                child: Column(
+                  children: [
+                    Text(
+                      'MyCard',
+                      style: Theme.of(context).textTheme.displayMedium
+                          ?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: isDark ? Colors.white : AppTheme.accentColor,
+                          ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Cartes de visite professionnelles',
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: isDark
+                            ? const Color(0xFF94A3B8)
+                            : const Color(0xFF6B5E56),
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Cartes de visite professionnelles',
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF6B5E56),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
+              ),
             ),
 
             const SizedBox(height: 60),
@@ -166,7 +166,9 @@ class _AuthLoadingScreenState extends ConsumerState<AuthLoadingScreen>
                 Text(
                   'Vérification de votre connexion...',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF6B5E56),
+                    color: isDark
+                        ? const Color(0xFF94A3B8)
+                        : const Color(0xFF6B5E56),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -193,14 +195,18 @@ class _AuthLoadingScreenState extends ConsumerState<AuthLoadingScreen>
                 color: isDark ? const Color(0xFF1E1A17) : Colors.white,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: isDark ? const Color(0xFF3A332E) : const Color(0xFFE7D9CF),
+                  color: isDark
+                      ? const Color(0xFF3A332E)
+                      : const Color(0xFFE7D9CF),
                 ),
               ),
               child: Row(
                 children: [
                   Icon(
                     Icons.info_outline,
-                    color: isDark ? const Color(0xFF60A5FA) : AppTheme.easternBlue,
+                    color: isDark
+                        ? const Color(0xFF60A5FA)
+                        : AppTheme.easternBlue,
                     size: 20,
                   ),
                   const SizedBox(width: 12),
@@ -208,7 +214,9 @@ class _AuthLoadingScreenState extends ConsumerState<AuthLoadingScreen>
                     child: Text(
                       'Restez connecté et accédez à vos cartes rapidement',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF6B5E56),
+                        color: isDark
+                            ? const Color(0xFF94A3B8)
+                            : const Color(0xFF6B5E56),
                       ),
                     ),
                   ),
@@ -224,7 +232,6 @@ class _AuthLoadingScreenState extends ConsumerState<AuthLoadingScreen>
 
 /// État de chargement pour l'authentification
 class AuthLoadingState {
-
   const AuthLoadingState({
     this.isLoading = false,
     this.isInitialized = false,
@@ -239,14 +246,17 @@ class AuthLoadingState {
     bool? isInitialized,
     String? error,
   }) => AuthLoadingState(
-      isLoading: isLoading ?? this.isLoading,
-      isInitialized: isInitialized ?? this.isInitialized,
-      error: error ?? this.error,
-    );
+    isLoading: isLoading ?? this.isLoading,
+    isInitialized: isInitialized ?? this.isInitialized,
+    error: error ?? this.error,
+  );
 }
 
 /// Provider pour l'état de chargement d'authentification
-final authLoadingProvider = StateNotifierProvider<AuthLoadingNotifier, AuthLoadingState>((ref) => AuthLoadingNotifier());
+final authLoadingProvider =
+    StateNotifierProvider<AuthLoadingNotifier, AuthLoadingState>(
+      (ref) => AuthLoadingNotifier(),
+    );
 
 class AuthLoadingNotifier extends StateNotifier<AuthLoadingState> {
   AuthLoadingNotifier() : super(const AuthLoadingState());

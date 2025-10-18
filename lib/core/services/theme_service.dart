@@ -1,5 +1,6 @@
 /// Service pour gérer la sauvegarde et le chargement des thèmes personnalisés
 library;
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mycard/data/models/event_overlay.dart';
@@ -39,7 +40,9 @@ class ThemeService {
   }
 
   /// Charge un thème personnalisé pour un événement
-  static Future<EventThemeCustomization?> loadCustomTheme(String eventId) async {
+  static Future<EventThemeCustomization?> loadCustomTheme(
+    String eventId,
+  ) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final existingThemes = prefs.getString(_customThemesKey);
@@ -67,7 +70,7 @@ class ThemeService {
       if (existingThemes == null) return {};
 
       return Map<String, Map<String, dynamic>>.from(
-        json.decode(existingThemes) as Map
+        json.decode(existingThemes) as Map,
       );
     } catch (e) {
       debugPrint('Erreur lors de la récupération des thèmes: $e');
@@ -205,7 +208,10 @@ class ThemeService {
   }
 
   /// Exporte un thème vers un format partageable
-  static String exportTheme(EventThemeCustomization customization, String eventName) {
+  static String exportTheme(
+    EventThemeCustomization customization,
+    String eventName,
+  ) {
     final exportData = {
       'eventName': eventName,
       'version': '1.0',

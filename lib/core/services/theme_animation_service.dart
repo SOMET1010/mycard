@@ -1,5 +1,6 @@
 /// Service d'animations et transitions pour les thèmes
 library;
+
 import 'dart:math';
 import 'package:flutter/material.dart';
 
@@ -47,7 +48,6 @@ enum TransitionType {
 }
 
 class ThemeAnimationConfig {
-
   const ThemeAnimationConfig({
     this.entranceAnimation = AnimationType.fadeIn,
     this.transitionType = TransitionType.fade,
@@ -59,21 +59,22 @@ class ThemeAnimationConfig {
     this.customAnimationId,
   });
 
-  factory ThemeAnimationConfig.fromJson(Map<String, dynamic> json) => ThemeAnimationConfig(
-      entranceAnimation: AnimationType.values.firstWhere(
-        (e) => e.name == json['entranceAnimation'],
-        orElse: () => AnimationType.fadeIn,
-      ),
-      transitionType: TransitionType.values.firstWhere(
-        (e) => e.name == json['transitionType'],
-        orElse: () => TransitionType.fade,
-      ),
-      duration: Duration(milliseconds: json['duration'] ?? 800),
-      delay: json['delay']?.toDouble() ?? 0.0,
-      autoPlay: json['autoPlay'] ?? true,
-      loop: json['loop'] ?? false,
-      customAnimationId: json['customAnimationId'],
-    );
+  factory ThemeAnimationConfig.fromJson(Map<String, dynamic> json) =>
+      ThemeAnimationConfig(
+        entranceAnimation: AnimationType.values.firstWhere(
+          (e) => e.name == json['entranceAnimation'],
+          orElse: () => AnimationType.fadeIn,
+        ),
+        transitionType: TransitionType.values.firstWhere(
+          (e) => e.name == json['transitionType'],
+          orElse: () => TransitionType.fade,
+        ),
+        duration: Duration(milliseconds: json['duration'] ?? 800),
+        delay: json['delay']?.toDouble() ?? 0.0,
+        autoPlay: json['autoPlay'] ?? true,
+        loop: json['loop'] ?? false,
+        customAnimationId: json['customAnimationId'],
+      );
   final AnimationType entranceAnimation;
   final TransitionType transitionType;
   final Duration duration;
@@ -84,15 +85,15 @@ class ThemeAnimationConfig {
   final String? customAnimationId;
 
   Map<String, dynamic> toJson() => {
-        'entranceAnimation': entranceAnimation.name,
-        'transitionType': transitionType.name,
-        'duration': duration.inMilliseconds,
-        'curve': curve.toString(),
-        'delay': delay,
-        'autoPlay': autoPlay,
-        'loop': loop,
-        'customAnimationId': customAnimationId,
-      };
+    'entranceAnimation': entranceAnimation.name,
+    'transitionType': transitionType.name,
+    'duration': duration.inMilliseconds,
+    'curve': curve.toString(),
+    'delay': delay,
+    'autoPlay': autoPlay,
+    'loop': loop,
+    'customAnimationId': customAnimationId,
+  };
 }
 
 class ThemeAnimationService {
@@ -176,7 +177,8 @@ class ThemeAnimationService {
     ),
   };
 
-  static AnimationConfig getConfigForAnimation(AnimationType type) => _animationConfigs[type] ?? _animationConfigs[AnimationType.fadeIn]!;
+  static AnimationConfig getConfigForAnimation(AnimationType type) =>
+      _animationConfigs[type] ?? _animationConfigs[AnimationType.fadeIn]!;
 
   static List<AnimationType> getAnimationsForMood(String mood) {
     final moodLower = mood.toLowerCase();
@@ -224,7 +226,9 @@ class ThemeAnimationService {
   }
 
   static AnimationType getRandomAnimation() {
-    final animations = AnimationType.values.where((a) => a != AnimationType.none);
+    final animations = AnimationType.values.where(
+      (a) => a != AnimationType.none,
+    );
     final random = Random();
     return animations.elementAt(random.nextInt(animations.length));
   }
@@ -241,7 +245,6 @@ class ThemeAnimationService {
 }
 
 class AnimationConfig {
-
   const AnimationConfig({
     required this.type,
     this.begin,
@@ -309,7 +312,10 @@ class _AnimatedThemeWidgetState extends State<AnimatedThemeWidget>
   void _setupAnimations() {
     switch (widget.animationConfig.entranceAnimation) {
       case AnimationType.fadeIn:
-        _scaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(_animation);
+        _scaleAnimation = Tween<double>(
+          begin: 0.0,
+          end: 1.0,
+        ).animate(_animation);
         break;
       case AnimationType.slideInLeft:
         _slideAnimation = Tween<Offset>(
@@ -336,42 +342,66 @@ class _AnimatedThemeWidgetState extends State<AnimatedThemeWidget>
         ).animate(_animation);
         break;
       case AnimationType.scaleIn:
-        _scaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(_animation);
+        _scaleAnimation = Tween<double>(
+          begin: 0.0,
+          end: 1.0,
+        ).animate(_animation);
         break;
       case AnimationType.rotateIn:
-        _rotateAnimation = Tween<double>(begin: -pi / 4, end: 0.0).animate(_animation);
+        _rotateAnimation = Tween<double>(
+          begin: -pi / 4,
+          end: 0.0,
+        ).animate(_animation);
         break;
       case AnimationType.bounceIn:
-        _scaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(_animation);
+        _scaleAnimation = Tween<double>(
+          begin: 0.0,
+          end: 1.0,
+        ).animate(_animation);
         break;
       case AnimationType.elasticIn:
-        _scaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(_animation);
+        _scaleAnimation = Tween<double>(
+          begin: 0.0,
+          end: 1.0,
+        ).animate(_animation);
         break;
       case AnimationType.flipInHorizontal:
-        _scaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(_animation);
+        _scaleAnimation = Tween<double>(
+          begin: 0.0,
+          end: 1.0,
+        ).animate(_animation);
         break;
       case AnimationType.flipInVertical:
-        _scaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(_animation);
+        _scaleAnimation = Tween<double>(
+          begin: 0.0,
+          end: 1.0,
+        ).animate(_animation);
         break;
       default:
-        _scaleAnimation = Tween<double>(begin: 1.0, end: 1.0).animate(_animation);
+        _scaleAnimation = Tween<double>(
+          begin: 1.0,
+          end: 1.0,
+        ).animate(_animation);
     }
   }
 
   void _startAnimation() {
-    Future.delayed(Duration(milliseconds: (widget.animationConfig.delay * 1000).round()), () {
-      if (mounted) {
-        _controller.forward().then((_) {
-          if (widget.onAnimationComplete != null) {
-            widget.onAnimationComplete!();
-          }
+    Future.delayed(
+      Duration(milliseconds: (widget.animationConfig.delay * 1000).round()),
+      () {
+        if (mounted) {
+          _controller.forward().then((_) {
+            if (widget.onAnimationComplete != null) {
+              widget.onAnimationComplete!();
+            }
 
-          if (widget.animationConfig.loop) {
-            _controller.repeat(reverse: true);
-          }
-        });
-      }
-    });
+            if (widget.animationConfig.loop) {
+              _controller.repeat(reverse: true);
+            }
+          });
+        }
+      },
+    );
   }
 
   @override
@@ -384,34 +414,22 @@ class _AnimatedThemeWidgetState extends State<AnimatedThemeWidget>
   Widget build(BuildContext context) {
     switch (widget.animationConfig.entranceAnimation) {
       case AnimationType.fadeIn:
-        return FadeTransition(
-          opacity: _scaleAnimation,
-          child: widget.child,
-        );
+        return FadeTransition(opacity: _scaleAnimation, child: widget.child);
       case AnimationType.slideInLeft:
       case AnimationType.slideInRight:
       case AnimationType.slideInUp:
       case AnimationType.slideInDown:
-        return SlideTransition(
-          position: _slideAnimation,
-          child: widget.child,
-        );
+        return SlideTransition(position: _slideAnimation, child: widget.child);
       case AnimationType.scaleIn:
       case AnimationType.bounceIn:
       case AnimationType.elasticIn:
-        return ScaleTransition(
-          scale: _scaleAnimation,
-          child: widget.child,
-        );
+        return ScaleTransition(scale: _scaleAnimation, child: widget.child);
       case AnimationType.rotateIn:
         return AnimatedBuilder(
           animation: _rotateAnimation,
           builder: (context, child) => Transform.rotate(
             angle: _rotateAnimation.value,
-            child: ScaleTransition(
-              scale: _scaleAnimation,
-              child: child,
-            ),
+            child: ScaleTransition(scale: _scaleAnimation, child: child),
           ),
           child: widget.child,
         );
@@ -420,7 +438,9 @@ class _AnimatedThemeWidgetState extends State<AnimatedThemeWidget>
         return AnimatedBuilder(
           animation: _animation,
           builder: (context, child) {
-            final isHorizontal = widget.animationConfig.entranceAnimation == AnimationType.flipInHorizontal;
+            final isHorizontal =
+                widget.animationConfig.entranceAnimation ==
+                AnimationType.flipInHorizontal;
             return Transform(
               alignment: Alignment.center,
               transform: Matrix4.identity()
@@ -448,10 +468,7 @@ class ThemeTransitionBuilder {
   }) {
     switch (transitionType) {
       case TransitionType.fade:
-        return FadeTransition(
-          opacity: animation,
-          child: child,
-        );
+        return FadeTransition(opacity: animation, child: child);
       case TransitionType.slide:
         return SlideTransition(
           position: Tween<Offset>(
@@ -461,10 +478,7 @@ class ThemeTransitionBuilder {
           child: child,
         );
       case TransitionType.scale:
-        return ScaleTransition(
-          scale: animation,
-          child: child,
-        );
+        return ScaleTransition(scale: animation, child: child);
       case TransitionType.flip:
         return AnimatedBuilder(
           animation: animation,
@@ -483,10 +497,7 @@ class ThemeTransitionBuilder {
           child: child,
         );
       case TransitionType.wipe:
-        return ClipPath(
-          clipper: WipeClipper(animation.value),
-          child: child,
-        );
+        return ClipPath(clipper: WipeClipper(animation.value), child: child);
       case TransitionType.blur:
         return AnimatedBuilder(
           animation: animation,
@@ -507,32 +518,32 @@ class ThemeTransitionBuilder {
 }
 
 class CircleRevealClipper extends CustomClipper<Path> {
-
   CircleRevealClipper(this.progress);
   final double progress;
 
   @override
   Path getClip(Size size) {
     final center = Offset(size.width / 2, size.height / 2);
-    final radius = sqrt(size.width * size.width + size.height * size.height) * progress;
+    final radius =
+        sqrt(size.width * size.width + size.height * size.height) * progress;
     return Path()
       ..addOval(Rect.fromCircle(center: center, radius: radius))
       ..close();
   }
 
   @override
-  bool shouldReclip(CircleRevealClipper oldClipper) => oldClipper.progress != progress;
+  bool shouldReclip(CircleRevealClipper oldClipper) =>
+      oldClipper.progress != progress;
 }
 
 class WipeClipper extends CustomClipper<Path> {
-
   WipeClipper(this.progress);
   final double progress;
 
   @override
   Path getClip(Size size) => Path()
-      ..addRect(Rect.fromLTWH(0, 0, size.width * progress, size.height))
-      ..close();
+    ..addRect(Rect.fromLTWH(0, 0, size.width * progress, size.height))
+    ..close();
 
   @override
   bool shouldReclip(WipeClipper oldClipper) => oldClipper.progress != progress;
@@ -553,7 +564,8 @@ class ParticleAnimationWidget extends StatefulWidget {
   final Duration duration;
 
   @override
-  State<ParticleAnimationWidget> createState() => _ParticleAnimationWidgetState();
+  State<ParticleAnimationWidget> createState() =>
+      _ParticleAnimationWidgetState();
 }
 
 class _ParticleAnimationWidgetState extends State<ParticleAnimationWidget>
@@ -564,10 +576,7 @@ class _ParticleAnimationWidgetState extends State<ParticleAnimationWidget>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      duration: widget.duration,
-      vsync: this,
-    );
+    _controller = AnimationController(duration: widget.duration, vsync: this);
 
     _generateParticles();
     _controller.repeat();
@@ -576,13 +585,15 @@ class _ParticleAnimationWidgetState extends State<ParticleAnimationWidget>
   void _generateParticles() {
     final random = Random();
     for (var i = 0; i < widget.particleCount; i++) {
-      _particles.add(Particle(
-        x: random.nextDouble(),
-        y: random.nextDouble(),
-        size: random.nextDouble() * 4 + 1,
-        speed: random.nextDouble() * 2 + 1,
-        angle: random.nextDouble() * 2 * pi,
-      ));
+      _particles.add(
+        Particle(
+          x: random.nextDouble(),
+          y: random.nextDouble(),
+          size: random.nextDouble() * 4 + 1,
+          speed: random.nextDouble() * 2 + 1,
+          angle: random.nextDouble() * 2 * pi,
+        ),
+      );
     }
   }
 
@@ -594,25 +605,24 @@ class _ParticleAnimationWidgetState extends State<ParticleAnimationWidget>
 
   @override
   Widget build(BuildContext context) => Stack(
-      children: [
-        AnimatedBuilder(
-          animation: _controller,
-          builder: (context, child) => CustomPaint(
-              painter: ParticlePainter(
-                particles: _particles,
-                progress: _controller.value,
-                color: widget.particleColor,
-              ),
-              child: child,
-            ),
-          child: widget.child,
+    children: [
+      AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) => CustomPaint(
+          painter: ParticlePainter(
+            particles: _particles,
+            progress: _controller.value,
+            color: widget.particleColor,
+          ),
+          child: child,
         ),
-      ],
-    );
+        child: widget.child,
+      ),
+    ],
+  );
 }
 
 class Particle {
-
   const Particle({
     required this.x,
     required this.y,
@@ -628,7 +638,6 @@ class Particle {
 }
 
 class ParticlePainter extends CustomPainter {
-
   ParticlePainter({
     required this.particles,
     required this.progress,
@@ -650,15 +659,12 @@ class ParticlePainter extends CustomPainter {
       final y = particle.y * size.height - (currentProgress * size.height * 2);
 
       if (y >= -10 && y <= size.height + 10) {
-        canvas.drawCircle(
-          Offset(x, y),
-          particle.size,
-          paint,
-        );
+        canvas.drawCircle(Offset(x, y), particle.size, paint);
       }
     }
   }
 
   @override
-  bool shouldRepaint(ParticlePainter oldDelegate) => oldDelegate.progress != progress;
+  bool shouldRepaint(ParticlePainter oldDelegate) =>
+      oldDelegate.progress != progress;
 }

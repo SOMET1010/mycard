@@ -1,9 +1,9 @@
 /// Widget de sélection de couleur
 library;
+
 import 'package:flutter/material.dart';
 
 class ColorPickerField extends StatelessWidget {
-
   const ColorPickerField({
     super.key,
     required this.label,
@@ -18,63 +18,53 @@ class ColorPickerField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                label,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-            InkWell(
-              onTap: () => _showColorPicker(context),
-              borderRadius: BorderRadius.circular(8),
-              child: Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: selectedColor,
-                  border: Border.all(color: Colors.grey[300]!),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(
-                  Icons.colorize,
-                  color: _getContrastColor(selectedColor),
-                  size: 20,
-                ),
-              ),
-            ),
-          ],
-        ),
-        if (helperText != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 4),
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(
+        children: [
+          Expanded(
             child: Text(
-              helperText!,
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey[600],
+              label,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            ),
+          ),
+          InkWell(
+            onTap: () => _showColorPicker(context),
+            borderRadius: BorderRadius.circular(8),
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: selectedColor,
+                border: Border.all(color: Colors.grey[300]!),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                Icons.colorize,
+                color: _getContrastColor(selectedColor),
+                size: 20,
               ),
             ),
           ),
-      ],
-    );
+        ],
+      ),
+      if (helperText != null)
+        Padding(
+          padding: const EdgeInsets.only(top: 4),
+          child: Text(
+            helperText!,
+            style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+          ),
+        ),
+    ],
+  );
 
   void _showColorPicker(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Sélectionner une couleur'),
-        content: SizedBox(
-          width: 300,
-          height: 300,
-          child: _buildColorGrid(),
-        ),
+        content: SizedBox(width: 300, height: 300, child: _buildColorGrid()),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),

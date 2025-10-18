@@ -1,5 +1,6 @@
 /// Renderer: bande verticale à gauche, mise en page pro
 library;
+
 import 'package:flutter/material.dart';
 import 'package:mycard/data/models/card_template.dart';
 import 'package:mycard/data/models/event_overlay.dart';
@@ -59,7 +60,11 @@ class StripeLeftRenderer implements CardRenderer {
                         padding: const EdgeInsets.only(left: 8),
                         child: Text(
                           company!,
-                          style: TextStyle(fontSize: 12, color: primary, fontFamily: fontFamily),
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: primary,
+                            fontFamily: fontFamily,
+                          ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -71,7 +76,11 @@ class StripeLeftRenderer implements CardRenderer {
                     padding: const EdgeInsets.only(top: 2),
                     child: Text(
                       title,
-                      style: TextStyle(fontSize: 13, color: primary.withOpacity(0.9), fontFamily: fontFamily),
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: primary.withOpacity(0.9),
+                        fontFamily: fontFamily,
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -79,15 +88,20 @@ class StripeLeftRenderer implements CardRenderer {
                 const SizedBox(height: 8),
                 _contact(Icons.phone, phone, primary, fontFamily),
                 _contact(Icons.email, email, primary, fontFamily),
-                if (website?.isNotEmpty == true) _contact(Icons.language, website!, primary, fontFamily),
+                if (website?.isNotEmpty == true)
+                  _contact(Icons.language, website!, primary, fontFamily),
                 const Spacer(),
                 Align(
                   alignment: Alignment.bottomRight,
-                  child: Container(width: 40, height: 4, color: accent.withOpacity(0.8)),
+                  child: Container(
+                    width: 40,
+                    height: 4,
+                    color: accent.withOpacity(0.8),
+                  ),
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
@@ -106,9 +120,13 @@ class StripeLeftRenderer implements CardRenderer {
               text,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 12, color: color, fontFamily: fontFamily),
+              style: TextStyle(
+                fontSize: 12,
+                color: color,
+                fontFamily: fontFamily,
+              ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -163,4 +181,3 @@ class StripeLeftRenderer implements CardRenderer {
     );
   }
 }
-

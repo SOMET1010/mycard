@@ -3,7 +3,6 @@ import 'package:mycard/core/services/accessibility_service.dart';
 
 /// Widget texte avec vérification d'accessibilité intégrée
 class AccessibleText extends StatelessWidget {
-
   const AccessibleText(
     this.text, {
     super.key,
@@ -62,7 +61,11 @@ class AccessibleText extends StatelessWidget {
     final bgColorValue = backgroundColor.toARGB32();
     final textColorValue = textColor.toARGB32();
 
-    if (!AccessibilityService.hasSufficientContrast(textColorValue, bgColorValue, largeText: isLargeText)) {
+    if (!AccessibilityService.hasSufficientContrast(
+      textColorValue,
+      bgColorValue,
+      largeText: isLargeText,
+    )) {
       // Utiliser la couleur optimale pour le contraste
       return Color(AccessibilityService.getOptimalTextColor(bgColorValue));
     }
@@ -73,7 +76,6 @@ class AccessibleText extends StatelessWidget {
 
 /// Widget pour les éléments interactifs accessibles
 class AccessibleInteractive extends StatelessWidget {
-
   const AccessibleInteractive({
     super.key,
     required this.child,
@@ -96,7 +98,8 @@ class AccessibleInteractive extends StatelessWidget {
 
     // S'assurer que l'élément a une taille minimale pour l'accessibilité
     if (minSize != null) {
-      final minInteractiveSize = AccessibilityService.getMinimumInteractiveSize();
+      final minInteractiveSize =
+          AccessibilityService.getMinimumInteractiveSize();
       if (minSize! < minInteractiveSize) {
         wrappedChild = SizedBox(
           width: minInteractiveSize,
@@ -123,7 +126,6 @@ class AccessibleInteractive extends StatelessWidget {
 
 /// Widget pour vérifier et améliorer le contraste des conteneurs
 class AccessibleContainer extends StatelessWidget {
-
   const AccessibleContainer({
     super.key,
     required this.child,
@@ -146,9 +148,9 @@ class AccessibleContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveDecoration = decoration ?? BoxDecoration(
-      color: backgroundColor ?? Colors.transparent,
-    );
+    final effectiveDecoration =
+        decoration ??
+        BoxDecoration(color: backgroundColor ?? Colors.transparent);
 
     return Container(
       width: width,
@@ -157,11 +159,7 @@ class AccessibleContainer extends StatelessWidget {
       margin: margin,
       decoration: effectiveDecoration,
       child: semanticsLabel != null
-          ? Semantics(
-              label: semanticsLabel,
-              container: true,
-              child: child,
-            )
+          ? Semantics(label: semanticsLabel, container: true, child: child)
           : child,
     );
   }

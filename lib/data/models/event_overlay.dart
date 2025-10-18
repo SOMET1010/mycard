@@ -1,9 +1,9 @@
 /// Modèle de données pour un overlay événementiel
 library;
+
 import 'package:flutter/material.dart';
 
 class EventOverlay {
-
   const EventOverlay({
     required this.id,
     required this.label,
@@ -16,14 +16,14 @@ class EventOverlay {
 
   /// Crée un événement à partir d'un Map JSON
   factory EventOverlay.fromJson(Map<String, dynamic> json) => EventOverlay(
-      id: json['id'],
-      label: json['label'],
-      color: Color(int.parse('FF${json['color']}', radix: 16)),
-      icon: json['icon'],
-      period: json['period'],
-      description: json['description'],
-      isActive: json['isActive'] ?? true,
-    );
+    id: json['id'],
+    label: json['label'],
+    color: Color(int.parse('FF${json['color']}', radix: 16)),
+    icon: json['icon'],
+    period: json['period'],
+    description: json['description'],
+    isActive: json['isActive'] ?? true,
+  );
   final String id;
   final String label;
   final Color color;
@@ -158,18 +158,19 @@ class EventOverlay {
   }
 
   /// Retourne les événements actuellement actifs
-  static List<EventOverlay> getActiveEvents() => predefinedEvents.where((event) => event.isCurrentlyActive()).toList();
+  static List<EventOverlay> getActiveEvents() =>
+      predefinedEvents.where((event) => event.isCurrentlyActive()).toList();
 
   /// Convertit en Map pour JSON
   Map<String, dynamic> toJson() => {
-      'id': id,
-      'label': label,
-      'color': color.value.toRadixString(16),
-      'icon': icon,
-      'period': period,
-      'description': description,
-      'isActive': isActive,
-    };
+    'id': id,
+    'label': label,
+    'color': color.value.toRadixString(16),
+    'icon': icon,
+    'period': period,
+    'description': description,
+    'isActive': isActive,
+  };
 
   @override
   bool operator ==(Object other) {

@@ -1,7 +1,7 @@
 /// Constantes utilisées dans toute l'application
 class AppConstants {
   // Dimensions (en pixels à 300 DPI)
-  static const double cardWidth = 900;  // 3 inches * 300 DPI
+  static const double cardWidth = 900; // 3 inches * 300 DPI
   static const double cardHeight = 540; // 1.8 inches * 300 DPI
   static const double cardAspectRatio = cardWidth / cardHeight;
 

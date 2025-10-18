@@ -1,5 +1,6 @@
 /// Service de versioning et gestion de l'historique des thèmes
 library;
+
 import 'dart:convert';
 import 'dart:math';
 
@@ -8,27 +9,26 @@ import 'package:mycard/data/models/event_overlay.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum ThemeVersionStatus {
-  draft,          // Brouillon
-  active,         // Actif
-  archived,       // Archivé
-  deleted,        // Supprimé
-  published,      // Publié
-  underReview,    // En révision
+  draft, // Brouillon
+  active, // Actif
+  archived, // Archivé
+  deleted, // Supprimé
+  published, // Publié
+  underReview, // En révision
 }
 
 enum ChangeType {
-  created,        // Créé
-  modified,       // Modifié
-  deleted,        // Supprimé
-  published,      // Publié
-  archived,       // Archivé
-  restored,       // Restauré
-  duplicated,     // Dupliqué
-  merged,         // Fusionné
+  created, // Créé
+  modified, // Modifié
+  deleted, // Supprimé
+  published, // Publié
+  archived, // Archivé
+  restored, // Restauré
+  duplicated, // Dupliqué
+  merged, // Fusionné
 }
 
 class ThemeVersion {
-
   const ThemeVersion({
     required this.id,
     required this.themeId,
@@ -52,34 +52,34 @@ class ThemeVersion {
   });
 
   factory ThemeVersion.fromJson(Map<String, dynamic> json) => ThemeVersion(
-      id: json['id'],
-      themeId: json['themeId'],
-      version: json['version'],
-      theme: EventThemeCustomization.fromJson(json['theme']),
-      changeDescription: json['changeDescription'],
-      changeType: ChangeType.values.firstWhere(
-        (e) => e.name == json['changeType'],
-        orElse: () => ChangeType.modified,
-      ),
-      authorId: json['authorId'],
-      authorName: json['authorName'],
-      createdAt: DateTime.parse(json['createdAt']),
-      publishedAt: json['publishedAt'] != null
-          ? DateTime.parse(json['publishedAt'])
-          : null,
-      status: ThemeVersionStatus.values.firstWhere(
-        (e) => e.name == json['status'],
-        orElse: () => ThemeVersionStatus.draft,
-      ),
-      tags: List<String>.from(json['tags'] ?? []),
-      metadata: Map<String, dynamic>.from(json['metadata'] ?? {}),
-      parentVersionId: json['parentVersionId'],
-      childVersionIds: List<String>.from(json['childVersionIds'] ?? []),
-      isMajorVersion: json['isMajorVersion'] ?? false,
-      isMinorVersion: json['isMinorVersion'] ?? false,
-      isPatchVersion: json['isPatchVersion'] ?? false,
-      changelog: Map<String, dynamic>.from(json['changelog'] ?? {}),
-    );
+    id: json['id'],
+    themeId: json['themeId'],
+    version: json['version'],
+    theme: EventThemeCustomization.fromJson(json['theme']),
+    changeDescription: json['changeDescription'],
+    changeType: ChangeType.values.firstWhere(
+      (e) => e.name == json['changeType'],
+      orElse: () => ChangeType.modified,
+    ),
+    authorId: json['authorId'],
+    authorName: json['authorName'],
+    createdAt: DateTime.parse(json['createdAt']),
+    publishedAt: json['publishedAt'] != null
+        ? DateTime.parse(json['publishedAt'])
+        : null,
+    status: ThemeVersionStatus.values.firstWhere(
+      (e) => e.name == json['status'],
+      orElse: () => ThemeVersionStatus.draft,
+    ),
+    tags: List<String>.from(json['tags'] ?? []),
+    metadata: Map<String, dynamic>.from(json['metadata'] ?? {}),
+    parentVersionId: json['parentVersionId'],
+    childVersionIds: List<String>.from(json['childVersionIds'] ?? []),
+    isMajorVersion: json['isMajorVersion'] ?? false,
+    isMinorVersion: json['isMinorVersion'] ?? false,
+    isPatchVersion: json['isPatchVersion'] ?? false,
+    changelog: Map<String, dynamic>.from(json['changelog'] ?? {}),
+  );
   final String id;
   final String themeId;
   final int version;
@@ -101,26 +101,26 @@ class ThemeVersion {
   final Map<String, dynamic> changelog;
 
   Map<String, dynamic> toJson() => {
-      'id': id,
-      'themeId': themeId,
-      'version': version,
-      'theme': theme.toJson(),
-      'changeDescription': changeDescription,
-      'changeType': changeType.name,
-      'authorId': authorId,
-      'authorName': authorName,
-      'createdAt': createdAt.toIso8601String(),
-      'publishedAt': publishedAt?.toIso8601String(),
-      'status': status.name,
-      'tags': tags,
-      'metadata': metadata,
-      'parentVersionId': parentVersionId,
-      'childVersionIds': childVersionIds,
-      'isMajorVersion': isMajorVersion,
-      'isMinorVersion': isMinorVersion,
-      'isPatchVersion': isPatchVersion,
-      'changelog': changelog,
-    };
+    'id': id,
+    'themeId': themeId,
+    'version': version,
+    'theme': theme.toJson(),
+    'changeDescription': changeDescription,
+    'changeType': changeType.name,
+    'authorId': authorId,
+    'authorName': authorName,
+    'createdAt': createdAt.toIso8601String(),
+    'publishedAt': publishedAt?.toIso8601String(),
+    'status': status.name,
+    'tags': tags,
+    'metadata': metadata,
+    'parentVersionId': parentVersionId,
+    'childVersionIds': childVersionIds,
+    'isMajorVersion': isMajorVersion,
+    'isMinorVersion': isMinorVersion,
+    'isPatchVersion': isPatchVersion,
+    'changelog': changelog,
+  };
 
   String get versionLabel {
     if (isMajorVersion) return '$version.0.0';
@@ -149,26 +149,26 @@ class ThemeVersion {
     bool? isPatchVersion,
     Map<String, dynamic>? changelog,
   }) => ThemeVersion(
-      id: id ?? this.id,
-      themeId: themeId ?? this.themeId,
-      version: version ?? this.version,
-      theme: theme ?? this.theme,
-      changeDescription: changeDescription ?? this.changeDescription,
-      changeType: changeType ?? this.changeType,
-      authorId: authorId ?? this.authorId,
-      authorName: authorName ?? this.authorName,
-      createdAt: createdAt ?? this.createdAt,
-      publishedAt: publishedAt ?? this.publishedAt,
-      status: status ?? this.status,
-      tags: tags ?? this.tags,
-      metadata: metadata ?? this.metadata,
-      parentVersionId: parentVersionId ?? this.parentVersionId,
-      childVersionIds: childVersionIds ?? this.childVersionIds,
-      isMajorVersion: isMajorVersion ?? this.isMajorVersion,
-      isMinorVersion: isMinorVersion ?? this.isMinorVersion,
-      isPatchVersion: isPatchVersion ?? this.isPatchVersion,
-      changelog: changelog ?? this.changelog,
-    );
+    id: id ?? this.id,
+    themeId: themeId ?? this.themeId,
+    version: version ?? this.version,
+    theme: theme ?? this.theme,
+    changeDescription: changeDescription ?? this.changeDescription,
+    changeType: changeType ?? this.changeType,
+    authorId: authorId ?? this.authorId,
+    authorName: authorName ?? this.authorName,
+    createdAt: createdAt ?? this.createdAt,
+    publishedAt: publishedAt ?? this.publishedAt,
+    status: status ?? this.status,
+    tags: tags ?? this.tags,
+    metadata: metadata ?? this.metadata,
+    parentVersionId: parentVersionId ?? this.parentVersionId,
+    childVersionIds: childVersionIds ?? this.childVersionIds,
+    isMajorVersion: isMajorVersion ?? this.isMajorVersion,
+    isMinorVersion: isMinorVersion ?? this.isMinorVersion,
+    isPatchVersion: isPatchVersion ?? this.isPatchVersion,
+    changelog: changelog ?? this.changelog,
+  );
 }
 
 class ThemeVersioningService {
@@ -196,7 +196,11 @@ class ThemeVersioningService {
     Map<String, dynamic> metadata = const {},
   }) async {
     final versions = await getThemeVersions(themeId);
-    final nextVersion = _calculateNextVersion(versions, isMajorVersion, isMinorVersion);
+    final nextVersion = _calculateNextVersion(
+      versions,
+      isMajorVersion,
+      isMinorVersion,
+    );
 
     final version = ThemeVersion(
       id: _generateVersionId(),
@@ -226,9 +230,9 @@ class ThemeVersioningService {
       if (parentVersion != null) {
         final updatedChildren = List<String>.from(parentVersion.childVersionIds)
           ..add(version.id);
-        await updateVersion(parentVersion.copyWith(
-          childVersionIds: updatedChildren,
-        ));
+        await updateVersion(
+          parentVersion.copyWith(childVersionIds: updatedChildren),
+        );
       }
     }
 
@@ -350,9 +354,7 @@ class ThemeVersioningService {
   static Future<void> restoreVersion(String versionId) async {
     final version = await getVersion(versionId);
     if (version != null && version.status == ThemeVersionStatus.archived) {
-      final updatedVersion = version.copyWith(
-        status: ThemeVersionStatus.draft,
-      );
+      final updatedVersion = version.copyWith(status: ThemeVersionStatus.draft);
       await updateVersion(updatedVersion);
     }
   }
@@ -375,7 +377,9 @@ class ThemeVersioningService {
       theme: originalVersion.theme,
       authorId: authorId,
       authorName: authorName,
-      changeDescription: changeDescription ?? 'Dupliqué depuis ${originalVersion.versionLabel}',
+      changeDescription:
+          changeDescription ??
+          'Dupliqué depuis ${originalVersion.versionLabel}',
       changeType: ChangeType.duplicated,
       parentVersionId: versionId,
       tags: originalVersion.tags,
@@ -400,7 +404,9 @@ class ThemeVersioningService {
     }
 
     // Logique de fusion simple - utiliser la version la plus récente comme base
-    final baseVersion = version1.createdAt.isAfter(version2.createdAt) ? version1 : version2;
+    final baseVersion = version1.createdAt.isAfter(version2.createdAt)
+        ? version1
+        : version2;
     final otherVersion = baseVersion == version1 ? version2 : version1;
 
     // Fusionner les métadonnées
@@ -416,7 +422,9 @@ class ThemeVersioningService {
       theme: baseVersion.theme,
       authorId: authorId,
       authorName: authorName,
-      changeDescription: changeDescription ?? 'Fusion de ${version1.versionLabel} et ${version2.versionLabel}',
+      changeDescription:
+          changeDescription ??
+          'Fusion de ${version1.versionLabel} et ${version2.versionLabel}',
       changeType: ChangeType.merged,
       parentVersionId: baseVersion.id,
       tags: mergedTags,
@@ -425,7 +433,10 @@ class ThemeVersioningService {
   }
 
   /// Compare deux versions
-  static Future<Map<String, dynamic>> compareVersions(String versionId1, String versionId2) async {
+  static Future<Map<String, dynamic>> compareVersions(
+    String versionId1,
+    String versionId2,
+  ) async {
     final version1 = await getVersion(versionId1);
     final version2 = await getVersion(versionId2);
 
@@ -452,7 +463,10 @@ class ThemeVersioningService {
   }
 
   /// Récupère l'historique des changements d'un thème
-  static Future<List<ThemeVersion>> getVersionHistory(String themeId, {int limit = 50}) async {
+  static Future<List<ThemeVersion>> getVersionHistory(
+    String themeId, {
+    int limit = 50,
+  }) async {
     await _loadVersions();
     final history = _versionHistory[themeId] ?? [];
     final versions = <ThemeVersion>[];
@@ -498,7 +512,8 @@ class ThemeVersioningService {
         if (changeType != null && version.changeType != changeType) continue;
 
         // Filtrer par date
-        if (startDate != null && version.createdAt.isBefore(startDate)) continue;
+        if (startDate != null && version.createdAt.isBefore(startDate))
+          continue;
         if (endDate != null && version.createdAt.isAfter(endDate)) continue;
 
         // Filtrer par tags
@@ -508,8 +523,13 @@ class ThemeVersioningService {
         if (query != null) {
           final searchLower = query.toLowerCase();
           if (!version.authorName.toLowerCase().contains(searchLower) &&
-              !(version.changeDescription?.toLowerCase().contains(searchLower) ?? false) &&
-              !version.tags.any((tag) => tag.toLowerCase().contains(searchLower))) {
+              !(version.changeDescription?.toLowerCase().contains(
+                    searchLower,
+                  ) ??
+                  false) &&
+              !version.tags.any(
+                (tag) => tag.toLowerCase().contains(searchLower),
+              )) {
             continue;
           }
         }
@@ -558,7 +578,11 @@ class ThemeVersioningService {
 
   // Méthodes privées
 
-  static int _calculateNextVersion(List<ThemeVersion> versions, bool isMajor, bool isMinor) {
+  static int _calculateNextVersion(
+    List<ThemeVersion> versions,
+    bool isMajor,
+    bool isMinor,
+  ) {
     if (versions.isEmpty) return 100; // 1.0.0
 
     final sortedVersions = List<ThemeVersion>.from(versions)
@@ -581,9 +605,13 @@ class ThemeVersioningService {
     }
   }
 
-  static String _generateVersionId() => 'version_${DateTime.now().millisecondsSinceEpoch}_${Random().nextInt(10000)}';
+  static String _generateVersionId() =>
+      'version_${DateTime.now().millisecondsSinceEpoch}_${Random().nextInt(10000)}';
 
-  static Map<String, dynamic> _generateChangelog(EventThemeCustomization theme, String? parentVersionId) {
+  static Map<String, dynamic> _generateChangelog(
+    EventThemeCustomization theme,
+    String? parentVersionId,
+  ) {
     // Simulation de génération de changelog
     return {
       'colors': {
@@ -591,24 +619,18 @@ class ThemeVersioningService {
         'secondaryChanged': true,
         'backgroundChanged': false,
       },
-      'typography': {
-        'fontChanged': false,
-        'sizeChanged': true,
-      },
-      'layout': {
-        'paddingChanged': true,
-        'borderRadiusChanged': false,
-      },
-      'effects': {
-        'shadowsChanged': true,
-        'animationsChanged': false,
-      },
+      'typography': {'fontChanged': false, 'sizeChanged': true},
+      'layout': {'paddingChanged': true, 'borderRadiusChanged': false},
+      'effects': {'shadowsChanged': true, 'animationsChanged': false},
       'generatedAt': DateTime.now().toIso8601String(),
       'autoGenerated': true,
     };
   }
 
-  static Map<String, dynamic> _calculateDifferences(EventThemeCustomization theme1, EventThemeCustomization theme2) {
+  static Map<String, dynamic> _calculateDifferences(
+    EventThemeCustomization theme1,
+    EventThemeCustomization theme2,
+  ) {
     final differences = <String, dynamic>{};
 
     // Comparer les couleurs
@@ -651,7 +673,10 @@ class ThemeVersioningService {
     return differences;
   }
 
-  static double _calculateSimilarity(EventThemeCustomization theme1, EventThemeCustomization theme2) {
+  static double _calculateSimilarity(
+    EventThemeCustomization theme1,
+    EventThemeCustomization theme2,
+  ) {
     final allProperties = theme1.toJson().keys;
     if (allProperties.isEmpty) return 1.0;
 
@@ -665,7 +690,9 @@ class ThemeVersioningService {
     return similarCount / allProperties.length;
   }
 
-  static Map<String, dynamic> _calculateThemeStatistics(List<ThemeVersion> versions) {
+  static Map<String, dynamic> _calculateThemeStatistics(
+    List<ThemeVersion> versions,
+  ) {
     final authors = <String, int>{};
     final changeTypes = <ChangeType, int>{};
     final versionsByMonth = <String, int>{};
@@ -675,10 +702,12 @@ class ThemeVersioningService {
       authors[version.authorName] = (authors[version.authorName] ?? 0) + 1;
 
       // Compter par type de changement
-      changeTypes[version.changeType] = (changeTypes[version.changeType] ?? 0) + 1;
+      changeTypes[version.changeType] =
+          (changeTypes[version.changeType] ?? 0) + 1;
 
       // Compter par mois
-      final monthKey = '${version.createdAt.year}-${version.createdAt.month.toString().padLeft(2, '0')}';
+      final monthKey =
+          '${version.createdAt.year}-${version.createdAt.month.toString().padLeft(2, '0')}';
       versionsByMonth[monthKey] = (versionsByMonth[monthKey] ?? 0) + 1;
     }
 
@@ -718,7 +747,9 @@ class ThemeVersioningService {
       final activeVersionsJson = prefs.getString(_activeVersionsKey);
       if (activeVersionsJson != null) {
         _activeVersions.clear();
-        _activeVersions.addAll(Map<String, String>.from(json.decode(activeVersionsJson)));
+        _activeVersions.addAll(
+          Map<String, String>.from(json.decode(activeVersionsJson)),
+        );
       }
 
       final historyJson = prefs.getString(_versionHistoryKey);
@@ -773,7 +804,9 @@ class ThemeVersioningService {
         versions.sort((a, b) => a.createdAt.compareTo(b.createdAt));
 
         // Garder les versions les plus récentes
-        final versionsToKeep = versions.skip(versions.length - maxVersionsPerTheme).toList();
+        final versionsToKeep = versions
+            .skip(versions.length - maxVersionsPerTheme)
+            .toList();
 
         // Marquer les anciennes comme archivées
         for (var i = 0; i < versions.length - maxVersionsPerTheme; i++) {
@@ -804,7 +837,8 @@ class ThemeVersioningService {
 
       for (final version in versions) {
         authors.add(version.authorId);
-        statusDistribution[version.status] = (statusDistribution[version.status] ?? 0) + 1;
+        statusDistribution[version.status] =
+            (statusDistribution[version.status] ?? 0) + 1;
       }
     }
 
@@ -812,8 +846,12 @@ class ThemeVersioningService {
       'totalThemes': totalThemes,
       'totalVersions': totalVersions,
       'uniqueAuthors': authors.length,
-      'averageVersionsPerTheme': totalThemes > 0 ? totalVersions / totalThemes : 0.0,
-      'statusDistribution': statusDistribution.map((k, v) => MapEntry(k.name, v)),
+      'averageVersionsPerTheme': totalThemes > 0
+          ? totalVersions / totalThemes
+          : 0.0,
+      'statusDistribution': statusDistribution.map(
+        (k, v) => MapEntry(k.name, v),
+      ),
       'activeVersionsCount': _activeVersions.length,
     };
   }

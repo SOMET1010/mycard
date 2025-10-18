@@ -8,7 +8,8 @@ class AIColorGeneratorPage extends ConsumerStatefulWidget {
   const AIColorGeneratorPage({super.key});
 
   @override
-  ConsumerState<AIColorGeneratorPage> createState() => _AIColorGeneratorPageState();
+  ConsumerState<AIColorGeneratorPage> createState() =>
+      _AIColorGeneratorPageState();
 }
 
 class _AIColorGeneratorPageState extends ConsumerState<AIColorGeneratorPage> {
@@ -49,9 +50,9 @@ class _AIColorGeneratorPageState extends ConsumerState<AIColorGeneratorPage> {
       });
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erreur: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Erreur: $e')));
       }
     }
   }
@@ -61,9 +62,11 @@ class _AIColorGeneratorPageState extends ConsumerState<AIColorGeneratorPage> {
 
     if (lowerDesc.contains('professionnel') || lowerDesc.contains('business')) {
       return ColorMood.professional;
-    } else if (lowerDesc.contains('créatif') || lowerDesc.contains('artistique')) {
+    } else if (lowerDesc.contains('créatif') ||
+        lowerDesc.contains('artistique')) {
       return ColorMood.creative;
-    } else if (lowerDesc.contains('énergique') || lowerDesc.contains('dynamique')) {
+    } else if (lowerDesc.contains('énergique') ||
+        lowerDesc.contains('dynamique')) {
       return ColorMood.energetic;
     } else if (lowerDesc.contains('calme') || lowerDesc.contains('relax')) {
       return ColorMood.calm;
@@ -80,9 +83,7 @@ class _AIColorGeneratorPageState extends ConsumerState<AIColorGeneratorPage> {
     if (_generatedPalette != null) {
       // TODO: Implémenter l'application de la palette à l'éditeur
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Palette appliquée à l\'éditeur!'),
-        ),
+        const SnackBar(content: Text('Palette appliquée à l\'éditeur!')),
       );
       // Naviguer vers l'éditeur avec la palette
       context.go('/editor');
@@ -91,95 +92,101 @@ class _AIColorGeneratorPageState extends ConsumerState<AIColorGeneratorPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/gallery'),
-        ),
-        title: const Text('Générateur IA de Couleurs'),
-        actions: [
-          if (_generatedPalette != null)
-            IconButton(
-              icon: const Icon(Icons.check),
-              onPressed: _applyPaletteToEditor,
-              tooltip: 'Appliquer à l\'éditeur',
-            ),
-        ],
+    appBar: AppBar(
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back),
+        onPressed: () => context.go('/gallery'),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Méthode de génération',
-                      style: Theme.of(context).textTheme.titleMedium,
+      title: const Text('Générateur IA de Couleurs'),
+      actions: [
+        if (_generatedPalette != null)
+          IconButton(
+            icon: const Icon(Icons.check),
+            onPressed: _applyPaletteToEditor,
+            tooltip: 'Appliquer à l\'éditeur',
+          ),
+      ],
+    ),
+    body: SingleChildScrollView(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Méthode de génération',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: 8),
+                  DropdownButtonFormField<ColorGenerationMethod>(
+                    initialValue: _selectedMethod,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
                     ),
-                    const SizedBox(height: 8),
-                    DropdownButtonFormField<ColorGenerationMethod>(
-                      initialValue: _selectedMethod,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                      ),
-                      items: ColorGenerationMethod.values.map((method) => DropdownMenuItem(
-                          value: method,
-                          child: Text(_getMethodName(method)),
-                        )).toList(),
-                      onChanged: (value) {
-                        if (value != null) {
-                          setState(() {
-                            _selectedMethod = value;
-                          });
-                        }
-                      },
+                    items: ColorGenerationMethod.values
+                        .map(
+                          (method) => DropdownMenuItem(
+                            value: method,
+                            child: Text(_getMethodName(method)),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (value) {
+                      if (value != null) {
+                        setState(() {
+                          _selectedMethod = value;
+                        });
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Description du thème (optionnel)',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: _descriptionController,
+                    decoration: const InputDecoration(
+                      hintText: 'Ex: "Une carte professionnelle élégante"',
+                      border: OutlineInputBorder(),
                     ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'Description du thème (optionnel)',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: 8),
-                    TextField(
-                      controller: _descriptionController,
-                      decoration: const InputDecoration(
-                        hintText: 'Ex: "Une carte professionnelle élégante"',
-                        border: OutlineInputBorder(),
-                      ),
-                      maxLines: 3,
-                    ),
-                    const SizedBox(height: 16),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: _isGenerating ? null : _generatePalette,
-                        icon: _isGenerating
-                            ? const SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(strokeWidth: 2),
-                              )
-                            : const Icon(Icons.auto_awesome),
-                        label: Text(_isGenerating
+                    maxLines: 3,
+                  ),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: _isGenerating ? null : _generatePalette,
+                      icon: _isGenerating
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : const Icon(Icons.auto_awesome),
+                      label: Text(
+                        _isGenerating
                             ? 'Génération en cours...'
-                            : 'Générer une palette'),
+                            : 'Générer une palette',
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 16),
-            if (_generatedPalette != null) _buildPaletteCard(context),
-          ],
-        ),
+          ),
+          const SizedBox(height: 16),
+          if (_generatedPalette != null) _buildPaletteCard(context),
+        ],
       ),
-    );
+    ),
+  );
 
   Widget _buildPaletteCard(BuildContext context) {
     final palette = _generatedPalette!;
@@ -190,10 +197,7 @@ class _AIColorGeneratorPageState extends ConsumerState<AIColorGeneratorPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              palette.name,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
+            Text(palette.name, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 4),
             Text(
               palette.description,
@@ -208,7 +212,10 @@ class _AIColorGeneratorPageState extends ConsumerState<AIColorGeneratorPage> {
                 ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: _buildColorSwatch('Secondaire', palette.secondaryColor),
+                  child: _buildColorSwatch(
+                    'Secondaire',
+                    palette.secondaryColor,
+                  ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
@@ -223,9 +230,7 @@ class _AIColorGeneratorPageState extends ConsumerState<AIColorGeneratorPage> {
                   child: _buildColorSwatch('Fond', palette.backgroundColor),
                 ),
                 const SizedBox(width: 8),
-                Expanded(
-                  child: _buildColorSwatch('Texte', palette.textColor),
-                ),
+                Expanded(child: _buildColorSwatch('Texte', palette.textColor)),
                 const SizedBox(width: 8),
                 const Expanded(child: SizedBox()),
               ],
@@ -259,24 +264,24 @@ class _AIColorGeneratorPageState extends ConsumerState<AIColorGeneratorPage> {
   }
 
   Widget _buildColorSwatch(String label, Color color) => Column(
-      children: [
-        Container(
-          width: double.infinity,
-          height: 60,
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Colors.grey.shade300),
-          ),
+    children: [
+      Container(
+        width: double.infinity,
+        height: 60,
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.grey.shade300),
         ),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: const TextStyle(fontSize: 12),
-          textAlign: TextAlign.center,
-        ),
-      ],
-    );
+      ),
+      const SizedBox(height: 4),
+      Text(
+        label,
+        style: const TextStyle(fontSize: 12),
+        textAlign: TextAlign.center,
+      ),
+    ],
+  );
 
   String _getMethodName(ColorGenerationMethod method) {
     switch (method) {

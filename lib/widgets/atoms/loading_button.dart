@@ -1,5 +1,6 @@
 /// Widget de bouton avec indicateur de chargement
 library;
+
 import 'package:flutter/material.dart';
 import 'package:mycard/app/theme.dart';
 
@@ -25,23 +26,27 @@ class LoadingButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => SizedBox(
-        width: width,
-        height: height,
-        child: ElevatedButton(
-          onPressed: isLoading ? null : onPressed,
-          style: style ?? ElevatedButton.styleFrom(
+    width: width,
+    height: height,
+    child: ElevatedButton(
+      onPressed: isLoading ? null : onPressed,
+      style:
+          style ??
+          ElevatedButton.styleFrom(
             backgroundColor: AppTheme.burntSienna,
             foregroundColor: Colors.white,
-            disabledBackgroundColor: AppTheme.burntSienna.withValues(alpha: 0.5),
+            disabledBackgroundColor: AppTheme.burntSienna.withValues(
+              alpha: 0.5,
+            ),
             elevation: 0,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(14),
             ),
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
           ),
-          child: _buildContent(),
-        ),
-      );
+      child: _buildContent(),
+    ),
+  );
 
   Widget _buildContent() {
     if (isLoading) {
@@ -58,11 +63,7 @@ class LoadingButton extends StatelessWidget {
     if (icon != null) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          icon!,
-          const SizedBox(width: 8),
-          Text(text),
-        ],
+        children: [icon!, const SizedBox(width: 8), Text(text)],
       );
     }
 

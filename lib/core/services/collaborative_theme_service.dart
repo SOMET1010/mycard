@@ -1,5 +1,6 @@
 /// Service pour la collaboration en temps réel sur les thèmes
 library;
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -8,14 +9,13 @@ import 'package:mycard/features/events/page_event_theme_preview.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 enum CollaborationRole {
-  owner,      // Propriétaire du thème
-  editor,     // Éditeur avec droits de modification
-  viewer,     // Spectateur uniquement
-  commenter,  // Peut commenter mais pas modifier
+  owner, // Propriétaire du thème
+  editor, // Éditeur avec droits de modification
+  viewer, // Spectateur uniquement
+  commenter, // Peut commenter mais pas modifier
 }
 
 class CollaborationSession {
-
   const CollaborationSession({
     required this.sessionId,
     required this.themeId,
@@ -27,21 +27,24 @@ class CollaborationSession {
     required this.isActive,
   });
 
-  factory CollaborationSession.fromJson(Map<String, dynamic> json) => CollaborationSession(
-      sessionId: json['sessionId'],
-      themeId: json['themeId'],
-      ownerName: json['ownerName'],
-      createdAt: DateTime.parse(json['createdAt']),
-      expiresAt: json['expiresAt'] != null ? DateTime.parse(json['expiresAt']) : null,
-      collaborators: (json['collaborators'] as List)
-          .map((c) => Collaborator.fromJson(c))
-          .toList(),
-      userRole: CollaborationRole.values.firstWhere(
-        (r) => r.name == json['userRole'],
-        orElse: () => CollaborationRole.viewer,
-      ),
-      isActive: json['isActive'] ?? true,
-    );
+  factory CollaborationSession.fromJson(Map<String, dynamic> json) =>
+      CollaborationSession(
+        sessionId: json['sessionId'],
+        themeId: json['themeId'],
+        ownerName: json['ownerName'],
+        createdAt: DateTime.parse(json['createdAt']),
+        expiresAt: json['expiresAt'] != null
+            ? DateTime.parse(json['expiresAt'])
+            : null,
+        collaborators: (json['collaborators'] as List)
+            .map((c) => Collaborator.fromJson(c))
+            .toList(),
+        userRole: CollaborationRole.values.firstWhere(
+          (r) => r.name == json['userRole'],
+          orElse: () => CollaborationRole.viewer,
+        ),
+        isActive: json['isActive'] ?? true,
+      );
   final String sessionId;
   final String themeId;
   final String ownerName;
@@ -52,19 +55,18 @@ class CollaborationSession {
   final bool isActive;
 
   Map<String, dynamic> toJson() => {
-        'sessionId': sessionId,
-        'themeId': themeId,
-        'ownerName': ownerName,
-        'createdAt': createdAt.toIso8601String(),
-        'expiresAt': expiresAt?.toIso8601String(),
-        'collaborators': collaborators.map((c) => c.toJson()).toList(),
-        'userRole': userRole.name,
-        'isActive': isActive,
-      };
+    'sessionId': sessionId,
+    'themeId': themeId,
+    'ownerName': ownerName,
+    'createdAt': createdAt.toIso8601String(),
+    'expiresAt': expiresAt?.toIso8601String(),
+    'collaborators': collaborators.map((c) => c.toJson()).toList(),
+    'userRole': userRole.name,
+    'isActive': isActive,
+  };
 }
 
 class Collaborator {
-
   const Collaborator({
     required this.id,
     required this.name,
@@ -75,16 +77,16 @@ class Collaborator {
   });
 
   factory Collaborator.fromJson(Map<String, dynamic> json) => Collaborator(
-      id: json['id'],
-      name: json['name'],
-      role: CollaborationRole.values.firstWhere(
-        (r) => r.name == json['role'],
-        orElse: () => CollaborationRole.viewer,
-      ),
-      avatarColor: Color(json['avatarColor']),
-      isOnline: json['isOnline'] ?? false,
-      lastSeen: DateTime.parse(json['lastSeen']),
-    );
+    id: json['id'],
+    name: json['name'],
+    role: CollaborationRole.values.firstWhere(
+      (r) => r.name == json['role'],
+      orElse: () => CollaborationRole.viewer,
+    ),
+    avatarColor: Color(json['avatarColor']),
+    isOnline: json['isOnline'] ?? false,
+    lastSeen: DateTime.parse(json['lastSeen']),
+  );
   final String id;
   final String name;
   final CollaborationRole role;
@@ -93,17 +95,16 @@ class Collaborator {
   final DateTime lastSeen;
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'role': role.name,
-        'avatarColor': avatarColor.value,
-        'isOnline': isOnline,
-        'lastSeen': lastSeen.toIso8601String(),
-      };
+    'id': id,
+    'name': name,
+    'role': role.name,
+    'avatarColor': avatarColor.value,
+    'isOnline': isOnline,
+    'lastSeen': lastSeen.toIso8601String(),
+  };
 }
 
 class ThemeChange {
-
   const ThemeChange({
     required this.userId,
     required this.userName,
@@ -115,14 +116,14 @@ class ThemeChange {
   });
 
   factory ThemeChange.fromJson(Map<String, dynamic> json) => ThemeChange(
-      userId: json['userId'],
-      userName: json['userName'],
-      timestamp: DateTime.parse(json['timestamp']),
-      changeType: json['changeType'],
-      oldValue: json['oldValue'],
-      newValue: json['newValue'],
-      description: json['description'],
-    );
+    userId: json['userId'],
+    userName: json['userName'],
+    timestamp: DateTime.parse(json['timestamp']),
+    changeType: json['changeType'],
+    oldValue: json['oldValue'],
+    newValue: json['newValue'],
+    description: json['description'],
+  );
   final String userId;
   final String userName;
   final DateTime timestamp;
@@ -132,18 +133,17 @@ class ThemeChange {
   final String? description;
 
   Map<String, dynamic> toJson() => {
-        'userId': userId,
-        'userName': userName,
-        'timestamp': timestamp.toIso8601String(),
-        'changeType': changeType,
-        'oldValue': oldValue,
-        'newValue': newValue,
-        'description': description,
-      };
+    'userId': userId,
+    'userName': userName,
+    'timestamp': timestamp.toIso8601String(),
+    'changeType': changeType,
+    'oldValue': oldValue,
+    'newValue': newValue,
+    'description': description,
+  };
 }
 
 class CollaborationMessage {
-
   const CollaborationMessage({
     required this.id,
     required this.userId,
@@ -153,17 +153,18 @@ class CollaborationMessage {
     required this.type,
   });
 
-  factory CollaborationMessage.fromJson(Map<String, dynamic> json) => CollaborationMessage(
-      id: json['id'],
-      userId: json['userId'],
-      userName: json['userName'],
-      content: json['content'],
-      timestamp: DateTime.parse(json['timestamp']),
-      type: MessageType.values.firstWhere(
-        (t) => t.name == json['type'],
-        orElse: () => MessageType.text,
-      ),
-    );
+  factory CollaborationMessage.fromJson(Map<String, dynamic> json) =>
+      CollaborationMessage(
+        id: json['id'],
+        userId: json['userId'],
+        userName: json['userName'],
+        content: json['content'],
+        timestamp: DateTime.parse(json['timestamp']),
+        type: MessageType.values.firstWhere(
+          (t) => t.name == json['type'],
+          orElse: () => MessageType.text,
+        ),
+      );
   final String id;
   final String userId;
   final String userName;
@@ -172,33 +173,31 @@ class CollaborationMessage {
   final MessageType type;
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'userId': userId,
-        'userName': userName,
-        'content': content,
-        'timestamp': timestamp.toIso8601String(),
-        'type': type.name,
-      };
+    'id': id,
+    'userId': userId,
+    'userName': userName,
+    'content': content,
+    'timestamp': timestamp.toIso8601String(),
+    'type': type.name,
+  };
 }
 
-enum MessageType {
-  text,
-  themeChange,
-  userJoin,
-  userLeave,
-  system,
-}
+enum MessageType { text, themeChange, userJoin, userLeave, system }
 
 class CollaborativeThemeService {
   static WebSocketChannel? _channel;
   static CollaborationSession? _currentSession;
-  static final StreamController<ThemeChange> _themeChangeController = StreamController.broadcast();
-  static final StreamController<CollaborationMessage> _messageController = StreamController.broadcast();
-  static final StreamController<List<Collaborator>> _collaboratorController = StreamController.broadcast();
+  static final StreamController<ThemeChange> _themeChangeController =
+      StreamController.broadcast();
+  static final StreamController<CollaborationMessage> _messageController =
+      StreamController.broadcast();
+  static final StreamController<List<Collaborator>> _collaboratorController =
+      StreamController.broadcast();
 
   static Stream<ThemeChange> get themeChanges => _themeChangeController.stream;
   static Stream<CollaborationMessage> get messages => _messageController.stream;
-  static Stream<List<Collaborator>> get collaborators => _collaboratorController.stream;
+  static Stream<List<Collaborator>> get collaborators =>
+      _collaboratorController.stream;
 
   static Future<CollaborationSession> createCollaborationSession({
     required String themeId,
@@ -336,7 +335,8 @@ class CollaborativeThemeService {
     required String collaboratorId,
     required CollaborationRole newRole,
   }) {
-    if (_currentSession == null || _currentSession!.userRole != CollaborationRole.owner) {
+    if (_currentSession == null ||
+        _currentSession!.userRole != CollaborationRole.owner) {
       return;
     }
 
@@ -365,10 +365,12 @@ class CollaborativeThemeService {
     throw UnimplementedError('Revert to version not implemented yet');
   }
 
-  static bool canEditTheme() => _currentSession?.userRole == CollaborationRole.owner ||
-           _currentSession?.userRole == CollaborationRole.editor;
+  static bool canEditTheme() =>
+      _currentSession?.userRole == CollaborationRole.owner ||
+      _currentSession?.userRole == CollaborationRole.editor;
 
-  static bool canManageCollaborators() => _currentSession?.userRole == CollaborationRole.owner;
+  static bool canManageCollaborators() =>
+      _currentSession?.userRole == CollaborationRole.owner;
 
   static CollaborationSession? get currentSession => _currentSession;
 
@@ -396,10 +398,9 @@ class CollaborativeThemeService {
 
     // Envoyer via WebSocket si connecté
     if (_channel != null) {
-      _channel!.sink.add(jsonEncode({
-        'type': 'theme_change',
-        'data': change.toJson(),
-      }));
+      _channel!.sink.add(
+        jsonEncode({'type': 'theme_change', 'data': change.toJson()}),
+      );
     }
   }
 
@@ -422,10 +423,9 @@ class CollaborativeThemeService {
 
     // Envoyer via WebSocket si connecté
     if (_channel != null) {
-      _channel!.sink.add(jsonEncode({
-        'type': 'message',
-        'data': message.toJson(),
-      }));
+      _channel!.sink.add(
+        jsonEncode({'type': 'message', 'data': message.toJson()}),
+      );
     }
   }
 
@@ -492,7 +492,8 @@ class CollaborativeThemeEditor extends StatefulWidget {
   final Function(EventThemeCustomization) onThemeChanged;
 
   @override
-  State<CollaborativeThemeEditor> createState() => _CollaborativeThemeEditorState();
+  State<CollaborativeThemeEditor> createState() =>
+      _CollaborativeThemeEditorState();
 }
 
 class _CollaborativeThemeEditorState extends State<CollaborativeThemeEditor> {
@@ -546,177 +547,168 @@ class _CollaborativeThemeEditorState extends State<CollaborativeThemeEditor> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(
-        title: Text('Édition collaborative: ${widget.session.ownerName}'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.people),
-            onPressed: _showCollaborators,
-            tooltip: 'Collaborateurs',
-          ),
-          IconButton(
-            icon: const Icon(Icons.history),
-            onPressed: _showHistory,
-            tooltip: 'Historique des changements',
-          ),
-        ],
-      ),
-      body: Row(
-        children: [
-          // Panneau d'édition principal
-          Expanded(
-            flex: 2,
-            child: _buildMainEditor(),
-          ),
+    appBar: AppBar(
+      title: Text('Édition collaborative: ${widget.session.ownerName}'),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.people),
+          onPressed: _showCollaborators,
+          tooltip: 'Collaborateurs',
+        ),
+        IconButton(
+          icon: const Icon(Icons.history),
+          onPressed: _showHistory,
+          tooltip: 'Historique des changements',
+        ),
+      ],
+    ),
+    body: Row(
+      children: [
+        // Panneau d'édition principal
+        Expanded(flex: 2, child: _buildMainEditor()),
 
-          // Panneau de discussion
-          Expanded(
-            flex: 1,
-            child: _buildChatPanel(),
-          ),
-        ],
-      ),
-    );
+        // Panneau de discussion
+        Expanded(flex: 1, child: _buildChatPanel()),
+      ],
+    ),
+  );
 
   Widget _buildMainEditor() => Column(
-      children: [
-        // En-tête avec informations de session
-        Container(
-          padding: const EdgeInsets.all(16),
-          color: Colors.grey[100],
-          child: Row(
-            children: [
-              Icon(Icons.group, color: Colors.grey[600]),
-              const SizedBox(width: 8),
-              Text(
-                'Session: ${widget.session.sessionId}',
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 12,
+    children: [
+      // En-tête avec informations de session
+      Container(
+        padding: const EdgeInsets.all(16),
+        color: Colors.grey[100],
+        child: Row(
+          children: [
+            Icon(Icons.group, color: Colors.grey[600]),
+            const SizedBox(width: 8),
+            Text(
+              'Session: ${widget.session.sessionId}',
+              style: TextStyle(color: Colors.grey[600], fontSize: 12),
+            ),
+            const Spacer(),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: _getRoleColor(widget.session.userRole),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                _getRoleLabel(widget.session.userRole),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              const Spacer(),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: _getRoleColor(widget.session.userRole),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  _getRoleLabel(widget.session.userRole),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
+            ),
+          ],
+        ),
+      ),
+
+      // Zone d'édition (placeholder pour l'éditeur de thème existant)
+      Expanded(
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Éditeur de thème collaboratif',
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              const SizedBox(height: 16),
+
+              // Ici, intégrer l'éditeur de thème existant
+              Expanded(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey[300]!),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Center(
+                    child: Text('Intégrer l\'éditeur de thème ici'),
                   ),
                 ),
               ),
             ],
           ),
         ),
-
-        // Zone d'édition (placeholder pour l'éditeur de thème existant)
-        Expanded(
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Éditeur de thème collaboratif',
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                const SizedBox(height: 16),
-
-                // Ici, intégrer l'éditeur de thème existant
-                Expanded(
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey[300]!),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Center(
-                      child: Text('Intégrer l\'éditeur de thème ici'),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
+      ),
+    ],
+  );
 
   Widget _buildChatPanel() => Column(
-      children: [
-        // En-tête du chat
+    children: [
+      // En-tête du chat
+      Container(
+        padding: const EdgeInsets.all(16),
+        color: Colors.grey[100],
+        child: Row(
+          children: [
+            const Icon(Icons.chat),
+            const SizedBox(width: 8),
+            const Text('Discussion'),
+            const Spacer(),
+            Container(
+              width: 8,
+              height: 8,
+              decoration: const BoxDecoration(
+                color: Colors.green,
+                shape: BoxShape.circle,
+              ),
+            ),
+          ],
+        ),
+      ),
+
+      // Messages
+      Expanded(
+        child: ListView.builder(
+          controller: _chatScrollController,
+          padding: const EdgeInsets.all(8),
+          itemCount: _messages.length,
+          itemBuilder: (context, index) {
+            final message = _messages[index];
+            return _buildMessageBubble(message);
+          },
+        ),
+      ),
+
+      // Zone de saisie
+      if (CollaborativeThemeService.canEditTheme())
         Container(
-          padding: const EdgeInsets.all(16),
-          color: Colors.grey[100],
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            border: Border(top: BorderSide(color: Colors.grey[300]!)),
+          ),
           child: Row(
             children: [
-              const Icon(Icons.chat),
-              const SizedBox(width: 8),
-              const Text('Discussion'),
-              const Spacer(),
-              Container(
-                width: 8,
-                height: 8,
-                decoration: const BoxDecoration(
-                  color: Colors.green,
-                  shape: BoxShape.circle,
+              Expanded(
+                child: TextField(
+                  controller: _messageController,
+                  decoration: const InputDecoration(
+                    hintText: 'Tapez un message...',
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
+                  ),
+                  onSubmitted: _sendMessage,
                 ),
+              ),
+              const SizedBox(width: 8),
+              IconButton(
+                onPressed: () => _sendMessage(_messageController.text),
+                icon: const Icon(Icons.send),
               ),
             ],
           ),
         ),
-
-        // Messages
-        Expanded(
-          child: ListView.builder(
-            controller: _chatScrollController,
-            padding: const EdgeInsets.all(8),
-            itemCount: _messages.length,
-            itemBuilder: (context, index) {
-              final message = _messages[index];
-              return _buildMessageBubble(message);
-            },
-          ),
-        ),
-
-        // Zone de saisie
-        if (CollaborativeThemeService.canEditTheme())
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              border: Border(top: BorderSide(color: Colors.grey[300]!)),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _messageController,
-                    decoration: const InputDecoration(
-                      hintText: 'Tapez un message...',
-                      border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 8,
-                      ),
-                    ),
-                    onSubmitted: _sendMessage,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                IconButton(
-                  onPressed: () => _sendMessage(_messageController.text),
-                  icon: const Icon(Icons.send),
-                ),
-              ],
-            ),
-          ),
-      ],
-    );
+    ],
+  );
 
   Widget _buildMessageBubble(CollaborationMessage message) {
     final isCurrentUser = message.userId == widget.session.sessionId;
@@ -724,10 +716,14 @@ class _CollaborativeThemeEditorState extends State<CollaborativeThemeEditor> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Column(
-        crossAxisAlignment: isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        crossAxisAlignment: isCurrentUser
+            ? CrossAxisAlignment.end
+            : CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: isCurrentUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+            mainAxisAlignment: isCurrentUser
+                ? MainAxisAlignment.end
+                : MainAxisAlignment.start,
             children: [
               if (!isCurrentUser) ...[
                 CircleAvatar(
@@ -742,7 +738,10 @@ class _CollaborativeThemeEditorState extends State<CollaborativeThemeEditor> {
               ],
               Flexible(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
                   decoration: BoxDecoration(
                     color: isCurrentUser ? Colors.blue[100] : Colors.grey[200],
                     borderRadius: BorderRadius.circular(16),
@@ -788,10 +787,7 @@ class _CollaborativeThemeEditorState extends State<CollaborativeThemeEditor> {
             ),
             child: Text(
               _formatTimestamp(message.timestamp),
-              style: TextStyle(
-                fontSize: 10,
-                color: Colors.grey[500],
-              ),
+              style: TextStyle(fontSize: 10, color: Colors.grey[500]),
             ),
           ),
         ],
@@ -817,7 +813,10 @@ class _CollaborativeThemeEditorState extends State<CollaborativeThemeEditor> {
             ListTile(
               leading: CircleAvatar(
                 backgroundColor: Colors.green[300],
-                child: const Text('MOI', style: TextStyle(fontSize: 10, color: Colors.white)),
+                child: const Text(
+                  'MOI',
+                  style: TextStyle(fontSize: 10, color: Colors.white),
+                ),
               ),
               title: Text(widget.session.ownerName),
               subtitle: Text(_getRoleLabel(widget.session.userRole)),
@@ -834,7 +833,10 @@ class _CollaborativeThemeEditorState extends State<CollaborativeThemeEditor> {
             const ListTile(
               leading: CircleAvatar(
                 backgroundColor: Colors.purple,
-                child: Text('A', style: TextStyle(fontSize: 10, color: Colors.white)),
+                child: Text(
+                  'A',
+                  style: TextStyle(fontSize: 10, color: Colors.white),
+                ),
               ),
               title: Text('Alice'),
               subtitle: Text('Éditeur'),
@@ -843,7 +845,10 @@ class _CollaborativeThemeEditorState extends State<CollaborativeThemeEditor> {
             const ListTile(
               leading: CircleAvatar(
                 backgroundColor: Colors.orange,
-                child: Text('B', style: TextStyle(fontSize: 10, color: Colors.white)),
+                child: Text(
+                  'B',
+                  style: TextStyle(fontSize: 10, color: Colors.white),
+                ),
               ),
               title: Text('Bob'),
               subtitle: Text('Spectateur'),
@@ -932,10 +937,14 @@ class _CollaborativeThemeEditorState extends State<CollaborativeThemeEditor> {
                 labelText: 'Rôle',
                 border: OutlineInputBorder(),
               ),
-              items: CollaborationRole.values.map((role) => DropdownMenuItem(
-                  value: role,
-                  child: Text(_getRoleLabel(role)),
-                )).toList(),
+              items: CollaborationRole.values
+                  .map(
+                    (role) => DropdownMenuItem(
+                      value: role,
+                      child: Text(_getRoleLabel(role)),
+                    ),
+                  )
+                  .toList(),
               onChanged: (value) {},
             ),
           ],

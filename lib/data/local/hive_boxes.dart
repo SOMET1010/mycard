@@ -1,5 +1,6 @@
 /// Configuration des boxes Hive pour l'application
 library;
+
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mycard/core/constants.dart';
 import 'package:mycard/data/models/business_card.dart';
@@ -9,16 +10,20 @@ import 'package:mycard/data/models/event_overlay.dart';
 /// Gestionnaire des boxes Hive
 class HiveBoxes {
   /// Box pour les cartes de visite
-  static Future<Box<BusinessCard>> get cardsBox async => Hive.openBox<BusinessCard>(AppConstants.cardsBoxName);
+  static Future<Box<BusinessCard>> get cardsBox async =>
+      Hive.openBox<BusinessCard>(AppConstants.cardsBoxName);
 
   /// Box pour les paramètres de l'application
-  static Future<Box> get settingsBox async => Hive.openBox(AppConstants.settingsBoxName);
+  static Future<Box> get settingsBox async =>
+      Hive.openBox(AppConstants.settingsBoxName);
 
   /// Box pour les templates (cache local)
-  static Future<Box<CardTemplate>> get templatesBox async => Hive.openBox<CardTemplate>('templates');
+  static Future<Box<CardTemplate>> get templatesBox async =>
+      Hive.openBox<CardTemplate>('templates');
 
   /// Box pour les événements (cache local)
-  static Future<Box<EventOverlay>> get eventsBox async => Hive.openBox<EventOverlay>('events');
+  static Future<Box<EventOverlay>> get eventsBox async =>
+      Hive.openBox<EventOverlay>('events');
 
   /// Initialise toutes les boxes nécessaires
   static Future<void> initializeAllBoxes() async {

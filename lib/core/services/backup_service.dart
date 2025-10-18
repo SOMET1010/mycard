@@ -8,7 +8,6 @@ import 'package:share_plus/share_plus.dart';
 
 /// Classe pour représenter une carte de visite sauvegardée
 class SavedCard {
-
   SavedCard({
     required this.id,
     required this.firstName,
@@ -32,26 +31,26 @@ class SavedCard {
   });
 
   factory SavedCard.fromJson(Map<String, dynamic> json) => SavedCard(
-      id: json['id'] as String,
-      firstName: json['firstName'] as String,
-      lastName: json['lastName'] as String,
-      title: json['title'] as String,
-      phone: json['phone'] as String,
-      email: json['email'] as String,
-      company: json['company'] as String?,
-      website: json['website'] as String?,
-      address: json['address'] as String?,
-      city: json['city'] as String?,
-      postalCode: json['postalCode'] as String?,
-      country: json['country'] as String?,
-      templateId: json['templateId'] as String?,
-      eventOverlayId: json['eventOverlayId'] as String?,
-      customColors: Map<String, String>.from(json['customColors'] as Map),
-      fontFamily: json['fontFamily'] as String?,
-      logoPath: json['logoPath'] as String?,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
-    );
+    id: json['id'] as String,
+    firstName: json['firstName'] as String,
+    lastName: json['lastName'] as String,
+    title: json['title'] as String,
+    phone: json['phone'] as String,
+    email: json['email'] as String,
+    company: json['company'] as String?,
+    website: json['website'] as String?,
+    address: json['address'] as String?,
+    city: json['city'] as String?,
+    postalCode: json['postalCode'] as String?,
+    country: json['country'] as String?,
+    templateId: json['templateId'] as String?,
+    eventOverlayId: json['eventOverlayId'] as String?,
+    customColors: Map<String, String>.from(json['customColors'] as Map),
+    fontFamily: json['fontFamily'] as String?,
+    logoPath: json['logoPath'] as String?,
+    createdAt: DateTime.parse(json['createdAt'] as String),
+    updatedAt: DateTime.parse(json['updatedAt'] as String),
+  );
   final String id;
   final String firstName;
   final String lastName;
@@ -73,31 +72,30 @@ class SavedCard {
   final DateTime updatedAt;
 
   Map<String, dynamic> toJson() => {
-      'id': id,
-      'firstName': firstName,
-      'lastName': lastName,
-      'title': title,
-      'phone': phone,
-      'email': email,
-      'company': company,
-      'website': website,
-      'address': address,
-      'city': city,
-      'postalCode': postalCode,
-      'country': country,
-      'templateId': templateId,
-      'eventOverlayId': eventOverlayId,
-      'customColors': customColors,
-      'fontFamily': fontFamily,
-      'logoPath': logoPath,
-      'createdAt': createdAt.toIso8601String(),
-      'updatedAt': updatedAt.toIso8601String(),
-    };
+    'id': id,
+    'firstName': firstName,
+    'lastName': lastName,
+    'title': title,
+    'phone': phone,
+    'email': email,
+    'company': company,
+    'website': website,
+    'address': address,
+    'city': city,
+    'postalCode': postalCode,
+    'country': country,
+    'templateId': templateId,
+    'eventOverlayId': eventOverlayId,
+    'customColors': customColors,
+    'fontFamily': fontFamily,
+    'logoPath': logoPath,
+    'createdAt': createdAt.toIso8601String(),
+    'updatedAt': updatedAt.toIso8601String(),
+  };
 }
 
 /// Classe pour représenter une sauvegarde complète
 class BackupData {
-
   BackupData({
     required this.version,
     required this.createdAt,
@@ -107,18 +105,20 @@ class BackupData {
   });
 
   factory BackupData.fromJson(Map<String, dynamic> json) => BackupData(
-      version: json['version'] as String,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      cards: (json['cards'] as List)
-          .map((card) => SavedCard.fromJson(card as Map<String, dynamic>))
-          .toList(),
-      templates: (json['templates'] as List)
-          .map((template) => CardTemplate.fromJson(template as Map<String, dynamic>))
-          .toList(),
-      eventOverlays: (json['eventOverlays'] as List)
-          .map((event) => EventOverlay.fromJson(event as Map<String, dynamic>))
-          .toList(),
-    );
+    version: json['version'] as String,
+    createdAt: DateTime.parse(json['createdAt'] as String),
+    cards: (json['cards'] as List)
+        .map((card) => SavedCard.fromJson(card as Map<String, dynamic>))
+        .toList(),
+    templates: (json['templates'] as List)
+        .map(
+          (template) => CardTemplate.fromJson(template as Map<String, dynamic>),
+        )
+        .toList(),
+    eventOverlays: (json['eventOverlays'] as List)
+        .map((event) => EventOverlay.fromJson(event as Map<String, dynamic>))
+        .toList(),
+  );
   final String version;
   final DateTime createdAt;
   final List<SavedCard> cards;
@@ -126,12 +126,12 @@ class BackupData {
   final List<EventOverlay> eventOverlays;
 
   Map<String, dynamic> toJson() => {
-      'version': version,
-      'createdAt': createdAt.toIso8601String(),
-      'cards': cards.map((card) => card.toJson()).toList(),
-      'templates': templates.map((template) => template.toJson()).toList(),
-      'eventOverlays': eventOverlays.map((event) => event.toJson()).toList(),
-    };
+    'version': version,
+    'createdAt': createdAt.toIso8601String(),
+    'cards': cards.map((card) => card.toJson()).toList(),
+    'templates': templates.map((template) => template.toJson()).toList(),
+    'eventOverlays': eventOverlays.map((event) => event.toJson()).toList(),
+  };
 }
 
 /// Service pour la sauvegarde et restauration des données
@@ -168,7 +168,13 @@ class BackupService {
     final file = File(backupPath);
     if (await file.exists()) {
       await Share.shareXFiles(
-        [XFile(backupPath, name: 'mycard_backup.json', mimeType: 'application/json')],
+        [
+          XFile(
+            backupPath,
+            name: 'mycard_backup.json',
+            mimeType: 'application/json',
+          ),
+        ],
         subject: 'MyCard Backup',
         text: 'Sauvegarde de vos cartes de visite MyCard',
       );
@@ -205,7 +211,8 @@ class BackupService {
   }
 
   /// @visibleForTesting - Vérifie si une version de sauvegarde est compatible
-  static bool _isVersionCompatible(String version) => isVersionCompatible(version);
+  static bool _isVersionCompatible(String version) =>
+      isVersionCompatible(version);
 
   /// Supprime une sauvegarde
   static Future<bool> deleteBackup(String backupPath) async {
@@ -225,8 +232,11 @@ class BackupService {
   static Future<List<File>> getAvailableBackups() async {
     try {
       final directory = await getApplicationDocumentsDirectory();
-      final files = await directory.list().where((entity) =>
-        entity is File && entity.path.endsWith('.json')).cast<File>().toList();
+      final files = await directory
+          .list()
+          .where((entity) => entity is File && entity.path.endsWith('.json'))
+          .cast<File>()
+          .toList();
 
       // Filtrer pour ne garder que les fichiers de sauvegarde valides
       final validBackups = <File>[];
@@ -243,8 +253,9 @@ class BackupService {
       }
 
       // Trier par date de modification (plus récent en premier)
-      validBackups.sort((a, b) =>
-        b.lastModifiedSync().compareTo(a.lastModifiedSync()));
+      validBackups.sort(
+        (a, b) => b.lastModifiedSync().compareTo(a.lastModifiedSync()),
+      );
 
       return validBackups;
     } catch (e) {
@@ -293,28 +304,32 @@ class BackupService {
     final buffer = StringBuffer();
 
     // En-tête CSV
-    buffer.writeln('ID,Prénom,Nom,Titre,Téléphone,Email,Entreprise,Site Web,Adresse,Ville,Code Postal,Pays,Template,Événement,Créé le,Modifié le');
+    buffer.writeln(
+      'ID,Prénom,Nom,Titre,Téléphone,Email,Entreprise,Site Web,Adresse,Ville,Code Postal,Pays,Template,Événement,Créé le,Modifié le',
+    );
 
     // Lignes de données
     for (final card in backupData.cards) {
-      buffer.writeln([
-        card.id,
-        card.firstName,
-        card.lastName,
-        card.title,
-        card.phone,
-        card.email,
-        card.company ?? '',
-        card.website ?? '',
-        card.address ?? '',
-        card.city ?? '',
-        card.postalCode ?? '',
-        card.country ?? '',
-        card.templateId ?? '',
-        card.eventOverlayId ?? '',
-        card.createdAt.toIso8601String(),
-        card.updatedAt.toIso8601String(),
-      ].join(','));
+      buffer.writeln(
+        [
+          card.id,
+          card.firstName,
+          card.lastName,
+          card.title,
+          card.phone,
+          card.email,
+          card.company ?? '',
+          card.website ?? '',
+          card.address ?? '',
+          card.city ?? '',
+          card.postalCode ?? '',
+          card.country ?? '',
+          card.templateId ?? '',
+          card.eventOverlayId ?? '',
+          card.createdAt.toIso8601String(),
+          card.updatedAt.toIso8601String(),
+        ].join(','),
+      );
     }
 
     return buffer.toString();
@@ -322,7 +337,4 @@ class BackupService {
 }
 
 /// Formats d'export supportés
-enum BackupFormat {
-  json,
-  csv,
-}
+enum BackupFormat { json, csv }

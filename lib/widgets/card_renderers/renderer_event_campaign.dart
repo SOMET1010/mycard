@@ -1,5 +1,6 @@
 /// Renderer dédié aux cartes d'événements (ex: Octobre Rose)
 library;
+
 import 'package:flutter/material.dart';
 import 'package:mycard/app/theme.dart';
 import 'package:mycard/data/models/card_template.dart';
@@ -28,7 +29,11 @@ class EventCampaignRenderer implements CardRenderer {
     EventOverlay? eventOverlay,
   }) {
     final purple = _getColor('primary', template, customColors); // titres
-    final pink = _getColor('accent', template, customColors); // accent événement
+    final pink = _getColor(
+      'accent',
+      template,
+      customColors,
+    ); // accent événement
     const neutral = Color(0xFF2E2E3A);
 
     return Container(
@@ -85,83 +90,83 @@ class EventCampaignRenderer implements CardRenderer {
                           softWrap: true,
                           overflow: TextOverflow.ellipsis,
                         ),
-                      if (title.isNotEmpty) ...[
-                        const SizedBox(height: 4),
-                        Text(
-                          title,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: neutral,
-                            fontFamily: fontFamily,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                      const SizedBox(height: 10),
-                      // Bloc événement
-                      if (eventOverlay != null) ...[
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(Icons.emoji_events, color: pink, size: 20),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    eventOverlay.label,
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w700,
-                                      color: pink,
-                                      fontFamily: fontFamily,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  const SizedBox(height: 2),
-                                  Text(
-                                    eventOverlay.description,
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: pink.withOpacity(0.9),
-                                      fontFamily: fontFamily,
-                                    ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
-                              ),
+                        if (title.isNotEmpty) ...[
+                          const SizedBox(height: 4),
+                          Text(
+                            title,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: neutral,
+                              fontFamily: fontFamily,
                             ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                        const SizedBox(height: 10),
+                        // Bloc événement
+                        if (eventOverlay != null) ...[
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Icon(Icons.emoji_events, color: pink, size: 20),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      eventOverlay.label,
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w700,
+                                        color: pink,
+                                        fontFamily: fontFamily,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    const SizedBox(height: 2),
+                                    Text(
+                                      eventOverlay.description,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: pink.withOpacity(0.9),
+                                        fontFamily: fontFamily,
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                        ],
+                        if (website?.isNotEmpty == true)
+                          Text(
+                            website!,
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: neutral,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: fontFamily,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        const SizedBox(height: 10),
+                        // Socials placeholders
+                        Row(
+                          children: [
+                            _pillIcon(Icons.facebook, purple),
+                            const SizedBox(width: 6),
+                            _pillIcon(Icons.alternate_email, purple),
+                            const SizedBox(width: 6),
+                            _pillIcon(Icons.ondemand_video, purple),
                           ],
                         ),
-                        const SizedBox(height: 10),
-                      ],
-                      if (website?.isNotEmpty == true)
-                        Text(
-                          website!,
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: neutral,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: fontFamily,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      const SizedBox(height: 10),
-                      // Socials placeholders
-                      Row(
-                        children: [
-                          _pillIcon(Icons.facebook, purple),
-                          const SizedBox(width: 6),
-                          _pillIcon(Icons.alternate_email, purple),
-                          const SizedBox(width: 6),
-                          _pillIcon(Icons.ondemand_video, purple),
-                        ],
-                      ),
                       ],
                     ),
                   ),
@@ -174,8 +179,10 @@ class EventCampaignRenderer implements CardRenderer {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      if (phone.isNotEmpty) _contactRow(Icons.phone, phone, neutral, fontFamily),
-                      if (email.isNotEmpty) _contactRow(Icons.email, email, neutral, fontFamily),
+                      if (phone.isNotEmpty)
+                        _contactRow(Icons.phone, phone, neutral, fontFamily),
+                      if (email.isNotEmpty)
+                        _contactRow(Icons.email, email, neutral, fontFamily),
                       if (address?.isNotEmpty == true)
                         _contactRow(
                           Icons.home,
@@ -213,33 +220,42 @@ class EventCampaignRenderer implements CardRenderer {
   }
 
   Widget _pillIcon(IconData icon, Color color) => Container(
-      width: 22,
-      height: 22,
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.15),
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: Icon(icon, size: 14, color: color),
-    );
+    width: 22,
+    height: 22,
+    decoration: BoxDecoration(
+      color: color.withOpacity(0.15),
+      borderRadius: BorderRadius.circular(6),
+    ),
+    child: Icon(icon, size: 14, color: color),
+  );
 
-  Widget _contactRow(IconData icon, String text, Color color, String? fontFamily) => Padding(
-      padding: const EdgeInsets.only(bottom: 6),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, color: color, size: 14),
-          const SizedBox(width: 6),
-          Expanded(
-            child: Text(
-              text,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 12, color: color, fontFamily: fontFamily),
+  Widget _contactRow(
+    IconData icon,
+    String text,
+    Color color,
+    String? fontFamily,
+  ) => Padding(
+    padding: const EdgeInsets.only(bottom: 6),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon, color: color, size: 14),
+        const SizedBox(width: 6),
+        Expanded(
+          child: Text(
+            text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 12,
+              color: color,
+              fontFamily: fontFamily,
             ),
           ),
-        ],
-      ),
-    );
+        ),
+      ],
+    ),
+  );
 
   String _qrData(String name, String phone, String email, String? website) {
     final buffer = StringBuffer()
@@ -253,11 +269,17 @@ class EventCampaignRenderer implements CardRenderer {
     return buffer.toString();
   }
 
-  Color _getColor(String colorType, CardTemplate template, Map<String, String> customColors) {
+  Color _getColor(
+    String colorType,
+    CardTemplate template,
+    Map<String, String> customColors,
+  ) {
     final customColor = customColors[colorType];
     if (customColor != null) {
       // Retirer le # s'il est présent au début
-      final cleanColor = customColor.startsWith('#') ? customColor.substring(1) : customColor;
+      final cleanColor = customColor.startsWith('#')
+          ? customColor.substring(1)
+          : customColor;
       return Color(int.parse('FF$cleanColor', radix: 16));
     }
     switch (colorType) {
